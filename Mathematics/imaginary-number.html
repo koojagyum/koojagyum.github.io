@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>허수(Imaginary Number)의 기본 개념</title>
+<!-- 2014-12-07 Sun 17:09 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Jagyum Koo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">허수(Imaginary Number)의 기본 개념</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. 허수와 복소 평면</a></li>
+<li><a href="#sec-2">2. The Number Line</a></li>
+<li><a href="#sec-3">3. 허수 i</a></li>
+<li><a href="#sec-4">4. 복소수</a></li>
+<li><a href="#sec-5">5. References</a></li>
+</ul>
+</div>
+</div>
+<p>
+Mathmetics for Computer Graphics 라는 책을 보다가 허수에 대한 개념이
+잘 설명되어 있는 것을 보고 기록해 둔다.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 허수와 복소 평면</h2>
+<div class="outline-text-2" id="text-1">
+\begin{equation}
+i=\sqrt{-1}
+\end{equation}
+
+<p>
+고등학교 수학에서는 단순히 -1의 제곱근을 허수라고 배웠다. 그리고
+이차원 좌표계를 복소평면이라고 배웠는데, 이 두 개념이 어떻게
+이어지는지에 대해서는 배운 기억이 없다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> The Number Line</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+복소수를 이해하기 위해 아래와 같이 좌우로 평행한 일차원 좌표계를
+사용한다. 이 좌표계를 "Number Line" 이라고 부르자.
+</p>
+
+
+<div class="figure">
+<p><img src="./images/number-line-1.png" alt="number-line-1.png" />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> 허수 i</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+복소수는 처리하기 곤란한 특정 타입의 방정식을 풀 수 있다. 예를 들어
+\(x^2-4=0\) 이라는 방정식은 \(x=+2\) 로 풀린다. 하지만 \(x^2+4=0\) 은
+실수해가 존재하지 않는다. 앞서 소개한 "Number Line" 은 두 번째
+방정식을 풀기 위한 새로운 종류의 수 체계인 복소수(Complex Number)를
+설명하는데 도움을 준다.
+</p>
+
+
+<div class="figure">
+<p><img src="./images/number-line-2.png" alt="number-line-2.png" />
+</p>
+</div>
+
+<p>
+위 그림을 보면, "Number Line" 상의 모든 숫자는 반시계 방향으로 180&deg;
+회전을 통해 양수는 음수로, 음수는 양수로 부호값만 바뀐다. 그림의
+예에서 보듯이 2가 180&deg; 회전하여 -2가 되고, -3은 3이 된다.
+</p>
+
+<p>
+즉, \(-2 = -1 \times 2\), \(3 = -1 \times -3\) 이렇게 표현할 수
+있다. 여기서 -1은 180&deg; 를 아주 멋지게 표현하게 되었다. 게다가
+180&deg; 는 90&deg; 를 두 번 더한 값이다. 90&deg; 의 회전이 "Number
+Line"에서 무엇을 나타내는지는 확실히 모르겠지만 이 연산을 \(i\) 라고
+부르도록 한다.
+</p>
+
+<p>
+따라서 \(2i\) 는 "Number Line"에서 2를 90&deg; 회전시키고 이 좌표계에는
+없는 어딘가(책에서는 limbo라고 표현함)에 두게 된다. 즉, 허수 i는
+90&deg; 회전이고 \(2ii\) 는 -2가 된다. 그러므로 \(2ii=-2\) 라고 쓸 수
+있으며 이는 \(ii=-1\) 을 의미한다. 이쯤 되니 고등학교에서 배운 수식이
+기억난다.
+</p>
+
+\begin{equation}
+i=\sqrt{-1}
+\end{equation}
+
+<p>
+때문에 허수 \(i\) 는 숫자 보다는 연산자로 보는 게 적절하다. 반시계
+방향으로 90&deg; 회전하는 연산자인 것이다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 복소수</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+이렇듯 복소수는 실수와 허수의 조합으로 이루어진 수이며 실수해가
+존재하지 않는 수학적 문제들을 해결할 수 있도록 해 준다. 복소수는
+아래와 같이 나타낼 수 있다.
+</p>
+
+\begin{equation}
+z=a+bi
+\end{equation}
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> References</h2>
+<div class="outline-text-2" id="text-5">
+<ul class="org-ul">
+<li>Mathmetics for Computer Graphics
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Jagyum Koo</p>
+<p class="date">Created: 2014-12-07 Sun 17:09</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

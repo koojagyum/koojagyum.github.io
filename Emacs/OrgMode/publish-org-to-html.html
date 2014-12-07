@@ -1,0 +1,1052 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Publishing Org-mode files to HTML</title>
+<!-- 2014-12-07 Sun 15:53 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Jagyum Koo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Publishing Org-mode files to HTML</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. 소개</a></li>
+<li><a href="#sec-2">2. 튜토리얼을 진행하기 앞서 기본사항</a></li>
+<li><a href="#sec-3">3. Org 프로젝트의 내용을 퍼블리싱하기</a>
+<ul>
+<li><a href="#sec-3-1">3.1. notes 컴포넌트 (org-notes)</a></li>
+<li><a href="#sec-3-2">3.2. 정적 컴포넌트 (org-static)</a></li>
+<li><a href="#sec-3-3">3.3. 퍼블리시 컴포넌트</a></li>
+<li><a href="#sec-3-4">3.4. 아.. 이제 퍼블리싱 할 수 있나요?</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. 디렉토리 추가하기</a></li>
+<li><a href="#sec-5">5. 기본 설정 덮어쓰기</a>
+<ul>
+<li><a href="#sec-5-1">5.1. export 옵션 템플릿</a>
+<ul>
+<li><a href="#sec-5-1-1">5.1.1. 주석을 사용한 스페셜 코멘트 섹션</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-6">6. 템플릿 내보내기가 귀찮다면?</a>
+<ul>
+<li><a href="#sec-6-1">6.1. 레벨 파일 추가 옵션</a></li>
+</ul>
+</li>
+<li><a href="#sec-7">7. More Projects</a>
+<ul>
+<li><a href="#sec-7-1">7.1. 컴포넌트 상속받기</a>
+<ul>
+<li><a href="#sec-7-1-1">7.1.1. 예제 하나 더</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-8">8. 전체 보기(Overview)</a>
+<ul>
+<li><a href="#sec-8-1">8.1. 사이트맵</a></li>
+<li><a href="#sec-8-2">8.2. org-info.js</a></li>
+</ul>
+</li>
+<li><a href="#sec-9">9. 특수 문자</a></li>
+<li><a href="#sec-10">10. 추가 정보</a></li>
+</ul>
+</div>
+</div>
+<p>
+이 문서는 orgmode 홈페이지의 <a href="http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html">Publishing Org-mode files to HTML</a> 문서를
+번역한 것으로, 번역은 본인이 이해한 것을 바탕으로 (상당량의) 의역과
+오역이 포함되어 있을 수 있다. 보다 명확한 이해를 위해서 원본 문서를
+참고하시라.
+</p>
+
+<p>
+Org-mode로 작성된 파일을 HTML로 퍼블리싱하기.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 소개</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+이 튜토리얼 문서는 Org-mode로 작성된 파일을 XHTML로 퍼블리싱하는 많은
+방법 중 일부에 대해 설명하고 있다. 여기서 사용하는 퍼블리싱 방법은
+*.org 파일과 여기서 생성되는 *.html 파일(웹 브라우저를 통해 접근
+가능)은 다른 위치로 분리하여 다루게 될 것이다. 간단히 말하자면
+Org-mode 파일이 HTML로 변환될 때 원본 파일(*.org)은 ~/org/ 디렉토리에
+남게 된다.
+</p>
+
+<p>
+생성된 XHTML 파일은 어디서든지 동작할 수 있다. 어느 호스트에서든지
+상관없으며 네트워크 액세스도 필요하지 않다. <a href="file:///">file:///</a> 프로토콜을 쓰면
+된다. 이를 위해 아래 항목들을 요구 한다.
+</p>
+
+<ul class="org-ul">
+<li>HTML 파일에 대한 절대 경로를 필요로 하지 않는다.
+</li>
+<li>디렉토리를 탐색하기 위한 서버 사이드의 스크립트를 필요로 하지
+않는다.
+</li>
+<li>(XHTML 1.0 strict 의 선택 사항인) base 엘레멘트를 필요로 하지
+않는다.
+</li>
+<li>이맥스와 Org-mode, 웹 브라우저를 제외한 어떠한 다른 소프트웨어도
+필요로 하지 않는다.
+</li>
+</ul>
+
+<p>
+위의 모든 내용들은 Org-mode 파일을 HTML로 변환한 결과를 즉시 그리고
+어디서든지 확인해 볼 수 있게 하기 위해 필요한 것이다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 튜토리얼을 진행하기 앞서 기본사항</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+이 튜토리얼 문서에서 Org-mode 파일들은 ~/org/ 디렉토리 아래에 있고
+이를 HTML로 변환한 파일들은 ~/public_html/ 디렉토리에 출력된다고 하자.
+</p>
+
+<p>
+또한 이 문서를 읽는 당신들은 이미 Org의 기본적인 사용법에 대해
+익숙하며 Org-mode 파일의 컨텐츠를 어느 정도 작성할 수 있어 튜토리얼에
+쓰이는 프로젝트에 작성한 컨텐츠를 사용할 수 있는 독자라고
+가정한다. 튜토리얼 프로젝트에 사용할 각 파일에는 최소한 하나 이상의
+헤드라인을 포함해 놓기를 바란다.
+</p>
+
+<p>
+우선 ~/org 라는 폴더를 하나 만든다. 이곳은 우리가 작성할 노트 파일들이
+들어가는 곳이다. 스타일시트와 스크립트 파일들을 놓기 위해 ~/org/
+아래에 css/ 폴더를 만들자. 그리고 img 폴더도 만들어 놓자(여기에는 뭐가
+들어갈지 설명 안 해도 되겠지).
+</p>
+
+<p>
+~/org 폴더(이하 서브디렉토리)에 생성할 첫 번째 파일은 index.org
+이다. 이름을 index.org 라고 한 이유는 Org의 퍼블리싱이 동작할 때 출력
+파일의 이름을 소스 파일의 이름에 확장자인 HTML<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>을 붙여서 짓기
+때문이다. 그러니까 ~/org/index.org 를 퍼블리싱하면,
+~/public_html/index.html 이렇게 나올 것이다. index.html 은 스타트
+페이지이다.
+</p>
+
+<p>
+이제 또 다른 파일을 하나 만든다. ~/org/remember.org 이다. 스타일시트도
+만들고 나면 ~/org/ 폴더는 아래와 같은 형태가 될 것이다.
+</p>
+
+<pre class="example">
+~/org/
+   |- css/
+   |  `- stylesheet.css
+   |- img/
+   |- index.org
+   `- remember.org
+</pre>
+
+<p>
+다른 파일로 링크를 하고 싶으면, 파일 링크를 하는 일반적인 방법을
+사용하면 된다. 예를 들어 index.org 파일에서 remember.org 파일로
+링크하고 싶다면 아래와 같이 쓰면 된다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">[[file:remember.org][remember]]
+</pre>
+</div>
+
+<p>
+Org는 export시 위 내용을 HTML 링크로 바꾸어준다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-html">&lt;a href="./remember.html"&gt;remember&lt;/a&gt;
+</pre>
+</div>
+
+<p>
+이미지를 링크할 때에도 동일하다. ~/org/img/test.jpg 파일을 만들고 이를
+참조하려면 아래와 같이 하면 된다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">[[file:img/test.jpg]]
+</pre>
+</div>
+
+<p>
+이렇게 만들어진 링크는 클릭하여 테스트해볼 수 있다. 이미지 링크를
+테스트하기 위해 iimage-mode<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> 를 사용해야 할 수도 있다.
+</p>
+
+<p>
+추가적으로 <a href="http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html#Special-comment-section">스페셜 코멘트 섹션</a> 에서처럼 스타일시트를 설정할 수도
+있다. 진짜 스타일시트를 사용하는 것을 권장한다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Org 프로젝트의 내용을 퍼블리싱하기</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+~/org/ 아래의 프로젝트를 HTML로 퍼블리싱하기 위해
+org-publish-project-alist<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> 라는 변수를 사용할 것이다. 이 글의
+저자는 각 프로젝트를 메뉴얼에서 설명하고 있는 기본적인 세 부분의
+컴포넌트로 나누는 것을 선호한다. 여기서 이야기하는 세 가지 컴포넌트는
+Org 파일이 퍼블리시되는 동적 컨텐츠(org =&gt; html)와 스크립트와 이미지,
+스타일시트 혹은 .htaccess 파일과 같은 정적 컨텐츠, 그리고 마지막으로
+기타 편리한 사용을 위한 내용들이다.
+</p>
+
+<p>
+org-publish-project-alist 변수는 이맥스의 커스토마이즈를 통해(M-x
+customize-variable RET org-project-alist RET) 설정할 수도 있다. 하지만
+이 글의 저자는 프로젝트 내의 추가 파일을 통해 설정하는 것을
+선호한다. 이 튜토리얼에서는 \*scratch\* 버퍼를 사용하여 이번 섹션과
+관련된 Lisp 코드를 실행시켜 보겠다.
+</p>
+
+<p>
+우선 /*scratch/* 버퍼에 아래 내용을 넣어보자.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(require 'ox-publish)
+(setq org-publish-project-alist
+      '(
+
+      ;; ... add all the components here (see below)...
+
+      ))
+</pre>
+</div>
+
+<p>
+이 아래의 설명에서 나오는 컴포넌트들에 대한 내용을 위의 코드의 주석
+부분에 넣는다.
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> notes 컴포넌트 (org-notes)</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+notes 컴포넌트는 Org-mode 파일을 HTML 파일로 퍼블리시한다는 내용을
+담고 있다. 따라서 publishing-function 은 org-publish-org-to-html 로
+설정한다. 아래는 노트 컴포넌트에 대한 예제이다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">("org-notes"
+ :base-directory "~/org/"
+ :base-extension "org"
+ :publishing-directory "~/public_html/"
+ :recursive t
+ :publishing-function org-html-publish-to-html
+ :headline-levels 4 ; Just the default for this project
+ :auto-preamble t
+ )
+</pre>
+</div>
+
+<p>
+여기서 headline-levels 는 기본값인데 각 파일의 개별 설정에서 다시
+적용할 경우 이 기본값을 덮어쓰게 할 수도 있다.
+</p>
+
+<p>
+가장 중요한 세팅들은 아래 내용들이다.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="left">base-directory</td>
+<td class="left">루트 디렉토리</td>
+</tr>
+
+<tr>
+<td class="left">base-extension</td>
+<td class="left">파일 이름의 접미사(구두점(.) 제외)</td>
+</tr>
+
+<tr>
+<td class="left">publishing-directory</td>
+<td class="left">퍼블리싱되는 파일들이 놓일 베이스 디렉토리</td>
+</tr>
+
+<tr>
+<td class="left">recursive</td>
+<td class="left">t일 경우 서브리텍토리들을 포함한다. 우리는 이걸 t로 놓을 것이다. :publishig-directory 내의 서브디렉토리들은 존재하지 않을 경우에 자동 생성된다.</td>
+</tr>
+
+<tr>
+<td class="left">publishing-funciton</td>
+<td class="left">이 컴퍼넌트의 파일들을 Org가 어떻게 처리할 것인지를 나타낸다. 위의 예제에서는 Org-mode 파일을 HTML로 변환한다.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> 정적 컴포넌트 (org-static)</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+정적 컴포넌트는 단순히 :base-directory 내의 파일들(과
+폴더들)을 :publishing-directory 로 그대로 카피한다. 아래 예제에서는
+Org-mode가 정적 컨텐츠를 퍼블리싱할 때 org-publish-attachment 함수를
+사용하도록 한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">("org-static"
+ :base-directory "~/org/"
+ :base-extension "css\\/js\\/png\\/jpg\\/gif\\/pdf\\/mp3\\/ogg\\/swf"
+ :publishing-directory "~/public_html/"
+ :recursive t
+ :publishing-function org-publish-attachment
+</pre>
+</div>
+
+<p>
+위의 예제에서:publishing-function 이 org-publish-attachment 로 세팅된
+것을 확인한다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> 퍼블리시 컴포넌트</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+프로젝트 내의 모든 내용들을 단 하나의 커맨드로 퍼블리싱하기 위해
+퍼블리시 컴포넌트를 추가한다. 저자는 종종 이 컴포넌트에서 접두사를
+빠트리고 프로젝트의 베이스네임을 사용한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">("org" :components ("org-notes" "org-static"))
+</pre>
+</div>
+
+<p>
+이제 M-x org-publish-project RET org RET 을 입력하여 프로젝트 내의
+모든 내용들이 재귀적으로 ~/public_html/ 폴더에 퍼블리싱 되는 것을
+확인할 수 있다. 타겟 디렉토리는 존재하지 않더라도 자동 생성될 것이다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4"><span class="section-number-3">3.4</span> 아.. 이제 퍼블리싱 할 수 있나요?</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+당연히 할 수 있다. 그런데 한 가지 걸리는게 있다. 퍼블리싱 컴포넌트들에
+대한 정의(Lisp 코드들)를 \*scratch\* 버퍼에 넣어 둔 것이다. 퍼블리싱
+컴포넌트에 대한 코드들이 괄호가 잘 닫혔는지 다시 한 번 확인해 보자.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(require 'org-publish)
+(setq org-publish-project-alist
+      '(
+
+       ;; ... all the components ...
+
+      ))
+</pre>
+</div>
+
+<p>
+첫 라인의 끝으로 커서를 옮겨서 C-x C-e 를 하여 org-publish 를
+로드하자. 그리고 마지막 라인의 끝으로 커서를 이동시키고 C-x C-e 를
+하자. org-publish-project-alist 가 바뀔 때마다 setq 명령을 실행시켜야
+한다.
+</p>
+
+<p>
+M-x org-publish-project RET org RET 을 하거나 매뉴얼에서 설명하는
+바로가기 키를 통해 퍼블리싱을 실행시킬 수 있다. 퍼블리싱이 잘 되었다면
+브라우저에서 <a href="http://localhost/~user/">http://localhost/~user/</a> 나 <a href="file://home/user/public_html/">file://home/user/public_html/</a>
+를 네비게이션하여 HTML로 퍼블리시된 내용을 확인할 수 있다.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 디렉토리 추가하기</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+프로젝트 베이스 디렉토리인 ~/org/ 에 파일이나 디렉토리를 더 추가할 수
+있다. 따라서 'networking-ssh-sshd-config.org' 처럼 궂이 파일 이름을
+길게 할 필요 없이 디렉토리들을 연결하여 쓰면 된다.
+</p>
+
+<pre class="example">
+~/org/
+  |- css/
+  |  `- stylesheet.css
+  |- Emacs
+  |  |- index.org
+  |  |- gnus.org
+  |  |- org.org
+  |  `- snippets.org
+  |- img/
+  |- index.org
+  `-remember.org
+</pre>
+
+<p>
+만일 위와 같은 디렉토리 구조를 가지고 있고 노트 컴포넌트와 정적
+컴포넌트에 ':recursive t' 를 안 주었다면 서브디렉토리들이 퍼블리싱되지
+않을 것이다. 추가하여 evaluate 시키도록 하자.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> 기본 설정 덮어쓰기</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+org-publish-project-alist 변수의 기본 값을 덮어쓰기 할 수 있다. 아마
+독자들은 퍼블리싱에 대한 설정값들을 하나의 파일에 지정해두고 쓰고
+싶어할 것이다. 헤드라인 레벨이라든지 추가적인 스크립트나 스타일시트
+파일 같은 것에 대한 내용을 프로젝트마다 다르게 적용하고 싶어할
+것이다. Org는 이런 세팅값들을 하나의 파일에서 읽어 사용할 수 있는
+방법들을 지원한다.
+</p>
+</div>
+
+<div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> export 옵션 템플릿</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+첫 번째 방법은 export 옵션 템플릿을 파일의 상단에 적어 넣는
+것이다. Org-mode 파일에서 기본 정보에 대한 내용을 C-c C-e #
+(org-export-dispatch) "template" 를 사용하여 적어 넣을 수 있다. 이
+명령을 실행하면 Options category: 프롬프트를 표시해 주는데 "default"
+라고 적어 넣으면 일반적인 Org가 옵션들에 대한 템플릿을 내 놓을
+것이다. 그리고 "html" 이라고 적어 넣으면 HTML과 관련된 옵션들을 내
+놓는다.
+</p>
+
+<p>
+주의: 아래 예제의 내용을 독자의 파일에 그대로 카피해 놓지 않기를
+바란다. 템플릿의 내용은 버전마다 다를 수 있다. 대신 위의 방법으로
+템플릿을 넣고 사용하지 않는 내용은 제거하고 쓰기를 바란다.
+</p>
+
+<p>
+"default" 옵션은 버퍼에 아래와 같은 내용을 적어 넣는다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+TITLE: filename with the extension omitted
+#+DATE: &lt;2013-06-04 Tue&gt;
+#+AUTHOR: Your name
+#+EMAIL: Your email address
+#+OPTIONS: ':t *:t -:t ::t &lt;:t H:3 \n:nil ^:t arch:headline author:t c:nil
+#+OPTIONS: creator:comment d:(not LOGBOOK) date:t e:t email:nil f:t inline:t
+#+OPTIONS: num:t p:nil pri:nil stat:t tags:t tasks:t tex:t timestamp:t toc:t
+#+OPTIONS: todo:t |:t
+#+CREATOR: Emacs 24.3.50.3 (Org mode 8.0.3)
+#+DESCRIPTION:
+#+EXCLUDE_TAGS: noexport
+#+KEYWORDS:
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+</pre>
+</div>
+
+<p>
+그리고 "html" 옵션은 아래와 같다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+OPTIONS: html-postamble:auto html-preamble:t tex:t
+#+CREATOR: &lt;a href="http://www.gnu.org/software/emacs/"&gt;Emacs&lt;/a&gt; 24.3.50.3 (&lt;a href="http://orgmode.org"&gt;Org&lt;/a&gt; mode 8.0.3)
+#+HTML_CONTAINER: div
+#+HTML_DOCTYPE: xhtml-strict
+#+HTML_HEAD:
+#+HTML_HEAD_EXTRA:
+#+HTML_HTML5_FANCY:
+#+HTML_INCLUDE_SCRIPTS:
+#+HTML_INCLUDE_STYLE:
+#+HTML_LINK_HOME:
+#+HTML_LINK_UP:
+#+HTML_MATHJAX:
+#+INFOJS_OPT:
+</pre>
+</div>
+
+<p>
+이제 위의 내용을 고쳐서 세부 사항들을 조정하면 된다. 모든 옵션들은
+Org-mode 메뉴얼에 잘 설명되어 있다. 이 옵션들은 최초(파일을 처음 열
+때)에만 파싱되어 적용될 것이다. 명시적으로 새로운 옵션들에 대해 다시
+적용하고 싶다면 해당 라인으로 커서를 옮겨서 C-c 를 두 번 눌러 주면
+된다.
+</p>
+</div>
+
+<div id="outline-container-sec-5-1-1" class="outline-4">
+<h4 id="sec-5-1-1"><span class="section-number-4">5.1.1</span> 주석을 사용한 스페셜 코멘트 섹션</h4>
+<div class="outline-text-4" id="text-5-1-1">
+<p>
+주석을 사용하여 스페셜 섹션으로 CSS 스타일 변수들이 Org-mode 파일에
+추가될 수 있다.
+</p>
+
+<p>
+#+BEGIN_SRC org
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> 템플릿 내보내기가 귀찮다면?</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+독자들이 저자와 비슷한 부류라면 이렇게 동일한 export 옵션 템플릿을 수
+많은 다른 파일들에 추가해 넣다가 금방 지칠 것이다. 하지만 운좋게도
+Org-mode는 이런 게으른 사람들을 위한 설정 방법을 추가적으로
+제공한다. 디렉토리를 하나 만들고(예를 들어 ~/.emacs.d/org-templates/)
+아래 파일들을 생성한다.
+</p>
+
+<ul class="org-ul">
+<li>level-0.org
+
+<p>
+이 파일에 export 옵션을 적어 넣는다. 서브디렉토리 아래의
+파일들에서는 <a href="http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html#Special-comment-section">특수 코멘트 섹션</a> 은 동작하지 않을 것이다. 따라서
+아래와 같은 export 라인을 적어 두면 된다.
+</p>
+
+<p>
+:#+STYLE:  &lt;link rel="stylesheet" type="text/css" href="stylesheet.css" /&gt;
+</p>
+
+<p>
+이 내용은 프로젝트 루트 폴더 아래의 모든 파일(~/org/ 또는 ~/B/
+폴더)에 적합한 내용이다. 그리고 level-0.org에 #+TITLE 옵션은
+제거하는 게 좋은데, 왜냐하면 이 옵션값은 모든 파일들에 대해 다르게
+세팅되어야 하는 것이기 때문이다. 이게 생략되어 있다면 파일이름에
+기반하여 자동으로 세팅되기 때문에 그냥 생략하는게 편하다.
+</p>
+</li>
+
+<li>level-1.org
+
+<p>
+이 파일은 프로젝트 루트 폴더 기준으로 한 단계 아래의 각
+서브폴더(예를 들어 ~/org/emacs/ 또는 ~/org/networking/)에 적용되는
+export 옵션들을 담고 있다. 역시 #+TITLE 은 생략한다. 스타일시트와
+관련된 옵션 라인은 아래와 같이 한다.
+</p>
+
+<p>
+:#+STYLE: &lt;link rel="stylesheet" type="text/css" href="../stylesheet.css" /&gt;
+</p>
+</li>
+
+<li>이런 식으로 그 이상의 서브레벨에 대한 파일을 추가한다.
+</li>
+</ul>
+
+<p>
+이제 프로젝트 폴더의 Org-mode 파일에서 <a href="http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html#Special-comment-section">특수 코멘트 섹션</a> 에 대한 내용을
+제거하고 export 옵션 템플릿의 내용을 아래와 같이 바꾸면 된다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+SETUPFILE: ~/.emacs.d/org-templates/level-N.org
+#+TITLE: My Title
+</pre>
+</div>
+
+<p>
+N을 프로젝트 루트 폴더로부터의 깊이값(0,1, 등등)으로 대체한다. 그리고
+해당 옵션의 라인에서 C-c 를 두 번 눌러서 적용한다. 그 다음 라인들은
+level-N.org 파일에서 설정된 내용들을 덮어쓰기 할 것이다.
+</p>
+</div>
+
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> 레벨 파일 추가 옵션</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+level-N 파일들을 사용하여 다른 export 셉업을 쉽게 적용할 수 있다. 아래
+예에서와 같이 별도의 다른 스타일시트와 프리젠테이션을 위해 사용할
+org-info.js 를 적용할 수 있다. 그리고 다른 옵션들에 대한 내용을
+level-0-slides.org 에 아래와 같이 적어넣을 수 있다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+INFOJS_OPT: path:org-info.js
+#+INFOJS_OPT: toc:nil view:slide
+#+STYLE: &lt;link rel="stylesheet" type="text/css" href="slides.css" /&gt;
+</pre>
+</div>
+
+<p>
+이제 프로젝트내의 어느 파일의 모양을 바꾸기 위해 단순히 '-slides' 라고
+적으면 된다???
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> More Projects</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+우리는 Org로 노트를 작성하고 있기 때문에 대부분의 프로젝트의
+디렉토리에 org 디렉토리를 추가해야 할 것이다. 여기의 모든 프로젝트들은
+또한 같은 이름의 디렉토리 아래에 퍼블리시 될 것이다. '~/B/' 폴더
+아래의 프로젝트는 '~/public_html/B/' 폴더에, '~/C/' 폴더 아래의 것은
+'~/public_html/C' 에 퍼블리시 될 것이다. 이런 식의 처리는 공통
+스타일시트와 현재 자바스크립트에 대한 문제를 일으킬 것이다. 따라서
+새로운 컴포넌트를 추가해야 한다.
+</p>
+</div>
+
+<div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> 컴포넌트 상속받기</h3>
+<div class="outline-text-3" id="text-7-1">
+<p>
+정적 파일들을 복사하는게 귀찮다면 아래와 같은 설정값을
+사용한다. <i>inherit</i> 컴포넌트를 추가하여 ~/org/ 디렉토리<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>에서 정적
+파일들을 복사해온다. 이제부터 스타일시트나 스크립트 파일들은 하나의
+디렉토리 아래에서만 이루어질 수 있다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">("B-inherit"
+ :base-directory "~/org/"
+ :recursive t
+ :base-extension "css\\|js"
+ :publishing-directory "~/public_html/B/"
+ :publishing-function org-publish-attachment
+)
+
+("B-org"
+:base-directory "~/B/"
+:auto-index t
+:index-filename "sitemap.org"
+:index-title "Sitemap"
+:recursive t
+:base-extension "org"
+:publishing-directory "~/public_html/B/"
+:publishing-function org-publish-org-to-html
+:headline-levels 3
+:auto-preamble t
+)
+("B-static"
+ :base-directory "~/B/"
+ :recursive t
+ :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+ :publishing-directory "~/public_html/B/"
+ :publishing-function org-publish-attachment)
+
+("B" :components ("B-inherit" "B-notes" "B-static"))
+</pre>
+</div>
+
+<p>
+<b>알아두기</b>: 이와 같은 상속(inherittance) 기법은 non org 파일에도
+적용된다. 이렇게 하여 스타일시트와 스크립트 등을 한 디레토리에
+몰아넣거나 상위 프로젝트에서 다른 설정값들을 상속하도록 할 수도 있다.
+</p>
+
+<p>
+<b>그리고</b>: <code>B-inherit</code> 은 웹으로 바로 내보내진다(export). <code>~/B</code> 바로
+아래의 <code>~org/*.css</code> 의 변경 사항을 추적하고 싶다면 알아두어야 할
+사실이 하나 있다. <code>B</code> 에 리스팅된 컴포넌트들은 실행될 때 적어놓은
+순서대로 수행되기 때문에 처음으로 수행되는 컴포넌트는 <code>B-inherit</code>
+컴포넌트가 된다. 스타일시트의 경우에는 <code>B</code> 의 것이 먼저 적용되고
+다음에 <code>B-static</code> 에 있는 것이 사용될 것이다.
+</p>
+</div>
+
+<div id="outline-container-sec-7-1-1" class="outline-4">
+<h4 id="sec-7-1-1"><span class="section-number-4">7.1.1</span> 예제 하나 더</h4>
+<div class="outline-text-4" id="text-7-1-1">
+<p>
+저자는 <a href="http://orgmode.org/worg/code/org-info-js/index.html">org-info.js</a> 를 사용하여 Worg git을 추적할 때 <code>org</code> 프로젝트
+안에서 "<code>inherit-org-info-js</code>" 을 사용한다???
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">("inherit-org-info-js"
+ :base-directory "~/develop/org/Worg/code/org-info-js/"
+ :recursive t
+ :base-extension "js"
+ :publishing-directory "~/org/"
+ :publishing-function org-publish-attachment)
+
+;; ... all the rest ... ;;
+
+("B" :components ("inherit-org-info-js" "B-inherit" "B-notes" "B-static"))
+("C" :components ("inherit-org-info-js" "C-inherit" "C-notes" "C-static"))
+("D" :components ("inherit-org-info-js" "D-inherit" "D-notes" "D-static"))
+("E" :components ("inherit-org-info-js" "E-inherit" "E-notes" "E-static"))
+</pre>
+</div>
+
+<p>
+위 코드는 <code>B</code> 와 <code>C</code> 와 <code>D</code> 와 <code>E</code> 가 저자의 로컬에 있는 스타일시트와
+<code>org-info.js</code> 의 최신 버전을 사용한다는 의미다.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> 전체 보기(Overview)</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+여러분이 작업하는 곳에는 수많은 파일과 서브디렉토리가 존재하기 때문에
+브라우저에서 이들 곳곳에 쉽게 접근하기 위한 방법이 필요하다. 그
+방법이란 전체 파일을 한 번에 볼 수 있는 오버뷰 색인(index) 페이지를
+만드는 것이다.
+</p>
+</div>
+
+<div id="outline-container-sec-8-1" class="outline-3">
+<h3 id="sec-8-1"><span class="section-number-3">8.1</span> 사이트맵</h3>
+<div class="outline-text-3" id="text-8-1">
+<p>
+Org mode의 굉장한 퍼블리싱 시스템은 재귀적인 사이트맵을
+작성해준다. 디폴트 이름은 <code>sitemap.org</code> 이고 퍼블리싱 후에 실제 페이지
+이름은 <code>sitemap.html</code> 이 된다<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup>. 운좋게도 사이트맵을 생성할 때
+이름을 바꿀 수 있는 설정 옵션도 있다. 사이트맵을 생성하기 위해 아래
+코드를 <i>notes</i> 컴포넌트에 추가한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elips">:auto-sitemap t                ; Generate sitemap.org automagically...
+:sitemap-filename "sitemap.org"  ; ... call it sitemap.org (it's the default)...
+:sitemap-title "Sitemap"         ; ... with title 'Sitemap'.
+</pre>
+</div>
+
+<p>
+사이트맵은 대상 프로젝트의 트리 구조를 그려줄 것이다. 사이트맵에 쉽게
+접근하기 위해 아래 두 가지 일을 해 주어야 한다.
+</p>
+
+<ol class="org-ol">
+<li>시작 페이지에서 <code>sitemap.html</code> 로의 업링크를 설정해 준다(다음 섹션
+참고).
+</li>
+<li>' <code>#+INCLUDE: sitemap.org</code>' 를 사용한다. 저자는 대부분의 Org mode
+파일에 "<i>Links</i>" 라는 챕터를 파일의 끝 부분에 넣는다. 여기에는
+<i>Sitemap</i> 이라는 서브섹션을 넣고 ' <code>#+INCLUDE: sitemap.org</code>' 으로
+사이트맵을 표시해 주도록 한다. 루트 디렉토리의 <code>index.org</code> 파일의
+경우 첫 번째 섹션에 사이트맵을 넣도록 한다.
+</li>
+</ol>
+
+<p>
+사이트맵에서 디렉토리의 위치를 <code>:sitemap-sort-folders</code> 으로 지정할 수
+있다. <code>last</code> 와 <code>first</code> (기본값) 으로 지정할 수 있으며 디렉토리가 끝에
+나오거나 처음에 나오게 한다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-8-2" class="outline-3">
+<h3 id="sec-8-2"><span class="section-number-3">8.2</span> org-info.js</h3>
+<div class="outline-text-3" id="text-8-2">
+<p>
+전체 구조를 탐색하는 또 다른 방법은 <a href="http://orgmode.org/worg/code/org-info-js/index.html">org-info.js</a> 이다. 아래와 같이
+설정해서 업링크를 시켜보자(모든 파일에 적용하거나 <code>org-level-N.org</code> (N
+&gt; 0) 으로 적용한다).
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+LINK_UP: index.html
+</pre>
+</div>
+
+<p>
+이렇게 하면 업링크를 하나 만들어 주는데, <code>h</code> 를 누르면 현재 디렉토리의
+<code>index.html</code> 파일로 이동시켜 준다<sup><a id="fnr.6" name="fnr.6" class="footref" href="#fn.6">6</a></sup>.
+</p>
+
+<p>
+프로젝트의 루트 디렉토리 아래의 <code>index.org</code> 의 경우는(index.html)
+동일하게 아래와 같이 하면 된다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+LINK_UP: sitemap.html
+</pre>
+</div>
+
+<p>
+서브디렉토리의 <code>index.org</code> 에는 아래와 같이 한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+LINK_UP: ../index.html
+</pre>
+</div>
+
+<p>
+<code>LINK_HOME</code> 은 항상 똑같은 파일로의 링크를 해준다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-org">#+LINK_HOME: http://localhost/~user/index.html
+</pre>
+</div>
+
+<p>
+마지막 예제는 상대 경로로 사용하는 것이 더 좋을 수도 있다.
+</p>
+
+<p>
+프로젝트내의 어느 문서를 보고 있든지간에 <code>H n</code> 을 누르면 사이트맵으로
+이동하고, <code>h</code> 를 누르면 상위 노드로 이동한다.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> 특수 문자<sup><a id="fnr.7" name="fnr.7" class="footref" href="#fn.7">7</a></sup></h2>
+</div>
+
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> 추가 정보</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+<a href="http://orgmode.org/manual/">Org-mode menual</a> 페이지에서 더 많은 정보를 얻을 수 있다. 지구에서 가장
+멋진 메일링 리스트중 하나인 <a href="http://lists.gnu.org/archive/html/emacs-orgmode/">emacs-orgmode (archive)</a> 에서는 관련하여
+질의 응답을 사용할 수도 있다.
+</p>
+
+<p>
+즐기세요!
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+export하여 생성되는 파일의 접미사를 커스토마이즈 할 수도
+있다. M-x customize RET org-export-html-extension 같은 것을 사용한다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+M-x iimage-mode RET 이렇게 해서 사용한다. 이맥스 설치시 librsvg
+가 있었다면 iimage-mode 는 *.svg 이미지도 보여줄 수 있다. FIXME:
+이맥스 22버전에서도 확인된 것인지 확인 필요.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+org-publish-project-alist 의 모든 컴포넌트에 대해서는 <a href="http://orgmode.org/manual/Project-alist.html#Project-alist">Org Mode
+Manual</a> 문서 참고.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+파일들은 임의의 소스 디렉토리에서 원하는 타겟 디렉토리로 복사된다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+기본적인 서버 동작이 그러하다. <a href="http://orgmode.org/worg/">http://orgmode.org/worg/</a> 여기를
+방문하면 그 아래의 index.html 으로 가게 된다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.6" name="fn.6" class="footnum" href="#fnr.6">6</a></sup> <p class="footpara">
+역주: 업링크의 의미와는 안 맞는 예를 들은 것 같다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.7" name="fn.7" class="footnum" href="#fnr.7">7</a></sup> <p class="footpara">
+역주: LaTex 특수문자 관련 내용으로 추후 업데이트 예정.
+</p></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: Jagyum Koo</p>
+<p class="date">Created: 2014-12-07 Sun 15:53</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

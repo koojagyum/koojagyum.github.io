@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>OpenGL Object</title>
+<!-- 2014-12-07 Sun 15:53 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Jagyum Koo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">OpenGL Object</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Object Creation and Destruction</a>
+<ul>
+<li><a href="#sec-1-1">1.1. Deletion unbinding</a></li>
+<li><a href="#sec-1-2">1.2. Deletion orphaning</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. Object Usage</a>
+<ul>
+<li><a href="#sec-2-1">2.1. Object zero</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. Multibind</a></li>
+<li><a href="#sec-4">4. Object Sharing</a></li>
+<li><a href="#sec-5">5. Object types</a>
+<ul>
+<li><a href="#sec-5-1">5.1. Container objects</a></li>
+</ul>
+</li>
+<li><a href="#sec-6">6. Non-standard objects</a></li>
+</ul>
+</div>
+</div>
+<p>
+OpenGL wiki의 <a href="https://www.opengl.org/wiki/OpenGL_Object">OpenGL Object</a> 문서 번역.
+</p>
+
+<p>
+<b>OpenGL Object</b> 는 몇 가지 상태값을 갖는 OpenGL의 구조체라고 보면 될 것
+같다. 이것들이 컨텍스트에 바인딩되면 이들이 가진 상태값이 컨텍스트의
+상태값으로 매핑된다. 그러므로 현재 컨텍스트의 상태값이 변화하면 이
+객체에 반영되며 컨텍스트 상태에 영향을 받는 함수들도 이 객체의 상태값을
+사용한다.
+</p>
+
+<p>
+OpenGL은 "상태 머신" 이다. API 호출은 OpenGL의 상태를 변화시키고 어떤
+상태값을 쿼리하여 가져오기도 하며, OpenGL이 무엇인가 렌더링할 때에는
+현재 상태를 참고하기도 한다.
+</p>
+
+<p>
+OpenGL Object 들은 모두 상태값을 저장하는 컨테이너이다. 각각의 타입의
+Object는 자신이 품고 있는 특정 상태에 의해 정의된다. 어떤 OpenGL
+Object는 특정 상태들의 그룹을 캡슐화하는 방식으로 사용되기도 하며 한
+번의 함수 호출로 상태값들을 모두 바꾸어버리기도 한다.
+</p>
+
+<p>
+Remember: 이 문서는 OpenGL이 그 스펙을 어떻게 정의하고 있는냐에 대한
+것이다. 실제 드라이버에서 이런 Object가 어떻게 구현되었는가는 또 다른
+문제이다. 하지만 이건 걱정할 문제는 아니고 중요한 것은 Object와
+상태값이 어떻게 스펙에 정의된 대로 상호 작용하냐에 대한 것이다.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Object Creation and Destruction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Object를 생성하기 위해서는 정수 형태의 Object의 이름을 생성해야
+한다. 이렇게 생성되는 정수값은 해당 Object에 대한 참조를
+나타낸다. Object가 컨텍스트에 바인드되면 처음에는 디폴트 상태값을 갖게
+된다.
+</p>
+
+<p>
+Object의 이름을 생성하는 함수는 glGen* 의 형태를 이룬다(*은 Object
+타입의 복수형). 이런 형태의 함수들은 모두 같은 프로토타입이다.
+</p>
+
+<pre class="example">
+void glGen*(GLsizei n, GLuint *objects);
+</pre>
+
+<p>
+위 함수는 주어진 타입으로 n개의 Object를 생성하여 objects 파라미터에
+배열로 저장한다. 이렇게 하여 한 번의 호출로 여러 개의 Object를 생성할
+수 있다.
+</p>
+
+<p>
+Object의 이름은 언제나 GLuint 이다. 이름은 포인터가 아니다. 이름은
+레퍼런스이며 그 Object에 대한 식별자이다. 이름은 0이 아닌 32비트의
+unsigned integer이다. 0인 Object는 특별한 상황에 대해 내정된
+객체이다. 자세한것은 이후의 내용을 참고하자.
+</p>
+
+<p>
+<b>Legacy Note</b>: OpenGL 3.0 이전에서는 사용자가 generation 단계를
+완전히 무시하는게 가능했다. 예를 들어 사용자는 "3"이 유효한 Object
+이름이라고 보고 이를 Object처럼 사용할 수 있었다. 실제 구현은 이런
+식의 접근을 허용하고 "3번" Object를 처음으로 사용할 때 Object를 몰래
+생성해준다. GL 3.0 에서 이러한 방식은 사용하지 않도록
+권장되었다. GL 3.1 이후부터는 이런 방식이 아예 허용되지 않고
+있다. 아무튼 OpenGL 버전과 관계 없이 glGen* 을 통해 Object를 만드는
+것이 임의로 번호를 따서 만드는 것보다 더 좋은 연습이 될 것이다.
+</p>
+
+<p>
+Object를 다 사용하였다면 지워야 한다. 삭제하는 함수는 glDelete* 의
+형태를 이룬다(*은 Object 타입이다). 삭제 함수들은 아래와 같은
+프로토타입이다.
+</p>
+
+<pre class="example">
+void glDelete*(GLsizei n, const GLuint *objects);
+</pre>
+
+<p>
+삭제 함수 역시 glGen* 함수처럼 동작한다. 단, 복수의 Object를 생성하는게
+아니라 지우는 것이다. 유효하지 않은 Object 값이나 0에 대해서는
+무시된다.
+</p>
+
+<p>
+OpenGL Object가 지워지면 이들의 이름은 더 이상 유효하지 않은 것으로
+간주된다. 이렇게 삭제하고 난 다음에 바로 glGen* 을 사용하면 방금 전에
+지웠던 그 이름은 다시 사용될 수도 있고 아닐 수도 있다. 그래서 이에 대해
+미리 예상하고 코드를 짜서는 안된다.
+</p>
+</div>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Deletion unbinding</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Object가 현재 컨텍스트에 바인드된 상태(<i>현재 컨텍스트</i> 에 대해서만으로
+한다)로 지워졌다면 그 Object는 그 컨텍스트에 대해 언바인드될 것이다.
+</p>
+
+<p>
+<b>Note</b>: "<i>attachment</i>" 가 아니라 "<i>binding</i>" 이다. 바인딩은
+컨텍스트에 대한 것이다. attachment는 어떤 Object가 다른 것을
+참조하게 되었을 때 무엇을 하느냐에 대한 것이다. attachment는 위의
+상황에 대해 동일하게 동작하지 않는다.
+</p>
+
+<p>
+어떤 Object들은 비정상적인 방식으로 컨텍스트와 연관되어 있다. 이런
+방법이란 아래 내용을 포함한다.
+</p>
+
+<ul class="org-ul">
+<li><a href="https://www.opengl.org/wiki/GLAPI/glBindBufferRange">glBindBufferRange</a> 혹은 이와 비슷한 형태의 함수에 의해 인덱스가
+지정된 타겟에 바인드된 <a href="https://www.opengl.org/wiki/Buffer_Object">Buffer Object</a>.
+</li>
+<li><a href="https://www.opengl.org/wiki/Image_Load_Store#Images_in_the_context">Image</a> 로 바인드된 <a href="https://www.opengl.org/wiki/Texture">Texture</a>.
+</li>
+</ul>
+
+<p>
+위의 경우 Object가 삭제되더라도 바인딩이 해제되지 않는다. 해제가 가능한
+바인딩은 해당 Object 타입의 glBind* 함수를 사용해서 바인딩이 해제되는
+유형의 바인딩이어야 한다.
+</p>
+
+<p>
+따라서 glBindBufferRange(GL_UNIFORM_BUFFER, &#x2026;)를 사용하여 바인드된
+버퍼를 삭제하는 것은 마치 glBindBuffer(GL_UNIFORM_BUFFER, 0)을 호출한
+것과 같은 것이다. 이렇게 하면 인덱스가 지정된 타겟에서 바인드를
+해제하지 않는다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Deletion orphaning</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Object Usage</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Object zero</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Multibind</h2>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Object Sharing</h2>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Object types</h2>
+<div class="outline-text-2" id="text-5">
+</div><div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> Container objects</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Non-standard objects</h2>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Jagyum Koo</p>
+<p class="date">Created: 2014-12-07 Sun 15:53</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
