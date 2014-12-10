@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Sitemap for project koodev-org</title>
+<title>Backquote</title>
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Jagyum Koo" />
@@ -136,73 +136,92 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">Sitemap for project koodev-org</h1>
-<ul class="org-ul">
-<li>Emacs
-<ul class="org-ul">
-<li>OrgMode
-<ul class="org-ul">
-<li><a href="Emacs/OrgMode/escape-verbatim-markup.html">Escaping in the Verbatim Markup</a>
-</li>
-<li><a href="Emacs/OrgMode/publish-org-to-html.html">Publishing Org-mode files to HTML</a>
-</li>
-</ul>
-</li>
-<li>Variables
-<ul class="org-ul">
-<li><a href="Emacs/Variables/org-publish-project-alist.html">org-publish-project-alist</a>
-</li>
-</ul>
-</li>
-<li>elisp
-<ul class="org-ul">
-<li><a href="Emacs/elisp/backquote.html">Backquote</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Graphics
-<ul class="org-ul">
-<li>OpenGL
-<ul class="org-ul">
-<li><a href="Graphics/OpenGL/opengl-object.html">OpenGL Object</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Mac
-<ul class="org-ul">
-<li><a href="Mac/prompt-elipse.html">Prompt elipse in MacOS X</a>
-</li>
-</ul>
-</li>
-<li>Mathematics
-<ul class="org-ul">
-<li><a href="Mathematics/imaginary-number.html">허수(Imaginary Number)의 기본 개념</a>
-</li>
-</ul>
-</li>
-<li>Tools
-<ul class="org-ul">
-<li>Github
-<ul class="org-ul">
-<li><a href="Tools/Github/github-jekyll.html">Using Jeckll with Pages</a>
-</li>
-</ul>
-</li>
-<li>git
-<ul class="org-ul">
-<li><a href="Tools/git/gitignore-donot-work.html">.gitignore dosen't work!</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="index.html">index</a>
-</li>
-</ul>
+<h1 class="title">Backquote</h1>
+<p>
+GNU Emacs 메뉴얼의 <a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Backquote.html#Backquote">Backquote</a> 페이지 번역.
+</p>
+
+<p>
+리스트 앞에 붙이는 backquote(`)는 quote(')와 비슷하지만 내부의
+엘리먼트를 선택적으로 evaluate 시킬 수 있다. 그런데 아주 단순하게
+사용한다면 special form 인 <code>quote</code> 와 동일하다(<a href="http://www.gnu.org/software/emacs/manual/html_node/elisp/Quoting.html#Quoting">Quoting</a> 페이지
+참고). 예를 들어 아래 두 개의 form은 동일한 결과값을 내놓는다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">`(a list of (+ 2 3) elements)
+;; =&gt; (a list of (+ 2 3) elements)
+'(a list of (+ 2 3) elements)
+;; =&gt; (a list of (+ 2 3) elements)
+</pre>
 </div>
+
+<p>
+그런데 special marker인 콤마(,)가 backquote 리스트 내부의 엘리먼트앞에
+붙게 되면 그 값을 상수로 취급하지 않는다.<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup> Emacs Lisp evaluator는
+콤마(,)가 붙은 인자는 evaluate 시키며 그 결과값을 리스트에 넣어 준다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">`(a list of ,(+ 2 3) elements)
+;; =&gt; (a list of 5 elements)
+</pre>
+</div>
+
+<p>
+아래와 같이 콤마(,)를 리스트 내부에 더 깊게 박아둘 수도 있다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">`(1 2 (3 ,(+ 4 5)))
+;; =&gt; (1 2 (3 9))
+</pre>
+</div>
+
+<p>
+special marker인 <code>​',@'​</code> 를 사용하면 evaluate 된 값의 일부분을 잘라서
+최종 리스트에 반영할 수도 있다. 이렇게 일부가 잘린 리스트의 엘리먼트는
+최종 리스트의 다른 엘리먼트들과 동등한 레벨이 된다.<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>
+backquote(`)를 사용하지 않게 되면 결과가 다를 것이다. 아래 예제를
+참고하자.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(setq some-list '(2 3))
+;; =&gt; (2 3)
+(cons 1 (append some-list '(4) some-list))
+;; =&gt; (1 2 3 4 2 3)
+`(1 ,@some-list 4 ,@some-list)
+;; =&gt; (1 2 3 4 2 3)
+
+(setq list '(hack foo bar))
+;; =&gt; (hack foo bar)
+(cons 'use
+  (cons 'the
+    (cons 'words (append (cdr list) '(as elements)))))
+;; =&gt; (use the words foo bar as elements)
+`(use the words ,@(cdr list) as elements)
+;; =&gt; (use the words foo bar as elements)
+</pre>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+역주: evaluate 시킨다는 뜻으로 보임.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+역주: 콤마앳(,@)은 괄호를 벗긴다고 보아도 될 듯.
+</p></div>
+
+
+</div>
+</div></div>
 </body>
 </html>
