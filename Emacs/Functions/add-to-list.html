@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Sitemap for project koodev-org</title>
+<title>add-to-list</title>
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Jagyum Koo" />
@@ -136,105 +136,36 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">Sitemap for project koodev-org</h1>
-<ul class="org-ul">
-<li>Emacs
-<ul class="org-ul">
-<li>Functions
-<ul class="org-ul">
-<li><a href="Emacs/Functions/add-to-list.html">add-to-list</a>
-</li>
-<li><a href="Emacs/Functions/defgroup.html">defgroup</a>
-</li>
-<li><a href="Emacs/Functions/eval-after-load.html">eval-after-load</a>
-</li>
-</ul>
-</li>
-<li>OrgMode
-<ul class="org-ul">
-<li><a href="Emacs/OrgMode/escape-verbatim-markup.html">Escaping in the Verbatim Markup</a>
-</li>
-<li><a href="Emacs/OrgMode/publish-org-to-html.html">Publishing Org-mode files to HTML</a>
-</li>
-<li><a href="Emacs/OrgMode/trouble-with-org-publish-project-alist.html">org-publish-project-alist 프로퍼티에 변수값 넣기</a>
-</li>
-</ul>
-</li>
-<li>Variables
-<ul class="org-ul">
-<li><a href="Emacs/Variables/auto-mode-alist.html">auto-mode-alist</a>
-</li>
-<li><a href="Emacs/Variables/org-publish-project-alist.html">org-publish-project-alist</a>
-</li>
-</ul>
-</li>
-<li>elisp
-<ul class="org-ul">
-<li><a href="Emacs/elisp/backquote.html">Backquote</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Graphics
-<ul class="org-ul">
-<li>OpenGL
-<ul class="org-ul">
-<li><a href="Graphics/OpenGL/opengl-object.html">OpenGL Object</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Linux
-<ul class="org-ul">
-<li><a href="Linux/dma.html">Direct Memory Access</a>
-</li>
-</ul>
-</li>
-<li>Mac
-<ul class="org-ul">
-<li><a href="Mac/prompt-elipse.html">Prompt elipse in MacOS X</a>
-</li>
-</ul>
-</li>
-<li>Mathematics
-<ul class="org-ul">
-<li>Artin-Algebra
-<ul class="org-ul">
-<li>01-Matrix-Operations
-<ul class="org-ul">
-<li><a href="Mathematics/Artin-Algebra/01-Matrix-Operations/01-00-intro.html">Chapter 01 - Matrix Operations: 소개</a>
-</li>
-<li><a href="Mathematics/Artin-Algebra/01-Matrix-Operations/01-01-The-Basic-Operations.html">THE BASIC OPERATIONS</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="Mathematics/imaginary-number.html">허수(Imaginary Number)의 기본 개념</a>
-</li>
-</ul>
-</li>
-<li>Tools
-<ul class="org-ul">
-<li>Github
-<ul class="org-ul">
-<li><a href="Tools/Github/github-jekyll.html">Using Jeckll with Pages</a>
-</li>
-</ul>
-</li>
-<li>git
-<ul class="org-ul">
-<li><a href="Tools/git/gitignore-donot-work.html">.gitignore dosen't work!</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="index.html">index</a>
-</li>
-</ul>
+<h1 class="title">add-to-list</h1>
+<p>
+add-to-list는 subr.el 에 정의되어 있으며 컴파일된 Lisp 함수이다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(add-to-list LIST-VAR ELEMENT &amp;optional APPEND COMPARE-FN)
+</pre>
+</div>
+
+<p>
+ELEMENT를 LIST-VAR의 값(어퍼스트로피를 의미하는 듯)에 추가한다. <span class="underline">만일
+list에 같은 ELEMENT가 있다면 추가되지 않는다.</span> ELEMENT와 같음을
+판별하기 위해 'equal'을 사용하거나 COMPARE-FN을 지정해서
+사용한다. ELEMENT가 추가되는 경우 기본적으로는 list의 시작 부분에
+추가된다. 끝 부분에 추가하기 위해서는 APPEND 인자에 nil이 아닌 값을
+넣어 주면 된다.
+</p>
+
+<p>
+리턴값은 업데이트된 LIST-VAR 이다.
+</p>
+
+<p>
+만일 특정 패키지가 로드되지 않은 상태에서는 정의되지 않는 변수에
+'add-to-list'를 사용하고 싶다면 패키지 로딩 후에 실행되는 hook 함수에서
+'add-to-list'를 부르면 된다. 'eval-after-load' 문서에서 이러한 방법을
+소개한다. 매이저 모드 hook과 같은 경우에서 이런 방식을 사용한다.
+</p>
 </div>
 </body>
 </html>

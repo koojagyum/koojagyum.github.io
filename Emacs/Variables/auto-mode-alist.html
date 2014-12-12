@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Sitemap for project koodev-org</title>
+<title>auto-mode-alist</title>
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Jagyum Koo" />
@@ -136,105 +136,73 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">Sitemap for project koodev-org</h1>
-<ul class="org-ul">
-<li>Emacs
-<ul class="org-ul">
-<li>Functions
-<ul class="org-ul">
-<li><a href="Emacs/Functions/add-to-list.html">add-to-list</a>
-</li>
-<li><a href="Emacs/Functions/defgroup.html">defgroup</a>
-</li>
-<li><a href="Emacs/Functions/eval-after-load.html">eval-after-load</a>
-</li>
-</ul>
-</li>
-<li>OrgMode
-<ul class="org-ul">
-<li><a href="Emacs/OrgMode/escape-verbatim-markup.html">Escaping in the Verbatim Markup</a>
-</li>
-<li><a href="Emacs/OrgMode/publish-org-to-html.html">Publishing Org-mode files to HTML</a>
-</li>
-<li><a href="Emacs/OrgMode/trouble-with-org-publish-project-alist.html">org-publish-project-alist 프로퍼티에 변수값 넣기</a>
-</li>
-</ul>
-</li>
-<li>Variables
-<ul class="org-ul">
-<li><a href="Emacs/Variables/auto-mode-alist.html">auto-mode-alist</a>
-</li>
-<li><a href="Emacs/Variables/org-publish-project-alist.html">org-publish-project-alist</a>
-</li>
-</ul>
-</li>
-<li>elisp
-<ul class="org-ul">
-<li><a href="Emacs/elisp/backquote.html">Backquote</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Graphics
-<ul class="org-ul">
-<li>OpenGL
-<ul class="org-ul">
-<li><a href="Graphics/OpenGL/opengl-object.html">OpenGL Object</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Linux
-<ul class="org-ul">
-<li><a href="Linux/dma.html">Direct Memory Access</a>
-</li>
-</ul>
-</li>
-<li>Mac
-<ul class="org-ul">
-<li><a href="Mac/prompt-elipse.html">Prompt elipse in MacOS X</a>
-</li>
-</ul>
-</li>
-<li>Mathematics
-<ul class="org-ul">
-<li>Artin-Algebra
-<ul class="org-ul">
-<li>01-Matrix-Operations
-<ul class="org-ul">
-<li><a href="Mathematics/Artin-Algebra/01-Matrix-Operations/01-00-intro.html">Chapter 01 - Matrix Operations: 소개</a>
-</li>
-<li><a href="Mathematics/Artin-Algebra/01-Matrix-Operations/01-01-The-Basic-Operations.html">THE BASIC OPERATIONS</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="Mathematics/imaginary-number.html">허수(Imaginary Number)의 기본 개념</a>
-</li>
-</ul>
-</li>
-<li>Tools
-<ul class="org-ul">
-<li>Github
-<ul class="org-ul">
-<li><a href="Tools/Github/github-jekyll.html">Using Jeckll with Pages</a>
-</li>
-</ul>
-</li>
-<li>git
-<ul class="org-ul">
-<li><a href="Tools/git/gitignore-donot-work.html">.gitignore dosen't work!</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="index.html">index</a>
-</li>
-</ul>
+<h1 class="title">auto-mode-alist</h1>
+<p>
+auto-mode-alist는 files.el 에 정의되어 있다.
+</p>
+
+<p>
+이 변수를 어떤 파일에서 로컬 변수로 사용하는 것은 위험할 수도 있으니
+주의한다.
+</p>
+
+<p>
+파일 이름을 나타내는 패턴과 그에 대응하는 매이저 모드 함수들로 이루어진
+alist(Associsation List) 이다. 각각의 엘리먼트는 (REGEXP . FUNCTION)
+혹은 (REGEXP FUNCTION NON-NIL) 이런 식으로 이루어져 있다. (NON-NIL은
+nil값이 아닌 다른 어떤 것을 나타낸다. 아무 값이나 상관 없다.) REGEXP에
+매칭되는 어떤 파일을 열면 해당되는 FUNCTION 에서 지정하는 모드를
+사용하는 것이다. 즉 nil이 아닌 FUNCTION은 호출된다.
+</p>
+
+<p>
+만일 어떤 엘리먼트가 (REGEXP FUNCTION NON-NIL) 형태를 갖는다면
+FUNCTION이 불린 다음에 REGEXP와 매칭되는 접미사<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>를 삭제하고 다른
+매칭을 찾아 리스르를 다시 뒤진다<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+</p>
+
+<p>
+파일에 대응하는 FUNCTION이 `archive-mode'<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>라면
+`auto-coding-alist'<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>에도 `no-conversion' coding system 으로 되어
+있어야 한다.
+</p>
+
+<p>
+`interpreter-mode-alist'에 대한 문서도 찾아보기 바란다. 이것은 파일을
+열었을 때 첫 라인에 명시한 인터프리터 이름을 보고 매이저 모드를 활성화
+시키는 것에 대한 변수이다. 그리고 `magic-mode-alist'도 역시 비슷한
+형태로서 파일 안의 내용과 매칭시켜서<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup> 매이저 모드를 결정한다.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+역주: FUNCTION을 의미하는 듯
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+역주: 한 번 부르고 끝나는 것이 아니라 리스트를 계속 탐색해서
+나오면 또 부른다는 뜻으로 보임.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+archive-mode는 압축 파일의 내용을 dired-mode 처럼 보여주는
+매이저 모드이다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+`audo-coding-alist'는 `auto-mode-alist'와 비슷한 형태인데
+매칭되는 파일이 열리면 함수를 실행하는 것이 아니라 해당 코딩 시스템을
+사용하여 디코딩하는 것이다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+파일을 열었을 때 버퍼의 시작 부분에서 부터 매칭한다.
+</p></div>
+
+
 </div>
+</div></div>
 </body>
 </html>

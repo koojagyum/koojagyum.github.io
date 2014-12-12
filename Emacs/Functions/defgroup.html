@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Sitemap for project koodev-org</title>
+<title>defgroup</title>
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Jagyum Koo" />
@@ -136,105 +136,53 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">Sitemap for project koodev-org</h1>
-<ul class="org-ul">
-<li>Emacs
-<ul class="org-ul">
-<li>Functions
-<ul class="org-ul">
-<li><a href="Emacs/Functions/add-to-list.html">add-to-list</a>
-</li>
-<li><a href="Emacs/Functions/defgroup.html">defgroup</a>
-</li>
-<li><a href="Emacs/Functions/eval-after-load.html">eval-after-load</a>
-</li>
-</ul>
-</li>
-<li>OrgMode
-<ul class="org-ul">
-<li><a href="Emacs/OrgMode/escape-verbatim-markup.html">Escaping in the Verbatim Markup</a>
-</li>
-<li><a href="Emacs/OrgMode/publish-org-to-html.html">Publishing Org-mode files to HTML</a>
-</li>
-<li><a href="Emacs/OrgMode/trouble-with-org-publish-project-alist.html">org-publish-project-alist 프로퍼티에 변수값 넣기</a>
-</li>
-</ul>
-</li>
-<li>Variables
-<ul class="org-ul">
-<li><a href="Emacs/Variables/auto-mode-alist.html">auto-mode-alist</a>
-</li>
-<li><a href="Emacs/Variables/org-publish-project-alist.html">org-publish-project-alist</a>
-</li>
-</ul>
-</li>
-<li>elisp
-<ul class="org-ul">
-<li><a href="Emacs/elisp/backquote.html">Backquote</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Graphics
-<ul class="org-ul">
-<li>OpenGL
-<ul class="org-ul">
-<li><a href="Graphics/OpenGL/opengl-object.html">OpenGL Object</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Linux
-<ul class="org-ul">
-<li><a href="Linux/dma.html">Direct Memory Access</a>
-</li>
-</ul>
-</li>
-<li>Mac
-<ul class="org-ul">
-<li><a href="Mac/prompt-elipse.html">Prompt elipse in MacOS X</a>
-</li>
-</ul>
-</li>
-<li>Mathematics
-<ul class="org-ul">
-<li>Artin-Algebra
-<ul class="org-ul">
-<li>01-Matrix-Operations
-<ul class="org-ul">
-<li><a href="Mathematics/Artin-Algebra/01-Matrix-Operations/01-00-intro.html">Chapter 01 - Matrix Operations: 소개</a>
-</li>
-<li><a href="Mathematics/Artin-Algebra/01-Matrix-Operations/01-01-The-Basic-Operations.html">THE BASIC OPERATIONS</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="Mathematics/imaginary-number.html">허수(Imaginary Number)의 기본 개념</a>
-</li>
-</ul>
-</li>
-<li>Tools
-<ul class="org-ul">
-<li>Github
-<ul class="org-ul">
-<li><a href="Tools/Github/github-jekyll.html">Using Jeckll with Pages</a>
-</li>
-</ul>
-</li>
-<li>git
-<ul class="org-ul">
-<li><a href="Tools/git/gitignore-donot-work.html">.gitignore dosen't work!</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="index.html">index</a>
-</li>
-</ul>
+<h1 class="title">defgroup</h1>
+<p>
+defgroup은 `custom.el' 파일에 있는 lisp 매크로이다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-elisp">(defgroup SYMBOL MEMBERS DOC &amp;rest ARGS)
+</pre>
+</div>
+
+<p>
+SYMBOL을 이름으로 커스토마이즈 그룹을 하나 만들어서 MEMEBERS를 안에
+포함시킨다. SYMBOL에 작은따옴표(')를 붙일 필요는 없다.
+</p>
+
+<p>
+세 번째 전달인자 DOC는 그룹에 대한 설명 문서이다. 그룹에 대한 짧은
+설명을 담고 있어야 하면 대문자로 시작해서 구두점으로 끝나야 한다. 첫
+글자를 제외한 나머지 글자들은 원래 그렇게 생겨먹지 않은 이상 소문자로
+써야 한다.
+</p>
+
+<p>
+MEMBERS는 ((NAME WIDGET)&#x2026;) 형태의 alist(Association List)를 이루어야
+한다. 여기서 NAME은 심볼이고 WIDGET은 해당 심볼을 편집하는
+위젯(UI)이다. 예를 들어 쓸만한 위젯에는 변수를 편집할 수 있는
+'cusom-variable'을 넣는다. 그외 글자 모양(face)를 조정하는
+'custom-face', 그룹을 편집하는 'custom-group' 등등이 있다.
+</p>
+
+<p>
+나머지 전달인자들은 아래와 같은 형태를 이룬다.
+</p>
+
+<pre class="example">
+[KEYWORD VALUE]...
+</pre>
+
+<p>
+이에 대해서는 'defcustom' 문서를 참고해 보기 바란다.
+</p>
+
+<p>
+또한 '(elisp) Customization' 문서에서도 관련된 추가적인 정보를 찾아볼
+수 있다.
+</p>
 </div>
 </body>
 </html>

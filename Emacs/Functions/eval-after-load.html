@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Sitemap for project koodev-org</title>
+<title>eval-after-load</title>
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Jagyum Koo" />
@@ -136,105 +136,81 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">Sitemap for project koodev-org</h1>
-<ul class="org-ul">
-<li>Emacs
-<ul class="org-ul">
-<li>Functions
-<ul class="org-ul">
-<li><a href="Emacs/Functions/add-to-list.html">add-to-list</a>
-</li>
-<li><a href="Emacs/Functions/defgroup.html">defgroup</a>
-</li>
-<li><a href="Emacs/Functions/eval-after-load.html">eval-after-load</a>
-</li>
-</ul>
-</li>
-<li>OrgMode
-<ul class="org-ul">
-<li><a href="Emacs/OrgMode/escape-verbatim-markup.html">Escaping in the Verbatim Markup</a>
-</li>
-<li><a href="Emacs/OrgMode/publish-org-to-html.html">Publishing Org-mode files to HTML</a>
-</li>
-<li><a href="Emacs/OrgMode/trouble-with-org-publish-project-alist.html">org-publish-project-alist 프로퍼티에 변수값 넣기</a>
-</li>
-</ul>
-</li>
-<li>Variables
-<ul class="org-ul">
-<li><a href="Emacs/Variables/auto-mode-alist.html">auto-mode-alist</a>
-</li>
-<li><a href="Emacs/Variables/org-publish-project-alist.html">org-publish-project-alist</a>
-</li>
-</ul>
-</li>
-<li>elisp
-<ul class="org-ul">
-<li><a href="Emacs/elisp/backquote.html">Backquote</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Graphics
-<ul class="org-ul">
-<li>OpenGL
-<ul class="org-ul">
-<li><a href="Graphics/OpenGL/opengl-object.html">OpenGL Object</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Linux
-<ul class="org-ul">
-<li><a href="Linux/dma.html">Direct Memory Access</a>
-</li>
-</ul>
-</li>
-<li>Mac
-<ul class="org-ul">
-<li><a href="Mac/prompt-elipse.html">Prompt elipse in MacOS X</a>
-</li>
-</ul>
-</li>
-<li>Mathematics
-<ul class="org-ul">
-<li>Artin-Algebra
-<ul class="org-ul">
-<li>01-Matrix-Operations
-<ul class="org-ul">
-<li><a href="Mathematics/Artin-Algebra/01-Matrix-Operations/01-00-intro.html">Chapter 01 - Matrix Operations: 소개</a>
-</li>
-<li><a href="Mathematics/Artin-Algebra/01-Matrix-Operations/01-01-The-Basic-Operations.html">THE BASIC OPERATIONS</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="Mathematics/imaginary-number.html">허수(Imaginary Number)의 기본 개념</a>
-</li>
-</ul>
-</li>
-<li>Tools
-<ul class="org-ul">
-<li>Github
-<ul class="org-ul">
-<li><a href="Tools/Github/github-jekyll.html">Using Jeckll with Pages</a>
-</li>
-</ul>
-</li>
-<li>git
-<ul class="org-ul">
-<li><a href="Tools/git/gitignore-donot-work.html">.gitignore dosen't work!</a>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="index.html">index</a>
-</li>
-</ul>
+<h1 class="title">eval-after-load</h1>
+<p>
+eval-after-load는 subr.el 파일에 정의된 컴파일된 함수이다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-emacs-lisp">(eval-after-load FILE FORM)
+</pre>
 </div>
+
+<p>
+FILE이 로드되면 FORM이 실행된다. 만일 FILE이 이미 로드된 상태라면
+FORM을 즉시 실행한다.
+</p>
+
+<p>
+만일 매칭되는 파일이 한번 더 로드되면 FORM도 다시 실행된다.
+</p>
+
+<p>
+FILE이 문자열인 경우 파일 이름은 절대/상대 경로 모두 가능하며 확장자
+표기(ex: ".el")만 하거나 확장자를 생략할수도 있으며, 압축 포멧의
+경우에도 명기하거나 생략할 수도 있다(ex: ".gz").
+</p>
+
+<p>
+FILE이 절대 경로일 경우 우선 파일 이름을 갖는 심볼릭 링크를
+만든다<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>. FORM을 실행시키기 위해서는 오로지 파일 이름만이 허용되기
+때문이다(다음 단략을 참고하시라). 만일 FILE이 상대 경로라면 그 FILE의
+절대 경로로 변환된 다음에 수행될 것이다.
+</p>
+
+<p>
+FILE의 확장자가 생략되어 있다면 확장자와는 상관없이 그 이름을 가진
+파일이 로드되면 FORM이 실행될 것이다. 확장자 없이 FILE 이름 뿐인 파일이
+로드되는 경우에도 동작한다. 압축 포멧에 쓰이는 확장자(ex: ".gz")는
+이러한 네임 매칭에 영향을 미치지 않는다???
+</p>
+
+<p>
+FILE은 feature(ex: symbol)가 될 수도 있다. 이 경우 FORM은 이맥스
+인터프리터가 이 feature를 *provide*<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>하는 파일을 다 읽으면
+실행된다. 만일 어느 파일과도 관련 없이 코드 실행만으로 feature가
+provide 되었다면 그 provide 명령문이 실행된 다음에 FORM이 실행된다.
+</p>
+
+<p>
+보통 FILE은 "font-lock" 같은 라이브러리 이름 혹은 feature의 이름을
+이야기 한다.
+</p>
+
+<p>
+이 함수는 `after-load-alist' 라는 변수의 엔트리로 들어간다.<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+임시로 만든다는 의미 같다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+여기서 provide는 '제공하다' 라는 뜻이 아니라 Emacs의 빌트인
+함수이다. 형식은 (provide FEATURE &amp;optional SUBFEATURES) 이고,
+FEATURE를 현재 Emacs의 feature로 선언하는 것이다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+잘 이해가 안된다. `after-load-alist' 문서도 참고해보자.
+</p></div>
+
+
+</div>
+</div></div>
 </body>
 </html>
