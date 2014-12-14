@@ -268,7 +268,7 @@ b_{m}
 </p>
 <div class="center">
 <p>
-\((a_{ij} + (b_{ij}) = (s_{ij})\)
+\((a_{ij}) + (b_{ij}) = (s_{ij})\)
 </p>
 
 <p>
@@ -290,13 +290,20 @@ where \(s_{ij} = a_{ij} + b_{ij}\) for all i,j. 따라서
 </p>
 
 <p>
-(1.5) 행렬에 어떤 숫자를 스칼라(scalar) 곱하는 연산은 벡터에 의해
+(1.5)
+</p>
+<div class="center">
+<p>
+행렬에 어떤 숫자를 스칼라(scalar) 곱하는 연산은 벡터에 의해
 정의된다. 행렬 \((a_{ij})\) 에 숫자 c를 곱한 결과는 또 다른 행렬이 된다.
 </p>
+</div>
 
+<div class="center">
 <p>
 \(c(a_{ij}) = (b_{ij})\),
 </p>
+</div>
 
 <p>
 where \(b_{ij} = ca_{ij}\) for all i, j. 따라서
@@ -531,7 +538,7 @@ p_{ij}
 
 <p>
 행렬 연산은 여러 항등식을 만족할 수 있다. 그 중 하나가 distributive
-law(분배 법칙) 이다.
+law(분배법칙) 이다.
 </p>
 
 <p>
@@ -544,7 +551,7 @@ law(분배 법칙) 이다.
 </div>
 
 <p>
-또 하나는 associative law(결합 법칙)이다.
+또 하나는 associative law(결합법칙)이다.
 </p>
 
 <p>
@@ -555,6 +562,495 @@ law(분배 법칙) 이다.
 \((AB)C = A(BC)\)
 </p>
 </div>
+
+<p>
+위 법칙들은 행렬곱(product)이 가능한 크기의 행렬들에 항상
+적용된다. 예를 들어 associative law(결합법칙)는 행렬들의 크기가 \(A = l
+\times m\), \(B = m \times n\), \(C = n \times p\) 가 되어야 한다. 식
+(1.11) 에서 양쪽 항에서 곱(product)한 결과가 같기 때문에 소괄호가
+필요하지 않다. 따라서 그냥 ABC 적어도 된다. 그러니까 세 행렬의
+곱(product) ABC는 \(l \times p\) 행렬이다. 아래 예는 associative
+law(결합법칙)를 사용한 행렬곱(product) 연산을 하는 두 가지 방법이다.
+</p>
+
+\begin{equation}
+ABC
+=
+\begin{bmatrix} 1 \\ 2 \end{bmatrix}
+\begin{bmatrix} 1 & 0 & 1 \end{bmatrix}
+\begin{bmatrix} 2 & 0 \\ 1 & 1 \\ 0 & 1 \end{bmatrix}
+\end{equation}
+
+<p>
+위의 식은 아래 두 가지 방식으로 계산할 수 있다.
+</p>
+
+\begin{equation}
+(AB)C
+=
+\begin{bmatrix} 1 & 0 & 1 \\ 2 & 0 & 1 \end{bmatrix}
+\begin{bmatrix} 2 & 0 \\ 1 & 1 \\ 0 & 1 \end{bmatrix}
+=
+\begin{bmatrix} 2 & 1 \\ 4 & 2 \end{bmatrix}
+\end{equation}
+<p>
+또는
+</p>
+\begin{equation}
+A(BC)
+=
+\begin{bmatrix} 1 \\ 2 \end{bmatrix}
+\begin{bmatrix} 2 & 1 \end{bmatrix}
+=
+\begin{bmatrix} 2 & 1 \\ 4 & 2 \end{bmatrix}
+\end{equation}
+
+<p>
+행렬에 대한 스칼라곱(scalar multiplication)은 아래와 같은
+호환성(compatible)을 갖는다.
+</p>
+
+<p>
+(1.12)
+/begin{equation}
+c(AB) = (cA)B = a(cB)
+/end{equation}
+</p>
+
+<p>
+위에 대한 증명은 직관적인 방식으로 할 수 있으나 별로 재미있는 과정은
+아니다.
+</p>
+
+<p>
+그런데 행렬연산에서 commutative law(교환법칙)은 지원되지 않는다.
+</p>
+
+<p>
+(1.13)
+</p>
+<div class="center">
+<p>
+일반적인 경우에서 \(AB \neq BA\)
+</p>
 </div>
+
+<p>
+A는 \(l \times m\) 행렬이고 B는 \(m \times l\) 행렬이며 AB와 BA의
+행렬곱(product)은 모두 가능하다고 해도 AB는 \(l \times l\) 행렬이 되고
+BA는 \(m \times m\) 행렬이 되므로 둘은 같지 않다. 두 행렬이 $m &times;
+m$의 정사각행렬이라고 해도 행렬곱(product)의 결과는 서로 다르다. 아래
+예를 참고하자.
+</p>
+
+\begin{equation}
+\begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}
+\begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix}
+=
+\begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+\begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix}
+\begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}
+=
+\begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}
+\end{equation}
+
+<p>
+행렬 곱셈(multiplication)이 교환의 성질(commutative)을 만족하지 못하기
+때문에 행렬 방정식을 다룰 때는 주의해야 한다. \(B = C\) 방정식의 양변의
+왼쪽에 (행렬곱이 가능한) A를 곱하면 \(AB = AC\) 가 된다. 이와 비슷하게
+행렬곱이 A를 오른쪽에 곱해서 $BA = CA$를 만들 수도 있다. 하지만 $B =
+C$라고 해서 $AB = CA$일 수는 없다!
+</p>
+
+<p>
+엔트리가 모두 0인 임의의 크기의 행렬을 zero matrix(영행렬)이라고
+부르고 0이라고 표기한다. \(0_{m \times n}\) 이라고 표기하면 더 좋을
+것이다.
+</p>
+
+<p>
+어떤 행렬 A에서 \(a_{ii}\) 엔트리<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>를 diagonal entries(대각성분)
+라고한다. 만일 diagonal entries(대각성분)가 모두 0이 아닌 성분인 행렬
+A를 diagonal matrix(대각행렬)라고 부른다.
+</p>
+
+<p>
+아래와같이 대각성분의 위치에만 1이 들어있고 나머지는 0인 \(n \times n\)
+정사각행렬을 \(n \times n\) identity matrix(단위행렬)라고 부른다.
+</p>
+
+<p>
+(1.14)
+</p>
+\begin{equation}
+I_{n}
+=
+\begin{bmatrix}
+1 & 0 & \cdots & 0 \\
+0 & 1 &  & \cdot \\
+\vdots &  & \ddots & \vdots \\
+0 & \cdots & \cdots & 1
+\end{bmatrix}
+\end{equation}
+
+<p>
+identity matrix(단위행렬)는 마치 1을 곱한 것과 같은 결과를 낸다. 행렬
+A가 \(m \times n\) 행렬이라면,
+</p>
+
+<div class="center">
+<p>
+\(I_{m}A = A\) 이고 \(AI_{n} = A\) 이다.
+</p>
+</div>
+
+<p>
+아래와 같이 행렬 $I_{n}$을 단순화시켜서 그릴 수도 있다.
+</p>
+
+\begin{equation}
+I_{n}
+=
+\begin{bmatrix} 1 & & 0 \\ & \ddots & \\ 0 & & 1 \end{bmatrix}
+=
+\begin{bmatrix} 1 & & \\ & \ddots & \\ & & 1 \end{bmatrix}
+\end{equation}
+
+<p>
+이 책에서는 종종 행렬의 모든 성분이 0으로만 이루어져 있을 경우 빈
+칸으로 냅두거나 0을 하나만 넣어두어 표기하고 있다.
+</p>
+
+<p>
+행렬내의 임의의 엔트리를 표현하기 위해 <code>*</code> 을 사용할 것이다.
+</p>
+
+\begin{equation}
+\begin{bmatrix} * & & * \\ & \ddots & \\ 0 & & * \end{bmatrix}
+\end{equation}
+
+<p>
+따라서 위의 예는 대각선 아래쪽의 엔트리는 모두 0이고, 다른 엔트리는
+임의의 수인 정사각 행렬이다. 이러한 행렬을 upper triangular
+matrix(상삼각행렬) 라고 부른다.
+</p>
+
+<p>
+행렬 A를 \(n \times n\) 의 정사각행렬이라고 하자. 만일 아래와 같은 행렬
+B가 존재한다면,
+</p>
+
+<p>
+(1.15)
+</p>
+<div class="center">
+<p>
+\(AB = I_{n}\) 이고 \(BA = I_{n}\)
+</p>
+</div>
+
+<p>
+이럴 경우 행렬 B를 행렬 A의 inverse(역행렬)라 부르고 \(A^{-1}\) 이라고
+쓴다.
+</p>
+
+<p>
+(1.16)
+</p>
+\begin{equation}
+A^{-1}A = I_{n} = AA^{-1}
+\end{equation}
+
+<p>
+행렬 A가 inverse(역행렬)를 가지면 이를 invertible matrix(가역행렬)라고
+부른다. 예를 들어 \(A = \begin{bmatrix} 2 & 1 \\ 5 & 3 \end{bmatrix}\)
+는 invertible(역행렬을가짐) 이다. 행렬 A의 역행렬은 \(A^{-1}
+= \begin{bmatrix} 3 & -1 \\ -5 & 2 \end{bmatrix}\) 이며 \(AA^{-1}\) 과
+\(A^{-1}A\) 인 것을 확인할 수 있다. 이와 관련하여 아래 두 개의 예를
+참고해 보자.
+</p>
+
+<div class="center">
+<p>
+\(\begin{bmatrix} 1 & \\ & 2 \end{bmatrix}^{-1} = \begin{bmatrix} 1 & \\ & \frac{1}{2} \end{bmatrix}\)
+와
+\(\begin{bmatrix} 1 & 1 \\ & 1 \end{bmatrix}^{-1} = \begin{bmatrix} 1 & -1 \\ & 1 \end{bmatrix}\)
+</p>
+</div>
+
+<p>
+나중에는 두 관계식 \(AB = I_{n}\) 이나 \(BA = I_{n}\) 중 하나를 만족하는
+행렬B 가 존재한다면 행렬 A는 invertible 하며(역행렬을 가지며) 행렬 B가
+inverse(역행렬)라는 것을 확인할 것이다((2.23) 을 참고하라). 하지만
+이는 행렬의 곱셈(multiplication)이 commutative(가환성) 하지 않기
+때문에 분명히 할 수가 없다. 그리고 두 행렬이 모두 정사각행렬이
+아니라면 이 식은 실패한다. 예를 들어 \(A = \begin{bmatrix} 1 & 2
+\end{bmatrix}\) 이고 \(B = \begin{bmatrix} 1 \\ 0 \end{bmatrix}\) 라고
+해보자. 그러면 \(AB = \begin{bmatrix} 1 \end{bmatrix} = I_{1}\) 이지만
+\(BA = \begin{bmatrix} 1 & 2 \\ 0 & 0 \end{bmatrix} \neq I_{2}\) 이다.
+</p>
+
+<p>
+한편, inverse(역행렬)가 존재할 경우 이것은 유일하게 된다. 즉,
+inverse(역행렬)는 단 하나만 존재할 수 있다. \(B\) 와 \(B'\) 가 동일한 행렬
+A에 대해 식 (1.15)를 만족한다고 하자. 그리고 \(AB = I_{n}\) (B는
+오른쪽으로 inverse(역행렬)임) 이며 \(B'A = I_{n}\) (\(B'\) 는 왼쪽으로
+inverse(역행렬)임) 인 사실만 확인했다고 하자. associative
+law(결합법칙)에 의하여 \(B'(AB) = (B'A)B\) 가 된다. 그러므로,
+</p>
+
+<p>
+(1.17)
+</p>
+\begin{equation}
+B' = B'I = B'(AB) = (B'A)B = IB = B
+\end{equation}
+
+<p>
+가 되며 따라서 \(B' = B\) 가 된다.
+</p>
+
+<p>
+(1.18) <b>Proposition.</b> A와 B를 \(n \times n\) 정사각행렬이라 하자. 두
+행렬이 모두 invertible 하다면(역행렬을 가지면), 이들의 곱(product)인
+AB는 아래와 같다.
+</p>
+\begin{equation}
+(AB)^{-1} = B^{-1}A^{-1}
+\end{equation}
+
+<p>
+좀 더 일반화 시켜보자. 만일 행렬 \(A_{1},\cdots,A_{m}\) 들이 모두
+invertible 하다면(역행렬을 갖는다면), 이들의 곱(product)인 \(A_{1}
+\cdots A_{m}\) 의 inverse(역행렬)는 \(A_{m}^{-1} \cdots A_{1}^{-1}\) 이
+된다.
+</p>
+
+<p>
+따라서 \(\begin{bmatrix} 1 & \\ & 2 \end{bmatrix} \begin{bmatrix} 1 & 1
+\\ & 1 \end{bmatrix} = \begin{bmatrix} 1 & 1 \\ & 2 \end{bmatrix}\) 의
+inverse(역행렬)는 \(\begin{bmatrix} 1 & -1 \\ & 1
+\end{bmatrix} \begin{bmatrix} 1 & \\ & \frac{1}{2} \end{bmatrix}
+= \begin{bmatrix} 1 & -\frac{1}{2} \\ & \frac{1}{2} \end{bmatrix}\)
+이다.
+</p>
+
+<p>
+Proof. 행렬 A와 B가 invertible(역행렬을가짐) 하다고 하자. 그리고
+\(B^{-1}A^{-1}\) 이 \(AB\) 의 inverse(역행렬) 임을 확인해보자.
+</p>
+
+\begin{equation}
+ABB^{-1}A^{-1} = AIA^{-1} = AA^{-1} = I
+\end{equation}
+
+<p>
+그리고 동시에
+</p>
+
+\begin{equation}
+B^{-1}A^{-1}AB = \cdots = I
+\end{equation}
+
+<p>
+일반화 버전의 assertion<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>은 induction on m(수학적귀납법) 으로
+증명할 수 있다(2.3절 참고). 우선 \(m = 1\) 일 때 assertion은 \(A_{1}\) 이
+invertible 하다면(역행렬을 가진다면) \(A_{1}^{-1}\) 은 \(A_{1}\) 의
+inverse(역행렬) 이다. 다음으로 \(m = k\) 일 경우에 이 assertion이
+참이라고 가정하고 \(m = k + 1\) 인 경우에 대해서 계속해서
+확인해본다. 행렬 \(A_{1} \cdots A_{k+1}\) 들이 모두 \(n \times n\)
+invertible(가역) 정사각행렬이라고 해 보자. 그리고 P는 k개의 행렬
+\(A_{1} \cdots A_{k}\) 들을 행렬곱(product) 한 결과라고 해
+둔다. induction hypothesis<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> 에 의하여 P는 invertible
+이고(역행렬을 가지고), inverse(역행렬)는 \(A_{k}^{-1} \cdots
+A_{1}^{-1}\) 이다. 또한 \(A_{k+1}\) 도 invertible 이다(역행렬을 가진다)
+. 따라서 두 invertible(가역) 행렬에 의해 행렬곱(product) \(PA_{k+1} =
+A_{1} \cdots A_{k}A_{k+1}\) 은 invertible 하다(역행렬을 가진다)는 것을
+알 수 있다. 그리고 이의 역행렬은 \(A_{k+1}^{-1}P^{-1} =
+A_{k+1}^{-1}A_{k}^{-1} \cdots A_{1}^{-1}\) 이 된다. 이는 \(m = k + 1\)
+일때 assertion이 참이라는 것을 보여주고 induction proof 가
+완료된다(수학적 귀납법이 증명된다).
+</p>
+
+<p>
+위의 내용이 행렬 곱셈(multiplication)의 정의와 결부되는 내용은 아니긴
+하지만, 앞으로 대부분의 정사각행렬이 invertible 하다는 것을(역행렬을
+가진다는 것을) 확인할 것이다. 하지만 행렬의 크기가 클 경우 inverse
+를(역행렬을) 찾는 것은 간단한 문제는 아니다.
+</p>
+
+<p>
+\(n \times n\) 크기의 invertible(가역) 행렬의 집합을 <code>n-dimensional
+general linear group</code> (일반선형군) 이라고 부르고 \(GL_{n}\) 이라고
+쓴다. general linear group(일반선형군)은 다음 챕터에서 group(군)에
+대한 기본 개념을 배울 때 가장 중요한 개념<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> 중에 하나가 될 것이다.
+</p>
+
+<p>
+운이 좋은 경우에는 여러가지 트릭을 적용하여 행렬 곱셈을 단순화시킬 수
+있다. block multiplication<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup> 이 그 중 하나이다. 행렬 \(M\) 과 \(M'\)
+를 각각 \(m \times n\) , \(n \times p\) 행렬이라고 하자. 그리고 r을 n보다
+작은 정수라고 하자. 그러면 아래와 같이 두 행렬을 내부 블록으로 풀어 쓸
+수 있다.
+</p>
+
+<div class="center">
+<p>
+\(M = \begin{bmatrix} A & | & B \end{bmatrix}\) and \(M' = \begin{bmatrix} A' \\ \hline \\ B' \end{bmatrix}\)
+</p>
+</div>
+
+<p>
+위에서 행렬 A는 r개의 column을 가지고 \(A'\) 는 r개의 row를
+가진다. 그러면 두 행렬의 곱(product)은 아래와 같이 계산할 수 있다.
+</p>
+
+<p>
+(1.19)
+</p>
+\begin{equation}
+MM' = AA' + BB'
+\end{equation}
+
+<p>
+이렇게 행렬곱(product)을 풀어 쓰는 것(decomposition)은 곱셈의 정의를
+그대로 따른다. 그리고 이렇게 풀면 계산이 쉬워질 수 있다. 아래 예를
+보자.
+</p>
+
+\begin{equation}
+\begin{bmatrix} 1 & 0 & | & 5 \\ 0 & 1 & | & 7 \end{bmatrix}
+\begin{bmatrix} 2 & 3 \\ 4 & 8 \\ \hline \\ 0 & 0 \end{bmatrix}
+=
+\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}
+\begin{bmatrix} 2 & 3 \\ 4 & 8 \end{bmatrix}
++
+\begin{bmatrix} 5 \\ 7 \end{bmatrix}
+\begin{bmatrix} 0 & 0 \end{bmatrix}
+=
+\begin{bmatrix} 2 & 3 \\ 4 & 8 \end{bmatrix}
+\end{equation}
+
+<p>
+(1.19) 공식이 row vector와 column vector를 곱하는 (1.6) 법칙과 동일한
+형태임을 주목해보자.
+</p>
+
+<p>
+행렬을 더 많은 블록으로 나누어 곱셈 연산을 할 수도
+있다. decomposition은 4개의 블록으로 나누는 것이 가장 유용할
+것이다. 이 경우의 블록 곱셈 방법은 \(2 \times 2\) 행렬의 곱셈의 방법과
+동일하다. \(r + s = n\) 이고 \(k + l = m\) ㅇ라고 해 보자. 그리고 \(m
+\times n\) 행렬 \(M\) 과 \(n \times n\) 행렬 \(M'\) 을 서브행렬로 나누어보자.
+</p>
+
+<div class="center">
+<p>
+\(M = \begin{array}{c|c} A & B \\ \hline C & D \end{array}\) , 
+\(M' = \begin{array}{c|c} A' & B' \\ \hline C' & D' \end{array}\)
+</p>
+</div>
+
+<p>
+위에서 행렬 \(A\) 의 column 수는 행렬 \(A'\) 의 row 수와 같다. 그러면 블록
+곱셈 법칙은 아래와 같이 된다.
+</p>
+
+<p>
+(1.20)
+</p>
+\begin{equation}
+\begin{bmatrix}
+\begin{array}{c|c} A & B \\ \hline C & D \end{array}
+\end{bmatrix}
+\begin{bmatrix}
+\begin{array}{c|c} A' & B' \\ \hline C' & D' \end{array}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\begin{array}{c|c} AA' + BC' & AB' + BD' \\ \hline CA' + DC' & CB' + DD' \end{array}
+\end{bmatrix}
+\end{equation}
+
+<p>
+아래 예제도 참고하자.
+</p>
+
+\begin{equation}
+
+\begin{bmatrix}
+\begin{array}{c|c}
+\begin{matrix} 1 & 0 \end{matrix} & 5 \\ \hline
+\begin{matrix} 0 & 1 \end{matrix} & 7
+\end{array}
+\end{bmatrix}
+
+\cdot
+
+\begin{bmatrix}
+\begin{array}{c|c}
+\begin{matrix} 2 & 3 \\ 4 & 1 \end{matrix} & \begin{matrix} 1 & 1 \\ 0 & 0 \end{matrix} \\ \hline
+\begin{matrix} 0 & 1 \end{matrix} & \begin{matrix} 1 & 0 \end{matrix}
+\end{array}
+\end{bmatrix}
+
+=
+
+\begin{bmatrix}
+\begin{array}{c|c}
+\begin{matrix} 2 & 8 \end{matrix} & \begin{matrix} 6 & 1 \end{matrix} \\ \hline
+\begin{matrix} 4 & 8 \end{matrix} & \begin{matrix} 7 & 0 \end{matrix}
+\end{array}
+\end{bmatrix}
+
+\end{equation}
+
+<p>
+예제의 행렬곱(product)에서 좌상단의 블록은 \(\begin{bmatrix} 1 & 0 \end{bmatrix} \begin{bmatrix} 2 & 3 \\ 4 & 1 \end{bmatrix} + \begin{bmatrix} 5 \end{bmatrix} \begin{bmatrix} 0 & 1 \end{bmatrix} = \begin{bmatrix} 2 & 8 \end{bmatrix}\) 이 된다. 나머지 블록도 같은 식으로 계산하면 된다.
+</p>
+
+<p>
+다시 한 번 말하지만 행렬 곱셈에서 decomposition 법칙은 행렬 곱셈의
+정의로부터 증명될 수 있다. 일반적으로 블록 곱셈은 두 행렬이
+행렬곱(product)을 할 수 있는 형태의 서브 행렬로 나뉘어져야만 사용할 수
+있다.
+</p>
+
+<p>
+block multiplication은 계산하기 쉬운 점 외에도 행렬과 관련된 사실을
+induction(수학적귀납법)으로 증명할 때 유용하게 사용할 수 있다.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+역주: row와 column 인덱스가 동일한 엔트리
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+[TODO] 적절한 번역 확인. `단언'이라는 뜻인데 수학 용어로
+확인해야 함.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+[TODO] 적절한 번역 확인. 수학적 귀납법의 가정인데 수학 용어로
+확인해야 함.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+역주: example 인데 의역함. 원래 의도랑 안 맞는 것 같기도 함.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+[TODO] 적절한 번역 확인. 행렬 내부 블록 곱셈 연산.
+</p></div>
+
+
+</div>
+</div></div>
 </body>
 </html>
