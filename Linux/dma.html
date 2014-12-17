@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Direct Memory Access</title>
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Jagyum Koo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Direct Memory Access</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Overview of a DMA Data Transfer</a></li>
+<li><a href="#sec-2">2. Allocating the DMA Buffer</a>
+<ul>
+<li><a href="#sec-2-1">2.1. Do-it-yourself allocation</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. Bus Addresses</a></li>
+<li><a href="#sec-4">4. The Generic DMA Layer</a>
+<ul>
+<li><a href="#sec-4-1">4.1. Dealing with difficult hardware</a></li>
+<li><a href="#sec-4-2">4.2. DMA mappings</a></li>
+<li><a href="#sec-4-3">4.3. Setting up coherent DMA mappings</a></li>
+<li><a href="#sec-4-4">4.4. DMA pools</a></li>
+<li><a href="#sec-4-5">4.5. Setting up streaming DMA mappings</a></li>
+<li><a href="#sec-4-6">4.6. Single-page streaming mappings</a></li>
+<li><a href="#sec-4-7">4.7. Scatter/gather mappings</a></li>
+<li><a href="#sec-4-8">4.8. PCI double-address cycle mappings</a></li>
+<li><a href="#sec-4-9">4.9. A simple PCI DMA example</a></li>
+</ul>
+</li>
+<li><a href="#sec-5">5. DMA for ISA Devices</a>
+<ul>
+<li><a href="#sec-5-1">5.1. Registering DMA usage</a></li>
+<li><a href="#sec-5-2">5.2. Talking to the DMA controller</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+Linux Device Driver, 3rd Edition (O'Reilly, 2005)의 <a href="http://www.makelinux.net/ldd3/chp-15-sect-4">Direct Memory
+Access</a> 를 번역 정리.
+</p>
+
+<p>
+Direct Memory Access(DMA)는 이 책(Linux Device Driver)에서 다루는
+메모리 관련 이슈의 마지막 주제이다. DMA는 주변 장치들이 데이터를 메인
+메모리로 복사하는 것이 시스템 프로세서의 개입 없이 다이렉트로
+이루어지도록 해 준다. 이 메커니즘을 사용하면 엄청난 오버헤드가
+생략되므로 디바이스로 오고 가는 데이터의 처리량을 훨씬 더 향상시킬 수
+있다.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Overview of a DMA Data Transfer</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+프로그래밍적인 세부 사항을 소개하기에 앞서 DMA가 어떻게 이루어지는지
+살펴보자. 단순한 접근을 위해 일단 데이터를 인풋하는 상황만을 가정해
+보도록 한다.
+</p>
+
+<p>
+데이터의 이동은 크게 두 가지 방법으로 일어나게 된다. 하나는
+소프트웨어가 read 함수 등으로 데이터를 요청하는 경우이고, 다른 하나는
+하드웨어가 스스로 데이터를 시스템에 비동기적으로 푸쉬하는 경우이다.
+</p>
+
+<p>
+첫 번째 케이스(소프트웨어가 read로 요청)에서의 세부 단계는 아래와
+같다.
+</p>
+<ol class="org-ol">
+<li>프로세스가 read 함수를 부르면 드라이버의 함수가 DMA 버퍼를 할당하고
+하드웨어에게 데이터를 DMA 버퍼로 이동하라고 지시한다. 그 동안
+프로세스는 슬립 상태에 빠진다.
+</li>
+<li>하드웨어가 DMA 버퍼에 데이터를 다 쓰면 인터럽트를 발생시킨다.
+</li>
+<li>인터럽트 핸들러는 슬립 상태이던 프로세스를 깨워서 데이터를 읽어
+가도록 한다.
+</li>
+</ol>
+
+<p>
+두 번째 케이스(하드웨어가 비동기 푸쉬)는 DMA를 비동기적으로 사용하는
+경우이다. 예를 들어 어떤 디바이스는 데이터를 얻으면 읽기 요청이 없어도
+계속해서 그 데이터를 푸쉬한다. 이 경우 드라이버는 버퍼를 하나 들고
+있으면서 read 콜이 불리면 그 동안 모아 두었던 데이터를 유저스페이스로
+리턴해 줄 수 있어야 한다. 따라서 첫 번째 케이스와는 조금 다른 세부
+단계를 보인다.
+</p>
+<ol class="org-ol">
+<li>하드웨어는 새로운 데이터가 생기면 인터럽트를 발생시킨다.
+</li>
+<li>인터럽트 핸들러는 버퍼를 하나 할당하고 하드웨어에게 그곳으로
+데이터를 옮기라고 지시한다.
+</li>
+<li>버퍼에 데이터를 쓰는 주변 장치가 일을 다 끝내면 또 다른 인터럽트를
+발생시킨다.
+</li>
+<li>두 번째 인터럽트 핸들러는 새로운 데이터가 도착했음을 관련
+프로세스에게 알리는 한편 그 동안 모아진 데이터를 잘
+관리한다.<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</li>
+</ol>
+
+<p>
+이러한 비동기적인 접근 방식의 변형들 중 하나는 네트워크 카드의
+경우이다. 네트워크 카드들은 보통 원형 버퍼(circular buffer; DMA ring
+buffer 라고도 불림)를 프로세서에서 공유되는 메모리에 만들어
+놓는다. 그리고 도착하는 패킷을 링버퍼의 다음 번 위치에다 옮겨 놓고
+인터럽트를 발생시킨다. 그러면 드라이버는 네트워크 패킷을 커널로
+옮기고 링버퍼 안에 새로운 DMA 버퍼를 만든다.<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>
+</p>
+
+<p>
+어떠한 케이스에서든지 효과적인 DMA에서 가장 강조되는 것은 인터럽트를
+리포트하는 방법이다. DMA를 구현하는 방법 중에 드라이버에서
+폴링(polling)을 하도록 할 수도 있다. 하지만 이것은 좋지 않은 방식인데
+폴링 드라이버는 프로세서가 직접 I/O를 수행하는 방법에 비해 뛰어난
+성능을 보이는 DMA 방식의 이점을 다 까먹게 될 것이기 때문이다.<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>
+</p>
+
+<p>
+여기서 소개할 DMA와 관련된 다른 주제는 DMA buffer 이다. DMA를 지원하기
+위해서는 드라이버에서 하나 이상의 특별한 버퍼를 할당해야 한다. 많은
+드라이버들에서는 초기화 시점에 이러한 버퍼를 할당해 두었다가 셧다운될
+때까지 사용한다. 그래서 앞에 DMA 동작 케이스에서 <i>할당</i> 이라고 했던
+부분은 사실 "이전에 할당했던 버퍼를 그대로 가지고 있는 것"을 의미하게
+된다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Allocating the DMA Buffer</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+이 섹션은 DMA 버퍼를 할당하는 부분을 Low Level에서 살펴보는 것이지만
+간단히 higher-level에서 소개하는 부분도 넣고자 한다. 여기서 다루는
+내용을 이해하는데 도움이 될 것이다.
+</p>
+
+<p>
+DMA 버퍼와 관련된 주된 이슈는 1페이지 이상의 데이터를 다루는
+것이다. DMA 버퍼는 반드시 물리 메모리상의 contiguous(연속적인) 페이지에
+있어야 한다. 왜냐하면 데이터를 옮기는 디바이스가 ISA나 PCI를 사용하는데
+둘 다 피지컬 어드레스를 사용하기 때문이다. 한편 SBus(<a href="http://www.makelinux.net/ldd3/chp-12-sect-5.shtml#chp-12-sect-5">12.5 절</a> 참고)는
+이러한 제약 사항에 걸리지 않는데 주변장치와의 버스 통신에서 가상주소를
+사용하기 때문이다.<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> 어떤 아키텍처들은 PCI 버스상에서 가상 주소를
+사용할 수도 있지만 포터블한 드라이버는 지원하지 못한다.
+</p>
+
+<p>
+DMA 버퍼 할당은 부팅 시점이나 런타임에 이루어질 수 있으나 모듈은 오로지
+런타임에서만 버퍼를 할당할 수 있다. 드라이버 개발자들은 DMA
+오퍼레이션에 사용될 메모리의 올바를 종류를 잘 알고 사용해야 한다. 모든
+메모리 영역이 DMA에 적합한건 아니기 때문인다. 특히 어떤 시스템에서 높은
+주소의 메모리는 어떤 디바이스과의 DMA에서 제데로 동작하지 않을 수도
+있다. 이러한 주변장치들은 높은 주소값을 지원하지 않기 때문이다.
+</p>
+
+<p>
+최근의 버스를 사용하는 대부분의 디바이스들은 32비트 어드레스를
+지원한다. 즉, 일반적인 메모리 할당에 대해서는 괜찮다는 이야기다. 하지만
+어떤 PCI 디바이스들은 PCI 표준을 모두 준수하지 않고 32비트 어드레스를
+지원 못할수도 있다. 물론 ISA 디바이스들은 24비트 어드레스까지만
+지원한다.
+</p>
+
+<p>
+디바이스들이 이러한 제약 사항을 가지고 있기 때문에 DMA 메모리를
+할당하기위해 <code>kmalloc</code> 이나 <code>get_free_pages</code> 를 호출할 때 <code>GFP_DMA</code>
+라는 플래그를 넣어 주어야 한다. 이 플래그가 들어 있으면 24비트 주소
+범위에 위치한 메모리만 할당된다. 디바이스의 메모리 제약 사항에 대한
+다른 방법으로는 generic DMA layer(뒤에 다시 다룰것임) 라는 것을 사용할
+수도 있다.
+</p>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Do-it-yourself allocation</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+이전 절에서 <code>get_free_pages</code> 를 통해 수 메가바이트(2의 exponent를
+나타내는 order는 <code>MAX_ORDER</code> 까지 가능, 현재 11)의 메모리를 할당할 수
+있는 것을 알아보았다.<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup> 그런데 order를 높게 주어 요청하면 실패할
+가능성이 많은데, 심지어 128KB 보다 작을 경우라도 시간이 지나면 시스템의
+메모리 파편화가 진행되기 때문에 실패할 수 있다.
+</p>
+
+<p>
+커널이 요청된 메모리를 할당하지 못하거나 드라이버에서 128KB(PCI frame
+grabber에서 일반적인 요구사항을 예로 든 것) 이상을 필요로 할 때는
+<code>-ENOMEM</code> 을 리턴한다. 이럴 때 대안으로 부팅 시점에 미리 메모리를
+할당해 두거나 물리 메모리의 상위 주소에 예약을 걸어 둘 수도 있다. <a href="http://www.makelinux.net/ldd3/chp-8-sect-6.shtml#chp-8-sect-6">8.6
+절</a> 에서는 부팅 시점에 메모리를 할당하는 것에 대해 설명하고 있다. 하지만
+모듈에서는 불가능한 방법이다. 메모리의 상위 주소에 예약을 걸어 두는
+것은 <code>mem=</code> 커맨드라인 아규먼트를 커널 부팅 시점에 전달하면 된다. 예를
+들어 256MB 만큼의 램 용량을 가지고 있다면 <code>mem=255M</code> 을 커맨드라인
+아규먼트로 넣어 주면 커널은 상위 주소에서 그것 만큼까지만
+사용한다.<sup><a id="fnr.6" name="fnr.6" class="footref" href="#fn.6">6</a></sup> 그리고 모듈에서는 아래 코드와 같은 방법으로 예약된
+메모리에 접근한다.<sup><a id="fnr.7" name="fnr.7" class="footref" href="#fn.7">7</a></sup>
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">dmabuf = ioremap (0xFF00000 /* 255M */, 0x100000 /* 1M */);
+</pre>
+</div>
+
+<p>
+이 책의 샘플 코드에서 <i>allocator</i> 부분은 몇몇 아키텍처에서 사용 가능한
+RAM 예약 사용과 관리에 대해서 다루고 있다. 그러나 이러한 트릭은
+high-memory 시스템(CPU에서 커버 가능한 영역보다 큰 물리 메모리를 가진
+시스템)에서는 동작하지 않는다.
+</p>
+
+<p>
+또 다른 방법은 버퍼를 할당할 때 <code>GFP_NOFAIL</code> 로 할당하는 것이다. 그러나
+이 방식은 메모리 관리 시스템에 엄청난 부하를 주고 시스템 전체를
+lock시킬 수도 있다. 이건 최후의 수단으로 미루어 두는게 좋을 것이다.
+</p>
+
+<p>
+그런데 이렇게 큰 DMA 버퍼를 할당할 생각이라면 차라리 (큰 할당보다는)
+다른 대안들을 생각해 보는게 좋을 것 같다. 만일 디바이스가
+scatter/gather I/O 가 가능하다면 버퍼를 작은 조각으로 나누고
+디바이스에게 알아서 하라고 할 수도 있다. scatter/gather I/O 는 또한
+유저 스페이스로의 direct I/O 가 가능하며 오히려 이 방식이 가장 좋은
+솔루션이 될 수도 있다.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Bus Addresses</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+DMA를 사용하는 디바이스 드라이버는 물리 주소를 사용하는 버스에 연결된
+하드웨어에게 프로그램의 코드가 어디서 가상 주소를 사용하는지 알려주어야
+한다.
+</p>
+
+<p>
+사실 DMA를 기반으로 하는 하드웨어는 물리 주소라기 보다는 버스 주소를
+사용한다. ISA와 PCI 버스 주소는 PC에서 그냥 물리 주소이긴 하지만 모든
+플랫폼에서 버스주소=물리주소 인 것은 아니다. 때로는 인터페이스 버스가
+I/O 주소를 다른 물리 주소로 매핑하는 브릿지 회로와 연결되어 있기도
+하다. 그리고 오히려 어떤 시스템에서는 임의의 페이지들이 연속적인 형태로
+주변 장치로의 버스 주소에 매핑될 수도 있다.<sup><a id="fnr.8" name="fnr.8" class="footref" href="#fn.8">8</a></sup>
+</p>
+
+<p>
+가장 낮은 레벨에서 살펴보면(여기서는 하이 레벨 솔루션만 간단히
+다룬다), 리눅스 커널은 <code>&lt;asm/io.h&gt;</code> 에 정의된 아래 함수를 export하여
+포터블한 솔루션을 제공한다. 이 함수들은 가능하면 사용하지 않기를
+바라는데 이들은 아주 간단한 I/O 아키텍처를 사용하는 시스템에서만 제데로
+동작하기 때문이다. 그럼에도 불구하고 커널 코드 안에서 이들을 볼 수는
+있다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">unsigned long virt_to_bus(volatile void *address);
+void *bus_to_virt(unsigned long address);
+</pre>
+</div>
+
+<p>
+이 함수들은 커널의 논리 주소와 버스 주소간 변환하는 기능을 한다. 이들은
+입출력을 위한 메모리가 반드시 프로그램에서 주어져야 하거나 바운스
+버퍼(bounce buffers)가 사용되어야 하는 상황에서는 동작하지
+않는다.<sup><a id="fnr.9" name="fnr.9" class="footref" href="#fn.9">9</a></sup> 이러한 변환이 사용되는 적절한 부분은 아래에서 설명할
+generic DMA layer 이다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> The Generic DMA Layer</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+DMA 오퍼레이션은 결국 저수준(low level)에서 버퍼를 할당하고
+디바이스에게 버스 어드레스를 알려주게 될 것이다. 그러나 포터블한
+드라이버가 모든 아키텍처에서 DMA를 안전하고 정확하게 수행하도록 하는
+것은 생각보다 어려운 일이다. 서로 다른 시스템에서는 공유 메모리
+시스템에서의 캐시 일관성(cache coherency)이 어떻게 동작해야 하는지에
+대해서 다른 개념을 가지고 있다. 만일 이에 대해 올바르게 처리하지
+않는다면 드라이버가 메모리를 엉망으로(corrupt) 만들어 놓을 수도
+있다. 어떤 시스템들은 복잡한 버스 하드웨어가 DMA 처리를 보다 쉽게 할
+수도, 어렵게 할 수도 있다. 그리고 어떤 시스템에서는 DMA가 허용되는
+메모리 구역이 따로 존재한다. 다행이도 커널에서는 버스(와 관련
+아키텍처)에 독립적인 DMA layer를 제공하여 개발자들이 이런 대부분의
+이슈들에 대해 신경쓰지 않도록 해 준다. 따라서 드라이버 제작자들에게
+DMA layer와 관련한 오퍼레이션을 사용하는 것을 강력히 권고하고 있다.
+</p>
+
+<p>
+아래에 나와 있는 다수의 함수들은 <code>struct device</code> 에 대한 포인터를
+요구한다. 이 구조체는 리눅스의 디바이스 모델에서 디바이스에 대한
+low-level 표현이다. 이걸 드라이버에서 자주 직접 다루지는 않지만
+generic DMA layer를 사용할 때 필요하다. 이 구조체는 보통 디바이스에
+대한 버스를 명세하는 부분에서 찾아볼 수 있다. 예를 들면 <code>struct
+pci_device</code> 나 <code>struct usb_device</code> 안의 <code>dev</code> 필드이다. <code>device</code>
+구조체는 <a href="http://www.makelinux.net/ldd3/chp-14.shtml#chp-14">챕터 14</a> 에서 다루고 있다.
+</p>
+
+<p>
+아래 함수들을 사용하는 드라이버는 <i>&lt;linux/dma-mapping.h&gt;</i> 를 include
+해야 한다.
+</p>
+</div>
+
+<div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> Dealing with difficult hardware</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+DMA를 하기 전에 우선 확인해야 할 것은 디바이스가 현재 호스트에 대하여
+관련 오퍼레이션을 할 수 있느냐에 대한 것이다. 많은 디바이스들은
+여러가지 이유 때문에 어드레싱 할 수 있는 메모리의 범위가 한정되어
+있다. 기본적으로 커널은 디바이스에서 DMA를 할 때 32비트 주소 접근이
+가능하다고 가정한다. 만일 그렇지 않은 경우라면 아래 함수 호출을 통해
+커널에게 이러한 사실을 알려 주어야 한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">int dma_set_mask(struct device *dev, u64 mask);
+</pre>
+</div>
+
+<p>
+<code>mask</code> 는 디바이스의 어드레싱에 대한 것을 비트값으로 표현한
+것이다. 예를 들어 24비트 어드레싱으로 제한되어 있다면, <code>mask</code> 에
+<code>0x0FFFFFF</code> 를 넣어서 전달하면 된다. 주어진 <code>mask</code> 값으로 DMA가 가능한
+경우 nonzero를 리턴하고, 그렇지 않으면 0을 리턴한다. 따라서 24비트
+어드레싱으로 제한된 DMA 오퍼레이션에 대한 디바이스의 초기화는 아래
+코드와 같은 형태가 될 것이다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">if (dma_set_mask (dev, 0xffffff))
+    card-&gt;use_dma = 1;
+else {
+    card-&gt;use_dma = 0; /* We'll have to live without DMA */
+    printk (KERN_WARN, "mydev: DMA not supported\n");
+}
+</pre>
+</div>
+
+<p>
+다시 말하지만, 디바이스의 DMA 오퍼레이션이 32비트 어드레싱을 지원한다면
+<code>dma_set_mask</code> 를 불러줄 필요는 없다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> DMA mappings</h3>
+<div class="outline-text-3" id="text-4-2">
+<p>
+<i>DMA mapping</i> 은 DMA 버퍼를 할당하고 디바이스에서 접근 가능한 주소를
+생성하여 그 버퍼의 주소로 지정하는 작업을 말한다. <code>virt_to_bus</code> 를
+불러서 간단히 처리하면 될까 싶지만 이렇게 하면 안 되는 절대적인
+이유들이 몇 가지 있다. 첫 번째 이유는 좀 괜찮은 하드웨어는 버스 주소에
+대한 자체적인 매핑 레지스터들을 제공하는 IOMMU<sup><a id="fnr.10" name="fnr.10" class="footref" href="#fn.10">10</a></sup> 를 탑재하고 있기
+때문이다. IOMMU는 디바이스에서 접근할 수 있는 주소 범위내에서 물리적인
+메모리를 정렬해 줄 수 있다. 즉, 실제로는 물리적으로 흐트러진 버퍼들을
+연속적인것(contiguous) 처럼 보이게 만들어 준다. IOMMU를 쓰려면
+<code>virt_to_bus</code> 가 아닌 generic DMA layer를 사용해야 한다.
+</p>
+
+<p>
+모든 아키텍처가 IOMMU를 지원하지는 않는다. 특히 x86 플랫폼은 IOMMU를
+지원하지 않는다. 그러나 잘 작성된 디바이스 드라이버는 구동 중인
+하드웨어의 이런 I/O 지원 사항에 대한 인지가 없어도 잘 동작할 것이다.
+</p>
+
+<p>
+그리고 디바이스에서 사용할 어드레스를 잘 세팅하기 위해서는 <i>bounce
+buffer</i> 가 필요할지도 모른다. bounce buffer는 주변 장치(peripheral
+device)가 접근할 수 없는 어떤 어드레스에 DMA를 시도할 때
+만들어진다. 예를 들면 high-memroy 어드레스 같은 곳에 접근하기 위한
+상황이 있다. 데이터가 쓰여지거나 읽어질 때 (필요한 경우에 한하여)
+bounce buffer를 거치게 된다. 불필요한 이야기겠지만 bounce buffer를
+사용하면 성능이 저하될 수 있다. 하지만 어쩔 수 없이 사용해야 할 때도
+있다.
+</p>
+
+<p>
+그리고 DMA mapping은 캐시 일관성(cache coherency)에 대한 이슈를
+고려해야 한다. 현대의 프로세서들은 최근에 접근한 메모리 영역에 대해
+고속의 로컬 캐시 안에 복사본을 둔다. 이러한 캐시가 없으면 어느 정도
+이상의 성능을 확보할 수 없다. 만일 디바이스가 메인 메모리의 어떤 영역을
+수정한다면 해당 영역에 대한 프로세서의 캐시는 무효화처리(invalidate)
+되어야 한다. 그렇지 않으면 프로세서는 잘못된 캐시(incorrect image)를
+참조하게 되고 결과적으로 엉망진창(data corruption)이 될 것이다. 이와
+비슷하게 디바이스가 DMA를 하여 메인메모리의 데이터를 읽을 때 그 메모리
+영역을 프로세서의 캐시에서 담고 있고 이 부분에 수정사항이 있다면
+데이터를 읽기 전에 우선 해당 캐시가 플러시되어야(flushed out)
+한다. 이러한 캐시 일관성(cache coherency) 이슈는 프로그래머가 주의깊게
+작업하지 않을 경우 잘 알려져 있지도 않고 찾기도 힘든 버그를 수없이 많이
+만들어낸다. 어떤 아키텍처에서는 캐시 일관성(cache coherency)을
+하드웨어에서 관리하지만 다른데에서는 소프트웨어가 지원한다. generic
+DMA layer는 모든 아키텍처에서 이러한 일이 잘 처리되도록
+보장한다. 하지만 올바른 동작을 위해서는 몇 가지 룰을 고수해야 할
+것이다.
+</p>
+
+<p>
+DMA mapping은 버스 주소를 나타내기 위해 <code>dma_addr_t</code> 라는 타입을
+사용한다. <code>dma_addr_t</code> 타입의 변수들은 드라이버에 의해 불투명하게
+다루어진다. 이에 대해 가능한 오퍼레이션은 이들을 DMA support routine과
+디바이스에 보내는 연산이다. <code>dma_addr_t</code> 를 버스 주소의 용도로 CPU가
+직접 사용할 경우 예상할 수 없는 문제를 불러올 수도 있다.
+</p>
+
+<p>
+아래 두 가지 타입의 DMA mapping을 구별하는 것은 PCI code 이다. DMA
+mapping 타입은 DMA 버퍼가 얼마나 오래 지속할 것인지에 의해 정해진다.
+</p>
+
+<ul class="org-ul">
+<li>Coherent DMA mappings
+
+<p>
+이 타입의 매핑은 보통 드라이버의 생명주기와 같이간다. coherent
+버퍼는 반드시 CPU와 주변장치에서 동시에 사용될 수 있어야 한다(나중에
+알아볼 다른 타입의 매핑에서는 특정시점에서 둘 중 하나에서만 사용
+가능하다). 그 결과 coherent mapping은 반드시 cache-coherent
+메모리상에 있어야 한다. coherent mapping은 셋업하고 사용하는 데 드는
+비용이 비싸다.
+</p>
+</li>
+
+<li>Streaming DMA mappings
+
+<p>
+streaming mapping은 보통 한 번의 오퍼레이션만으로 셋업된다. 어떤
+아키텍처에서는 streaming mapping을 사용할 때 의미있는 최적화 과정이
+들어갈 수도 있다. 하지만 이 매핑에서는 접근하는 방법에 있어서 엄격한
+규칙을 따라야 한다. 커널 개발자들은 가능한 coherent mapping 보다는
+streaming mapping 을 사용하는 것을 추천한다. 이유는 두 가지가
+있다. 첫 번째로 mapping 레지스터를 지원하는 시스템에서 각 DMA 매핑은
+버스의 레지스터를 하나 이상 사용한다. coherent mapping은 긴
+생명주기를 가지고 있어 이런 레지스터를 오랜 시간, 심지어 사용되지
+않는 동안에도 독점한다. 다른 이유는 streaming mapping은 coherent
+mapping에서는 불가능한 방법에 의해 최적화가 가능하기 때문이다.
+</p>
+</li>
+</ul>
+
+<p>
+두 mapping 타입은 다른 방식으로 다루어진다. 이제 그에 대해 자세히
+다루겠다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-3" class="outline-3">
+<h3 id="sec-4-3"><span class="section-number-3">4.3</span> Setting up coherent DMA mappings</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+드라이버에서는 <code>dma_alloc_coherent</code> 함수를 사용하여 coherent mappping을
+셋업한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void *dma_alloc_coherent(struct device *dev, site_t size,
+                         dma_addr_t *dma_handle, int flag);
+</pre>
+</div>
+
+<p>
+이 함수는 버퍼를 할당하고 매핑까지 해준다. 앞의 두 전달인자는
+디바이스를 나타내는 구조체와 필요한 버퍼의 사이즈이다. 그리고 DMA
+mapping의 결과를 함수의 리턴값과 세 번째 인자를 통해서
+알려준다. 리턴값은 버퍼를 가리키는 커널의 가상주소를 나타내며 이 값은
+드라이버에서 사용될 수 있다. 그리고 <code>dma_handle</code> 인자를 통해서 나오는
+값은 버스의 주소를 나타낸다. 이 함수를 통해 할당된 버퍼는 DMA 입출력을
+할 때 쓰이는 장소로 사용된다. 그리고 보통 여기에 사용되는 메모리는
+<code>get_free_pages</code> 를 통해 할당된 메모리이다(인자로 사용되는 사이즈는
+order 값이 아니라 그냥 바이트 값이다). <code>flag</code> 전달인자는 <code>GFP_...</code>
+값으로 메모리가 어떻게 할당될것인지에 대한 것이다. 보통은 <code>GFP_KERNEL</code>
+을 사용하거나 atomic context에서는 <code>GFP_ATOMIC</code> 을 사용한다.
+</p>
+
+<p>
+버퍼가 더 이상 쓸모가 없을 경우(보통 모듈을 내리는 시점) 시스템에
+반환해주어야 하는데 이때 쓰이는 함수가 <code>dma_free_coherent</code> 이다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void dma_free_coherent(struct device *dev, size_t size,
+                       void *vaddr, dma_addr_t dma_handle);
+</pre>
+</div>
+
+<p>
+이 함수는 다른 많은 generic DMA 함수와 마찬가지로 사이즈와 CPU 주소,
+버스 주소를 전달인자로 받는다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-4" class="outline-3">
+<h3 id="sec-4-4"><span class="section-number-3">4.4</span> DMA pools</h3>
+<div class="outline-text-3" id="text-4-4">
+<p>
+DMA pool은 작은 사이즈의 coherent DMA mapping을 위한 할당
+메커니즘이다. <code>dma_alloc_coherent</code> 를 통해 이루어진 매핑은 적어도
+1페이지의 크기를 갖는다. 디바이스에서 이것보다 작은 크기의 DMA 영역을
+필요로 한다면 아마도 DMA pool을 사용해야 할 것이다. DMA pool은
+(전체적으로 큰 메모리 영역을 다루더라도) 의도적으로 작은 영역에 DMA를
+수행하고자 하는 상황에서도 유용하게 쓰일 수 있다. 어떤 찾기 힘든
+드라이버상의 버그들은 이러한 작은 DMA 영역 근처에 위치한 구조체의
+필드에 캐시 일관성(cache coherency) 문제가 원인이 되는 경우도
+있다. 이런 문제를 피하려면 DMA 오퍼레이션을 위한 영역을 따로 명시적으로
+할당하여 사용하고 non-DMA 데이터와는 확실히 구분해야 한다.
+</p>
+
+<p>
+DMA pool 관련 함수들은 <i>&lt;linux/dmapool.h&gt;</i> 에 정의되어 있다.
+</p>
+
+<p>
+DMA pool은 아래 함수로 생성한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">struct dma_pool *dma_pool_create(const char *name, struct device *dev,
+                                 size_t size, size_t align,
+                                 size_t allocation);
+</pre>
+</div>
+
+<p>
+<code>name</code> 은 DMA pool의 이름이고, <code>dev</code> 는 디바이스 구조체이다. <code>size</code> 는
+이 DMA pool에서 할당되는 버퍼의 사이즈를 나타내고 align은 DMA pool에서
+할당된 버퍼에 적용될 하드웨어 alignment 요구사항이다. 그리고
+<code>allocation</code> 은 0이 아닐 경우 메모리 할당시 이 인자로 지정된 만큼을
+초과하지 않도록 한다. 예를 들어 <code>allocation</code> 이 4096일 경우 이 DMA
+pool로부터 할당되는 버퍼는 4-KB의 경계선을 넘지 않을 것이다.
+</p>
+
+<p>
+DMA pool을 다 사용하였다면 아래 함수로 해제시켜 준다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void dma_pool_destroy(struct dma_pool *pool);
+</pre>
+</div>
+
+<p>
+DMA pool을 해제하기 전에 반드시 모든 버퍼 할당도 해제시켜주어야 한다.
+</p>
+
+<p>
+버퍼 할당은 <code>dma_pool_alloc</code> 을 사용한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void *dma_pool_alloc(struct dma_pool *pool, int mem_flags,
+                     dma_addr_t *handle);
+</pre>
+</div>
+
+<p>
+이 함수에서 <code>mem_flags</code> 는 <code>GFP_...</code> 할당 플래그들이다. 성공하면 일정
+영역(DMA pool을 생성할 때 지정한 바운더리 크기를 참고)의 메모리가
+할당되어 리턴된다. <code>dma_alloc_coherent</code> 와 마찬가지로 리턴되는 값은
+DMA 버퍼의 주소이며 커널의 가상 주소이고, 버스 주소는 <code>handle</code> 값에
+저장된다.
+</p>
+
+<p>
+다 사용한 버퍼는 아래 함수를 사용하여 DMA pool로 되돌려준다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void dma_pool_free(struct dma_pool *pool, void *vaddr, dma_addr_t addr);
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4-5" class="outline-3">
+<h3 id="sec-4-5"><span class="section-number-3">4.5</span> Setting up streaming DMA mappings</h3>
+</div>
+
+<div id="outline-container-sec-4-6" class="outline-3">
+<h3 id="sec-4-6"><span class="section-number-3">4.6</span> Single-page streaming mappings</h3>
+</div>
+
+<div id="outline-container-sec-4-7" class="outline-3">
+<h3 id="sec-4-7"><span class="section-number-3">4.7</span> Scatter/gather mappings</h3>
+</div>
+
+<div id="outline-container-sec-4-8" class="outline-3">
+<h3 id="sec-4-8"><span class="section-number-3">4.8</span> PCI double-address cycle mappings</h3>
+</div>
+
+<div id="outline-container-sec-4-9" class="outline-3">
+<h3 id="sec-4-9"><span class="section-number-3">4.9</span> A simple PCI DMA example</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> DMA for ISA Devices</h2>
+<div class="outline-text-2" id="text-5">
+</div><div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> Registering DMA usage</h3>
+</div>
+
+<div id="outline-container-sec-5-2" class="outline-3">
+<h3 id="sec-5-2"><span class="section-number-3">5.2</span> Talking to the DMA controller</h3>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+역주: takes care of housekeeping 을 의역한 것임.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+The driver then passes the network packets to the rest of the
+kernel and places a new DMA buffer in the ring.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+예외도 있다. 어떤 고성능의 네트워크 드라이버는 폴링 방식으로
+구현하는 것이 가장 뛰어나다고 한다. <a href="http://www.makelinux.net/ldd3/chp-15-sect-2.shtml#chp-15-sect-2.6">관련 문서</a> 참고.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+역주: 단점은 프로세서에 독립적이지 못하며 느리다고 한다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+역주: <code>__get_free_pages</code> 는 페이지를 통째로 할당받는 커널
+함수이다. 2의 멱수 단위로 할당 가능하며, order라는 인자로 넣어준다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.6" name="fn.6" class="footnum" href="#fnr.6">6</a></sup> <p class="footpara">
+역주: <code>mem=</code> 아규먼트는 커널에게 "내 시스템이 램이 얼마 있다"
+라고 알려주는 인자이다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.7" name="fn.7" class="footnum" href="#fnr.7">7</a></sup> <p class="footpara">
+역주: <code>ioremap(물리주소, 주소크기)</code> 은 물리 주소를 가상 메모리
+주소로 바꿔주는 함수이고, 사용 후에는 <code>iounmap(가상주소)</code> 로 해제시켜
+주어야 한다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.8" name="fn.8" class="footnum" href="#fnr.8">8</a></sup> <p class="footpara">
+Some systems even have a page-mapping scheme that can make
+arbitrary pages appear contiguous to the peripheral bus.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.9" name="fn.9" class="footnum" href="#fnr.9">9</a></sup> <p class="footpara">
+They do not work in any situation where an I/O memory
+management unit must be programmed or where bounce buffers must be
+used.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.10" name="fn.10" class="footnum" href="#fnr.10">10</a></sup> <p class="footpara">
+역주: IOMMU란 IO+MMU 로 Input/Output Memory Management Unit의
+약자이다. 디바이스와 메인메모리로 가는 DMA 연결 버스 사이에
+위치한다. 그냥 MMU 처럼 해당 디바이스에서 사용하는 가상주소를 물리
+주소로 변환하는 기능을 가지고 있다. 
+</p></div>
+
+
+</div>
+</div></div>
+</body>
+</html>
