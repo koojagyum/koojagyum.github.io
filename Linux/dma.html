@@ -730,14 +730,283 @@ DMA 버퍼의 주소이며 커널의 가상 주소이고, 버스 주소는 <code
 
 <div id="outline-container-sec-4-5" class="outline-3">
 <h3 id="sec-4-5"><span class="section-number-3">4.5</span> Setting up streaming DMA mappings</h3>
+<div class="outline-text-3" id="text-4-5">
+<p>
+streaming mapping은 coherent mapping 보다 더 복잡한 인터페이스를
+가지는데 여기에는 몇 가지 이유가 있다. streaming mapping은 드라이버에서
+이미 할당해 둔 버퍼를 다루어야 한다. 따라서 이 mapping은 스스로 선택한
+것이 아닌 주소값을 다루어야 하는 것이다.<sup><a id="fnr.11" name="fnr.11" class="footref" href="#fn.11">11</a></sup> 어떤 아키텍처에서
+streaming mapping은 다수의 불연속적인(discontiguous) 페이지와
+multipart "scatter/gather" 버퍼를 가질 수도 있다. 이런 이유 때문에
+streaming mapping은 전용 매핑 함수 셋을 가지게 된다.
+</p>
+
+<p>
+streaming mapping을 셋업하기 위해서는 데이터가 이동할 방향을 커널에게
+알려주어야 한다. 이런 목적의 심볼들(<code>enum dma_data_direction</code> 타입)이
+몇 개가 있다.
+</p>
+
+<ul class="org-ul">
+<li>DMA_TO_DEVICE
+</li>
+<li>DMA_FROM_DEVICE
+
+<p>
+위 두 심볼은 이름만으로 설명이 될 것이다. 만일 데이터가 디바이스로
+보내지는 경우라면(<code>write</code> 시스템 콜) <code>DMA_TO_DEVICE</code> 가 쓰일
+것이고, 데이터를 CPU로 옮기는 경우라면 <code>DMA_FROM_DEVICE</code> 를 대신
+사용할 것이다.
+</p>
+</li>
+
+<li>DMA_BIDIRECTIONAL
+
+<p>
+데이터가 양쪽 방향으로 이동하는 경우 <code>DMA_BIDIRECTIONAL</code> 을
+사용한다.
+</p>
+</li>
+
+<li>DMA_NONE
+
+<p>
+디버깅 용도로 사용하는 심볼이다. 이렇게 방향을 설정하고 버퍼를
+사용할 경우 커널 패닉이 발생한다.
+</p>
+</li>
+</ul>
+
+<p>
+그냥 모든 경우에서 <code>DMA_BIDIRECTIONAL</code> 로 할 수도 있지만 드라이버
+개발자들은 자제해야 한다. 어떤 아키텍처에서는 이렇게 할 경우 성능
+저하가 있을 수 있다.
+</p>
+
+<p>
+전송에 쓰일 버퍼가 싱글 버퍼라면 <code>dma_map_single</code> 함수로 매핑한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">dma_addr_t dma_map_single(struct device *dev, void *buffer, size_t size,
+                          enum dma_data_direction direction);
+</pre>
+</div>
+
+<p>
+리턴값은 디바이스로 넘길 버스 주소이고 문제가 있을 경우 <code>NULL</code> 이
+리턴된다.
+</p>
+
+<p>
+전송이 완료되면 mapping을 해제하기 위해 <code>dma_unmap_single</code> 함수를
+사용한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void dma_unmap_single(struct device *dev, dma_addr_t dma_addr, size_t size,
+                      enum dma_data_direction direction);
+</pre>
+</div>
+
+<p>
+<code>size</code> 와 <code>direction</code> 인자는 버퍼 mapping시 사용했던 것과 일치해야
+한다.
+</p>
+
+<p>
+streaming DMA mapping을 사용할 때 지켜야 할 룰이 몇 가지 있다.
+</p>
+<ul class="org-ul">
+<li>버퍼를 사용한 전송은 mapping시 <code>direction</code> 에서 지정된 것에 맞추어서
+이루어져야 한다.
+</li>
+<li>일단 버퍼가 mapping 되면 프로세서가 아니라가 디바이스에
+귀속된다. 버퍼를 unmap 하기 전까지 드라이버는 버퍼 안의 내용을
+건드리면 안된다. <code>dma_unmap_single</code> 이 불리고 난 후에야 드라이버가
+버퍼의 내용에 안전하게 접근할 수 있다(그러나 예외도 있다). 여러 다른
+룰들 중에서도 이 룰이 의미하는 것은 디바이스에 데이터를 쓰는데
+사용되고 있는 버퍼는 전송할 데이터를 모두 버퍼 안에 넣어두고 나서
+mapping 해야 한다는 것이다.<sup><a id="fnr.12" name="fnr.12" class="footref" href="#fn.12">12</a></sup>
+</li>
+<li>DMA가 활성화되어 있는 동안 버퍼를 unmap 하면 안된다. 심각한 시스템의
+불안정을 불러올 것이다.
+</li>
+</ul>
+
+<p>
+왜 mapping된 버퍼에 드라이버가 접근할 수 없을까? 여기에는 두 가지
+이유가 있다. 첫 번째는 다음과 같다. 버퍼가 DMA용도로 mapping되면 커널은
+버퍼 안의 데이터를 메모리로 확실히 옮겨야 한다. 그리고
+<code>dma_unmap_single</code> 이 불릴 때 프로세서의 캐시에 데이터가 남아 있을 수
+있는데 반드시 명시적으로 flush 시켜야 한다. flush 된 이후 프로세서가
+버퍼에 쓴 데이터는 디바이스에서는 보이지 않을 것이다.<sup><a id="fnr.13" name="fnr.13" class="footref" href="#fn.13">13</a></sup>
+</p>
+
+<p>
+두 번째는 디바이스에서 접근할 수 없는 영역의 메모리에 버퍼가
+mapping되었다고 가정해보자. 어떤 아키텍처에서는 이러한 시도에 대해
+실패로 처리하지만 또다른 곳에서는 bounce buffer를 만든다. bounce
+buffer는 디바이스에서 <i>접근 가능한</i> 별개의 영역의 메모리이다. 만일 어떤
+버퍼가 <code>DMA_TO_DEVICE</code> direction으로 bounce buffer를 통해 mapping
+되었다면 mapping 오퍼레이션으로 인하여 오리지널 버퍼의 내용이 bounce
+buffer로 복사된다. 당연히 복사 이후에 오리지널 버퍼에 대한 수정 사항은
+디바이스에 반영되지 않을 것이다. 이와 비슷하게 <code>DMA_FROM_DEVICE</code>
+direction의 bounce buffer의 내용은 <code>dma_unmap_single</code> 에 의해 오리지널
+버퍼로 복사된다. 그리고 디바이스에서 온 데이터는 복사가 다 완료될
+때까지 확인할 수 없을 것이다.
+</p>
+
+<p>
+한편 bounce buffer는 direction을 올바르게 지정해야 하는 중요한 이유 중
+하나이다. <code>DMA_BIDIRECTIONAL</code> 으로 지정된 bounce buffer는 오퍼레이션이
+전/후에 걸쳐서 복사가 일어나게 되고 이것이 CPU 사이클을 무의미하게
+낭비할 수 있기 때문이다.
+</p>
+
+<p>
+가끔은 드라이버가 streaming DMA buffer 내용에 unmap 하지 않고 접근해야
+할 때도 있다. 아래 함수는 이러한 것을 가능하게 한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void dma_sync_single_for_cpu(struct device *dev, dma_handle_t bus_addr,
+                             size_t size, enum dma_data_direction direction);
+</pre>
+</div>
+
+<p>
+이 함수를 프로세서가 streaming DMA buffer에 접근하기 전에
+호출한다. 이게 불리고 나면 CPU가 DMA buffer를 "소유"하여 조작이
+가능하게 된다. 그러나 디바이스가 다시 버퍼에 접근하기 위해서는 아래
+함수를 통해 소유권을 가져와야 한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void dma_sync_single_for_device(struct device *dev, dma_handle_t bus_addr,
+                                size_t size, enum dma_data_direction direction);
+</pre>
+</div>
+
+<p>
+다시 한 번 말하지만 프로세서는 위의 함수가 불린 이후로 DMA buffer에
+접근하면 안된다.
+</p>
+</div>
 </div>
 
 <div id="outline-container-sec-4-6" class="outline-3">
 <h3 id="sec-4-6"><span class="section-number-3">4.6</span> Single-page streaming mappings</h3>
+<div class="outline-text-3" id="text-4-6">
+<p>
+때로는 <code>struct page</code> 포인터가 가리키는 버퍼에 mapping을 하고 싶을 때가
+있을 것이다. 예를 들면 <i>get_user_pages</i> 를 통해 매핑된 user-space
+버퍼이다. 아래와 함수를 사용하여 <code>struct page</code> 포인터에 streaming
+mapping을 셋업하고 해제시킬 수 있다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">dma_addr_t dma_map_page(struct device *dev, struct page *page,
+                        unsigned long offset, size_t size,
+                        enum dma_data_direction direction);
+void dma_unmap_page(struct device *dev, dma_addr_t dma_address,
+                    size_t size, enum dma_data_direction direction);
+</pre>
+</div>
+
+<p>
+<code>offset</code> 과 <code>size</code> 전달인자를 사용하여 1페이지보다 작은 크기로 mapping
+할 수 있다. 하지만 페이지를 나누어서 mapping 하는 것은 정말 필요하지
+않은 경우라면 사용하지 않는 것이 좋다. 메모리 할당이 캐시 라인(cache
+line)의 일부분만을 차지하게 되면 캐시 일관성(cache coherency) 문제가
+생길 수 있기 때문이다. 즉, 메모리가 엉망이 되고(memory corruption)
+디버그하기가 엄청 어려울 것이다.
+</p>
+</div>
 </div>
 
 <div id="outline-container-sec-4-7" class="outline-3">
 <h3 id="sec-4-7"><span class="section-number-3">4.7</span> Scatter/gather mappings</h3>
+<div class="outline-text-3" id="text-4-7">
+<p>
+scatter/gather mapping은 streaming DMA mapping의 특별한 타입이다. 여러
+개의 버퍼를 가지고 디바이스와 입출력을 한다고 가정해보자. 몇 가지
+방법이 있을 것인데, <i>readv</i> 나 <i>writev</i> 시스템 콜을 사용할 수 있고,
+clustered disk I/O 나 mapping 된 커널 I/O 버퍼 내의 페이지들을 사용할
+수도 있다. 아니면 버퍼 여러개를 차례로 mapping 하여 필요한 오퍼레이션을
+수행시킬 수도 있지만 이러한 mapping을 단 한 번에 수행하는 방법이 있다.
+</p>
+
+<p>
+많은 디바이스들이 (메모리)배열 포인터와 length에 대한 <i>scaterrlist</i> 를
+지원하여 하나의 DMA 오퍼레이션으로 모든 내용을 전송할 수 있게
+해준다. 예를 들어 패킷이 여러 조각으로 나뉘어져 있으면(그리고
+scatterlist를 사용 하면) "zero-copy" 네트워크가 더
+쉬워진다. scatterlist를 사용하여 전체를 하나로 mapping 하는 또다른
+이유는 버스 하드웨어 내부에 매핑 레지스터들을 가진 시스템을 잘 활용하기
+위해서이다. 이런 시스템에서는 물리적으로 연속적이지
+않은(discontiguous) 페이지들이 하나로 조합되어 디바이스의 입장에서
+보았을 때 연속적인(contiguous) 배열로 보이게 할 수 있다. 이러한 기법은
+scatterlist 안의 엔트리들이 페이지 크기가 동일해야 한다(처음이랑 마지막
+것은 제외됨).<sup><a id="fnr.14" name="fnr.14" class="footref" href="#fn.14">14</a></sup> 이게 동작하게 되면 다중 오퍼레이션이 하나의 DMA
+오퍼레이션으로 바뀌게 되어 성능까지 향상된다.
+</p>
+
+<p>
+그리고 만일 bounce buffer가 사용되어야 하는 상황이라면 전체 리스트를
+하나의 (bounce) 버퍼로 합쳐서 동작하게 된다(나중에는 어쨌든 복사될
+것이기 때문임).
+</p>
+
+<p>
+따라서 scatterlist로 mapping하는 것은 어떤 상황에서는 쓸만할
+것이다. scatterlist를 사용하기 위해서는 우선 전송될 버퍼를 나타내는
+<code>struct scatterlist</code> 배열을 만들어 내용을 채워 넣어야 한다. 이 구조체는
+아키텍처마다 다르며 <i>&lt;asm/scatterlist.h&gt;</i> 에 정의되어 있다. 그렇지만
+항상 아래 세 개의 필드를 포함한다.
+</p>
+
+<ul class="org-ul">
+<li><code>struct page *page;</code>
+
+<p>
+<code>struct page</code> 포인터는 scatter/gather 오퍼레이션에 사용될 버퍼를
+가리킨다.
+</p>
+</li>
+
+<li><code>unsigned int length;</code>
+</li>
+<li><code>unsigned int offset;</code>
+
+<p>
+버퍼의 길이와 페이지 내에서의 오프셋.
+</p>
+</li>
+</ul>
+
+<p>
+scatter/gather DMA 오퍼레이션을 mapping 하기 위해서는 드라이버가 전송에
+쓰일 각 버퍼에 대한 <code>struct scatterlist</code> 엔트리에 <code>page</code> 랑 <code>offset</code>,
+<code>length</code> 필드를 채워 넣고 아래 함수를 불러 주어야 한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">int dma_map_sg(struct device *dev, struct scatterlist *sg, int nents,
+               enum dma_data_direction direction);
+</pre>
+</div>
+
+<p>
+<code>nents</code> 는 이 함수로 전달되는 scatterlist 엔트리의 개수이다.
+</p>
+</div>
 </div>
 
 <div id="outline-container-sec-4-8" class="outline-3">
@@ -765,7 +1034,7 @@ DMA 버퍼의 주소이며 커널의 가상 주소이고, 버스 주소는 <code
 <div id="text-footnotes">
 
 <div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-역주: takes care of housekeeping 을 의역한 것임.
+takes care of housekeeping 을 의역한 것임.
 </p></div>
 
 <div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
@@ -779,21 +1048,21 @@ kernel and places a new DMA buffer in the ring.
 </p></div>
 
 <div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
-역주: 단점은 프로세서에 독립적이지 못하며 느리다고 한다.
+단점은 프로세서에 독립적이지 못하며 느리다고 한다.
 </p></div>
 
 <div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
-역주: <code>__get_free_pages</code> 는 페이지를 통째로 할당받는 커널
+<code>__get_free_pages</code> 는 페이지를 통째로 할당받는 커널
 함수이다. 2의 멱수 단위로 할당 가능하며, order라는 인자로 넣어준다.
 </p></div>
 
 <div class="footdef"><sup><a id="fn.6" name="fn.6" class="footnum" href="#fnr.6">6</a></sup> <p class="footpara">
-역주: <code>mem=</code> 아규먼트는 커널에게 "내 시스템이 램이 얼마 있다"
+<code>mem=</code> 아규먼트는 커널에게 "내 시스템이 램이 얼마 있다"
 라고 알려주는 인자이다.
 </p></div>
 
 <div class="footdef"><sup><a id="fn.7" name="fn.7" class="footnum" href="#fnr.7">7</a></sup> <p class="footpara">
-역주: <code>ioremap(물리주소, 주소크기)</code> 은 물리 주소를 가상 메모리
+<code>ioremap(물리주소, 주소크기)</code> 은 물리 주소를 가상 메모리
 주소로 바꿔주는 함수이고, 사용 후에는 <code>iounmap(가상주소)</code> 로 해제시켜
 주어야 한다.
 </p></div>
@@ -810,10 +1079,29 @@ used.
 </p></div>
 
 <div class="footdef"><sup><a id="fn.10" name="fn.10" class="footnum" href="#fnr.10">10</a></sup> <p class="footpara">
-역주: IOMMU란 IO+MMU 로 Input/Output Memory Management Unit의
+IOMMU란 IO+MMU 로 Input/Output Memory Management Unit의
 약자이다. 디바이스와 메인메모리로 가는 DMA 연결 버스 사이에
 위치한다. 그냥 MMU 처럼 해당 디바이스에서 사용하는 가상주소를 물리
-주소로 변환하는 기능을 가지고 있다. 
+주소로 변환하는 기능을 가지고 있다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.11" name="fn.11" class="footnum" href="#fnr.11">11</a></sup> <p class="footpara">
+have to deal with addresses that they did not choose.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.12" name="fn.12" class="footnum" href="#fnr.12">12</a></sup> <p class="footpara">
+Among other things, this rule implies that a buffer being
+written to a device cannot be mapped until it contains all the data to
+write.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.13" name="fn.13" class="footnum" href="#fnr.13">13</a></sup> <p class="footpara">
+뭐라고 하는 건지 모르겠음.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.14" name="fn.14" class="footnum" href="#fnr.14">14</a></sup> <p class="footpara">
+This technique works only when the entries in the scatterlist
+are equal to the page size in length (except the first and last)
 </p></div>
 
 
