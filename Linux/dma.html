@@ -964,7 +964,7 @@ scatterlist 안의 엔트리들이 페이지 크기가 동일해야 한다(처�
 </p>
 
 <p>
-따라서 scatterlist로 mapping하는 것은 어떤 상황에서는 쓸만할
+따라서 scatterlist로 mapping하는 것은 상황에 따라서 유용할
 것이다. scatterlist를 사용하기 위해서는 우선 전송될 버퍼를 나타내는
 <code>struct scatterlist</code> 배열을 만들어 내용을 채워 넣어야 한다. 이 구조체는
 아키텍처마다 다르며 <i>&lt;asm/scatterlist.h&gt;</i> 에 정의되어 있다. 그렇지만
@@ -1004,8 +1004,85 @@ scatter/gather DMA 오퍼레이션을 mapping 하기 위해서는 드라이버�
 </div>
 
 <p>
-<code>nents</code> 는 이 함수로 전달되는 scatterlist 엔트리의 개수이다.
+<code>nents</code> 는 이 함수로 전달되는 scatterlist 엔트리의 개수이다. 그리고
+리턴값은 전송에 사용될 DMA 버퍼의 개수이고 이것은 <code>nents</code> 인자로 전달된
+값보단 작을 것이다.
 </p>
+
+<p>
+<code>dma_map_sg</code> 는 scatterlist 로 들어간 각 버퍼들에 대해 디바이스로의
+버스 주소를 지정해준다. 내부적으로는 인접한 메모리에 위치한 버퍼들을
+통합하기도 한다. 그리고 만일 드라이버가 구동 중인 시스템에 I/O 메모리
+management unit이 있다면 <code>dma_map_sg</code> 가 그 메모리 management unit의
+mapping 레지스터도 제어한다. 그래서 디바이스의 입장에서는 단 하나의
+연속적인(contiguous) 버퍼를 데이터 전송에 사용할 수도 있게 된다. 이
+함수가 호출되어 결과가 나오기 전 까지는 어떤 식으로 전송을 해야 하는지
+알 수 없는 것이다.<sup><a id="fnr.15" name="fnr.15" class="footref" href="#fn.15">15</a></sup>
+</p>
+
+<p>
+드라이버는 <code>pci_map_sg</code> 에서 리턴한 버퍼에 전송을 해야한다. 각 버퍼에
+대한 버스의 주소와 길이는 <code>struct scatterlist</code> 엔트리에 저장되는데,
+구조체 내부에서 필드의 위치는 아키텍처마다 다르다. 이에 대해 포터블한
+코드를 작성하기 위한 두 가지 매크로가 있다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">dma_addr_t sg_dma_address(struct scatterlist *sg);
+</pre>
+</div>
+
+<p>
+입력받은 scatterlist 엔트리에서 버스(DMA) 주소를 리턴한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">unsigned int sg_dma_len(struct scatterlist *sg);
+</pre>
+</div>
+
+<p>
+버퍼의 길이를 리턴한다.
+</p>
+
+<p>
+다시 한 번 말하지만 (DMA) 전송에 쓰일 버퍼들의 주소와 길이는
+<code>dma_map_sg</code> 에 전달된 인자에 따라 다를 수 있다.
+</p>
+
+<p>
+전송이 끝나면 scatter/gather mapping은 <code>dma_unmap_sg</code> 를 사용하여
+해제해야 한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void dma_unmap_sg(struct device *dev, struct scatterlist *list,
+                  int nents, enum dma_data_direction direction);
+</pre>
+</div>
+
+<p>
+<code>nents</code> 인자는 <code>dma_map_sg</code> 함수에 넘겨 주었던 엔트리의 개수를 의미하지
+그 함수에서 리턴된 DMA 버퍼의 개수가 아니다.
+</p>
+
+<p>
+scatter/gather mapping은 streaming DMA mapping 이며 여기에도 동일한
+접근 룰이 적용된다.<sup><a id="fnr.16" name="fnr.16" class="footref" href="#fn.16">16</a></sup> 매핑된 scatter/gather 리스트에 접근할 때에는
+우선 동기화를 해야 한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void dma_sync_sg_for_cpu(struct device *dev, struct scatterlist *sg,
+                         int nents, enum dma_data_directjion direction);
+void dma_sync_sg_for_device(struct device *dev, struct scatterlist *sg,
+                            int enents, enum dma_data_directjion direction);
+</pre>
+</div>
 </div>
 </div>
 
@@ -1102,6 +1179,15 @@ write.
 <div class="footdef"><sup><a id="fn.14" name="fn.14" class="footnum" href="#fnr.14">14</a></sup> <p class="footpara">
 This technique works only when the entries in the scatterlist
 are equal to the page size in length (except the first and last)
+</p></div>
+
+<div class="footdef"><sup><a id="fn.15" name="fn.15" class="footnum" href="#fnr.15">15</a></sup> <p class="footpara">
+단 하나의 연속적인(contiguous) 버퍼를 사용할 지, 여러 개의
+버퍼를 사용할 지 모른다는 뜻.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.16" name="fn.16" class="footnum" href="#fnr.16">16</a></sup> <p class="footpara">
+and the same access rules apply to them as the single variety.
 </p></div>
 
 

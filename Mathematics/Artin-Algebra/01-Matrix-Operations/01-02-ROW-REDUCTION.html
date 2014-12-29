@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>ROW REDUCTION</title>
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Jagyum Koo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">ROW REDUCTION</h1>
+<p>
+\(A = (a_{ij})\) 를 \(m \times n\) 행렬이라고 하고 미지수 \(X = (x_{ij})\)
+를 \(n \times p\) 행렬이라고 하자. 그리고 아래와 같이 \(Y = (y_{ij})\)
+으로 \(m \times p\) 행렬을 정의해서 이것을 X를 변수로 하는 함수라고 할
+수 있다.
+</p>
+
+<p>
+(2.1)
+</p>
+\begin{equation}
+Y = AX
+\end{equation}
+
+<p>
+이러한 연산을 <i>left multiplication by A</i> 라고 부른다.
+</p>
+
+<p>
+(2.2)
+</p>
+\begin{equation}
+y_{ij} = a_{i1}x_{1j} + \cdots + a_{in}x_{nj}
+\end{equation}
+
+<p>
+식 (2.2) 에서 엔트리 \(y_{ij}\) 는 변수로 쓰인 행렬 X의 j번째 column 과
+행렬 A의 i번째 row 인 \(x_{1j},\cdots,x_{nj}\) 에 의존적이게
+된다. 따라서 이 함수에서 행렬 A는 행렬 X의 각 column에 개별적으로
+작용하게 되는데, 이것을 A가 column vector 들에 대한 동작을
+지시한다고도 볼 수 있다.<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+
+\begin{equation}
+\begin{bmatrix}
+A
+\end{bmatrix}
+\begin{bmatrix} x_{1} \\ \vdots \\ \vdots \\ x_{n} \end{bmatrix}
+=
+\begin{bmatrix} y_{1} \\ \vdots \\ y_{m} \end{bmatrix}
+\end{equation}
+
+<p>
+column vector 들에 left multiplication by A 하는 것은 n-dimensional
+column vector 들인 X 의 공간(space)에서 m-dimensional column vector
+들인 Y의 공간(space)으로 사상되는 함수라고 생각할 수 있다. 또는 n개의
+변수를 갖는 m개의 함수들의 집합으로도 볼 수 있다.
+</p>
+
+\begin{equation}
+y_{i} = a_{i1}x_{1} + \cdots + a_{in}x_{n} (i = 1,\cdots,m)
+\end{equation}
+
+<p>
+위 함수들은 homogeneous 하고 linear 하기 때문에 이것을 <i>linear
+transformation</i> 이라고 부른다. (변수 \(u_{1},\cdots,u_{k}\) 들에 대한
+<i>linear</i> 함수는 \(a_{1}u_{1} + \cdots + a_{k}u_{k} + c\) (단,
+\(a_{1},\cdots,a_{k},c\) 들은 scalar) 의 형태이다. 이런 함수의 상수부
+c가 0일 경우 <i>homogeneous linear</i> 라고 부른다.)
+</p>
+
+<p>
+아래 그림은 \(2 \times 2\) 행렬인 \(\begin{bmatrix} 3 & 2 \\ 1 & 4
+\end{bmatrix}\) 의 연산을 그린 것이다. 2-space to 2-space 매핑이다.
+</p>
+
+<div class="center">
+
+<div class="figure">
+<p><img src="./images/fig_2.3.png" alt="fig_2.3.png" />
+</p>
+</div>
+</div>
+
+<p>
+다시 행렬 A에 \(n \times p\) 행렬 X를 연산하는 것으로 돌아가면, 행렬 A가
+행렬 X의 각 column에 대해 동일한 방식으로 연산된다고 해석할 수
+있다. \(Y_{i}\) 를 Y의 <i>i</i> 번째 열(row) 이라고 하자. 그러니까 <i>row
+vector</i> 처럼 보는 것이다. <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>
+</p>
+
+\begin{equation}
+Y
+=
+\begin{bmatrix}
+- & Y_{1} & - \\
+- & Y_{2} & - \\
+ & \vdots & \\
+- & Y_{p} & -
+\end{bmatrix}
+\end{equation}
+
+<p>
+\(Y_{i}\) 를 X의 j번째 row인 \(X_{j}\) 의 vector 표현식을 쓸 수
+있다. 아래와 같이&#x2026;
+</p>
+
+<p>
+(2.4)
+</p>
+\begin{equation}
+Y_{i} = a_{i1}X_{1} + \cdots + a_{in}X_{n}
+\end{equation}
+
+<p>
+위 식은 (2.2) 를 다시 쓴 것일 뿐이다. 그리고 이건 또다른 block
+multiplication 의 예제이기도 하다.
+</p>
+
+\begin{equation}
+\begin{bmatrix} 0 & -1 & 2 \\ 3 & 4 & -6 \end{bmatrix}
+\begin{bmatrix} 1 & 0 \\ 4 & 2 \\ 3 & 2 \end{bmatrix}
+=
+\begin{bmatrix} 2 & 2 \\ 1 & -4 \end{bmatrix}
+\end{equation}
+
+<p>
+위의 예에서 아래 row(2열)의 행렬곱(product) 연산은 \(3 \begin{bmatrix} 1 & 0 \end{bmatrix} + 4 \begin{bmatrix} 4 & 2 \end{bmatrix} - 6 \begin{bmatrix} 3 & 2 \end{bmatrix} = \begin{bmatrix} 1 & -4 \end{bmatrix}\) 으로 계산할 수 있다.
+</p>
+
+<p>
+여기서 행렬 A가 square matrix(정사각행렬) 일 경우 left multiplication
+by A 를 <i>row operation</i> 이라고도 부른다.
+</p>
+
+<p>
+한편, 아래와 같이 가장 간단한 형태의 0이 아닌 행렬을 matrix unit(s)
+라고 부르고 \(e_{ij}\) 라고 표기한다.
+</p>
+
+<p>
+(2.5)
+</p>
+<div class="center">
+
+<div class="figure">
+<p><img src="./images/equ_2.5.png" alt="equ_2.5.png" />
+</p>
+</div>
+</div>
+
+<p>
+행렬 \(e_{ij}\) 는 (i, j) 위치에 유일한 0이 아닌 entiry 로 1이 존재하는
+행렬이다. (보통 행렬을 영문자 대문자로 표기한다. 그런데 전통적으로
+matrix unit 에 대해서만은 영문자 소문자로 쓴다.) matrix unit 은 모든
+행렬 \(A = (a_{ij})\) 을 아래와 같이 덧셈식(sum)으로 표현할 수 있어
+유용하다.
+</p>
+
+\begin{equation}
+A
+=
+a_{11}e_{11} + a_{12}e_{12} + \cdots + a_{nn}e_{nn}
+=
+\sum_{i,j} a_{ij}e_{ij}
+\end{equation}
+
+<p>
+시그마 표현식에 쓰인 i,j 인덱스는 모든 i와 j값을 취하여 합한 것을
+의미한다. 아래 예를 참고하자.
+</p>
+
+\begin{equation}
+\begin{bmatrix} 3 & 2 \\ 1 & 4 \end{bmatrix}
+=
+\begin{bmatrix} 3 & \\ & \end{bmatrix}
++
+\begin{bmatrix}  & 2 \\ & \end{bmatrix}
++
+\begin{bmatrix} ​ & \\ 1 & \end{bmatrix}
++
+\begin{bmatrix} ​ & \\ & 4 \end{bmatrix}
+=
+3e_{11} + 2e_{12} + 1e_{21} + 4e_{22}
+\end{equation}
+
+<p>
+이러한 덧셈식(sum)을 \(e_{ij}\) 행렬들의 linear combination 이라고 한다.
+</p>
+
+<p>
+matrix unit은 행렬끼리의 덧셈과 행렬과 scalar 곱셈의 연구에 편리하게
+사용된다. 그런데 행렬 곱셈(multiplication)에는 <i>elementary matrices</i>
+(기본행렬)라고 불리우는 특정한 square matrices(정사각행렬)가 더
+유용하다. elementary matrix 에는 세 가지 타입이 있다.
+</p>
+
+<p>
+(2.6i)
+</p>
+\begin{equation}
+\begin{bmatrix}
+1 &  &  & \\
+ & \ddots & a & \\
+ &  & \ddots & \\
+ &  &  & 1
+\end{bmatrix}
+\; or \;
+\begin{bmatrix}
+1 &  &  & \\
+ & \ddots &  & \\
+ & a & \ddots & \\
+ &  &  & 1
+\end{bmatrix}
+=
+I + ae_{ij} (i \neq j)
+\end{equation}
+
+<p>
+위의 수식은 대각선 성분들이 모두 1이고 하나의 비대각 성분을 가진
+행렬이다.
+</p>
+
+<p>
+(2.6ii)
+</p>
+\begin{equation}
+\begin{bmatrix}
+1 & & & & & & \\
+ & \ddots & & & & & \\
+ & & 0 & & 1 & & \\
+ & & & \ddots & & & \\
+ & & 1 & & 0 & & \\
+ & & & & & . & \\
+ & & & & & & 1
+\end{bmatrix}
+=
+I + e_{ij} + e_{ji} - e_{ii} - e_{jj}
+\end{equation}
+
+<p>
+위에서는 I행렬(단위행렬)의 i번째와 j번째 대각선 entry가(성분이) 0으로
+대체되고 두 개의 1이 (i, j)와 (j, i)의 위치에 더해진 것이다. (이
+행렬은 수식으로 표현하면 좀 지저분해지기 때문에 이 책에서는 이에 대한
+수식을 자주 쓰지는 않을 것이다.)
+</p>
+
+<p>
+(2.6iii)
+</p>
+\begin{equation}
+\begin{bmatrix}
+1 & & & & & & \\
+ & \ddots & & & & & \\
+ & & 1 & & & & \\
+ & & & c & & & \\
+ & & & & 1 & & \\
+ & & & & & \ddots & \\
+ & & & & & & 1
+\end{bmatrix}
+=
+I + (c - 1)e_{ii}
+,
+\;
+(c \neq 0).
+\end{equation}
+
+<p>
+이것은 identity matrix(단위행렬)의 diagonal entry(대각성분) 하나가 0이
+아닌 숫자 c로 대체된 것이다.
+</p>
+
+<p>
+\(2 \times 2\) 기본행렬은 아래와 같다.
+</p>
+\begin{equation}
+(i)
+\;\;
+\begin{bmatrix} 1 & a \\ 0 & 1 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ a & 1 \end{bmatrix},
+\;\;
+(ii)
+\;\;
+\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix},
+\;\;
+(iii)
+\;\;
+\begin{bmatrix} c & \\ & 1 \end{bmatrix}, \begin{bmatrix} 1 & \\ & c \end{bmatrix}
+\end{equation}
+
+<p>
+위에서 \(a\) 는 임의의 수이고 \(c\) 는 임의의 0이 아닌 수이다.
+</p>
+
+<p>
+elementary matrix(기본행렬) \(E\) 는 행렬 \(X\) 에 대해 아래와 같은 연산을
+수행한다.
+</p>
+
+<p>
+(2.7) 아래의 과정을 거쳐서 행렬 \(EX\) 를 구한다.
+</p>
+<blockquote>
+<p>
+Type (i):
+</p>
+
+<p>
+Type (ii):
+</p>
+
+<p>
+Type (iii):
+</p>
+</blockquote>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+we can understand the way A operates by considering its action
+on column vectors.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+그림에서 행렬 Y의 row vector를 \(Y_{p}\) 까지 그렸는데, 앞에서
+예로 든 내용을 보면 행렬 Y는 \(m \times p\) 행렬이다. \(Y_{m}\) 의
+오타이지 않을까 싶다.
+</p></div>
+
+
+</div>
+</div></div>
+</body>
+</html>
