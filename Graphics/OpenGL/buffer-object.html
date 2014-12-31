@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Buffer Object</title>
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Jagyum Koo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Buffer Object</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Creation</a>
+<ul>
+<li><a href="#sec-1-1">1.1. Immutable Storage</a>
+<ul>
+<li><a href="#sec-1-1-1">1.1.1. Immutable access methods</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-2">1.2. Mutable Storage</a>
+<ul>
+<li><a href="#sec-1-2-1">1.2.1. Buffer Object Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+OpenGL wiki의 <a href="https://www.opengl.org/wiki/Buffer_Object">Buffer Object</a> 문서 번역.
+</p>
+
+<p>
+<b>Buffer Object</b> 는 OpenGL Context(GPU)에서 할당한 포메팅되지 않은
+메모리 배열을 저장하는 <a href="https://www.opengl.org/wiki/OpenGL_Object">OpenGL Object</a> 이다. Buffer Object에는 <a href="https://www.opengl.org/wiki/Vertex_Buffer_Object">Vertex
+Data</a>, <a href="https://www.opengl.org/wiki/Pixel_Buffer_Object">이미지나 Framebuffer에서 받은 Pixel Data</a>, <a href="https://www.opengl.org/wiki/Buffer_Object#General_use">그 외 다른 것들</a> 을
+저장할 수 있다.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Creation</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Buffer Object는 <a href="https://www.opengl.org/wiki/OpenGL_Objects">OpenGL Object</a> 이다. 따라서 Buffer Object는 일반적인
+OpenGL Object에서의 룰을 따른다. Buffer Object를 만드려면
+<code>glGenBuffers</code> 를, 지우려면 <code>glDeleteBuffers</code> 를 호출해야 한다. 즉,
+대부분의 OpenGL Object에서 사용하는 Gen/Delete 형식을 따른다.
+</p>
+
+<p>
+일반적인 OpenGL Object에서와 마찬가지로 <code>glGenBuffers</code> 역시 Object를
+참조하는 이름만을 생성한다. 여기에 저장 공간을 할당하려면 Context에
+bind를 해야 한다. 이 때 사용하는 API는 다음과 같다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void glBindBuffer(enum target, uint bufferName)
+</pre>
+</div>
+
+<p>
+<b><i>target</i></b> 은 bind한 해당 Buffer Object를 어떻게 사용할지를
+나타낸다. 그냥 Buffer Object를 생성하여 안에 데이터만 채울 용도라면
+target은 별 문제가 되지 않는다. target 값은 OpenGL이 어떠한 방법을 통해
+그 안의 데이터를 사용하도록 할 경우에만 문제가 된다.
+</p>
+
+<p>
+Buffer Object는 직렬로 된(linear) 임의의 크기의 메모리 배열을 가지고
+있다. 메모리는 쓰거나(upload) 읽기(use)전에 미리 할당되어
+있어야(allocated) 한다. Buffer Object의 저장소를 할당은 두 가지, 즉
+mutable한 방법과 immutable<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>한 방법이 있다. Buffer Object에
+immutable한 저장소를 할당하는 것은 그 Buffer Object와 상호작용하는
+방법을 바꾸는 것이다.
+</p>
+</div>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Immutable Storage</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+<a href="https://www.opengl.org/wiki/Texture_Storage#Kinds_of_storage">immutable storage texture</a> 와 마찬가지로 Buffer Object의 저장소는
+immutable하게 할당될 수 있다. 이렇게 할당된 저장소는 재할당이
+불가능하지만 <a href="https://www.opengl.org/wiki/Buffer_Object#Invalidation">명시적인 invalidation 명령</a> 이나 <a href="https://www.opengl.org/wiki/Buffer_Object#.23Mapping">Buffer mapping</a> 으로
+invalidate를 할 수는 있다. 그러나 <code>glBufferData(..., NULL)</code> 과 같은
+방법으로 invalidate하는 것은 불가능하다.
+</p>
+
+<p>
+Buffer Object에 immutable한 저장소를 할당하려면 아래 함수를 사용한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void glBufferStorage(GLenum target, GLsizeiptr size, const GLvoid * data, GLbitfield flags);
+</pre>
+</div>
+
+<p>
+<i><b>target</b></i> 파라미터는 <code>glBindBuffer</code> 에서와 마찬가지로 수정할 Buffer가
+어디에 bind된 것인지를 나타낸다. <i><b>size</b></i> 는 해당 Buffer Object에
+얼마만큼의 바이트를 할당할 것인지를 나타낸다.
+</p>
+
+<p>
+<i><b>data</b></i> 는 <i><b>size</b></i> 의 길이를 갖는 바이트 배열의 포인터이다. OpenGL은
+Buffer 초기화시에 여기에 있는 데이터를 Buffer Object로 복사한다. 이
+파라미터를 NULL로 둘 수도 있는데, 이렇게 하면 해당 Buffer Object의
+초기값이 결정되지 않게(undefined) 된다. <a href="https://www.opengl.org/wiki/Buffer_Object#Clearing">할당한 직후에 버퍼를 그냥
+clear할</a> 수도 있다(클라이언트에서 수정 가능한 경우에 대한 것임).
+</p>
+
+<p>
+<i><b>flags</b></i> 필드는 OpenGL과 클라이언트 사이의 계약
+내용(contract)이다. Buffer의 내용에 어떻게 접근해야 하며 접근을
+제한하는 방법에 대한 것이다.
+</p>
+</div>
+
+<div id="outline-container-sec-1-1-1" class="outline-4">
+<h4 id="sec-1-1-1"><span class="section-number-4">1.1.1</span> Immutable access methods</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+위에서 밝힌대로 immutable 저장소를 사용하는 Buffer Object는
+클라이언트와 OpenGL간의 계약(contract)을 체결할 수 있다. 이는 해당
+Buffer Object의 저장소의 내용에 접근하거나 수정하는 방법에 대한
+것이다. <i><b>flags</b></i> 는 해당 Buffer Object에 연산시 적용되어야 할
+제약사항에 대한 비트필드로 이루어져 있고, 이러한 제약사항을 따르지 않을
+경우 <a href="https://www.opengl.org/wiki/OpenGL_Error">OpenGL Error</a> 가 발생하게 된다.
+</p>
+
+<p>
+<i><b>flags</b></i> 의 비트는 클라이언트가 직접적으로 버퍼를 읽거나 쓰는 방법에
+대한 내용도 담고 있다. 하지만 클라이언트가 데이터를 직접 수정하는
+방식에 대해서만 제한되어 있다.<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> 즉, 버퍼 내용에 대해
+"server-side"의 오퍼레이션만 가능한 것이다.
+</p>
+
+<p>
+아래 오퍼레이션은 <i><b>flags</b></i> 필드에 상관 없이 immutable 버퍼에 항상
+유효한 오퍼레이션이다.
+</p>
+
+<ul class="org-ul">
+<li><a href="https://www.opengl.org/wiki/Rendering_Pipeline_Overview">Rendering Pipeline Process</a> 를 통해 버퍼에 write하는 경우. <a href="https://www.opengl.org/wiki/Transform_Feedback">Transform
+Feedback</a>, <a href="https://www.opengl.org/wiki/Image_Load_Store">Image Load Store</a>, <a href="https://www.opengl.org/wiki/Atomic_Counter">Atomic Counter</a>, <a href="https://www.opengl.org/wiki/Shader_Storage_Buffer_Object">Shader Storage Buffer
+Object</a> 를 포함한다. 기본적으로는 Rendering Pipeline 의 일부분일 경우
+버퍼에 write하는 오퍼레이션은 항상 유효하다.
+</li>
+<li><a href="https://www.opengl.org/wiki/Buffer_Object#Clearing">버퍼 clear</a>. 이건 전송되는 데이터가 얼마 되지 않기 때문에
+"client-side" 수정이라고 보지 않는다.
+</li>
+<li><a href="https://www.opengl.org/wiki/Buffer_Object#Copying">버퍼 copy</a>. 이건 한 버퍼에서 다른 버퍼로 복사하는 것으로
+"server-side"에서 이루어진다.
+</li>
+<li><a href="https://www.opengl.org/wiki/Buffer_Object#Invalidation">버퍼 invalidate</a>. 실질적으로는 버퍼의 내용을 지워버리는 것 뿐이기
+때문에 "server-side"로 취급한다.
+</li>
+<li><a href="https://www.opengl.org/wiki/Pixel_Buffer_Object">버퍼로 비동기적인 픽셀 전송</a>. 버퍼 안의 데이터를 set하는 것이며
+pure-OpenGL 매커니즘을 통해서만 가능하다.
+</li>
+<li><code>glGetBufferSubData</code> 를 사용하여 버퍼 데이터의 일부분을 CPU로
+옮겨오기. 이건 "server-side" 오퍼레이션은 아니지만 항상 유효하다.
+</li>
+</ul>
+
+<p>
+아래는 client-side의 오퍼레이션들이며 해당 비트를 set하여 사용 요청할
+수 있다. 대부분은 서로 독립적이지만 그렇지 않은 것들은 따로 표시했다.
+</p>
+
+<p>
+<code>GL_MAP_READ_BIT</code>
+</p>
+<blockquote>
+<p>
+클라이언트가 <a href="https://www.opengl.org/wiki/Buffer_Object#Mapping">버퍼에 map</a> 을 해서 그 내용을 읽을 수 있도록 한다. 이
+플래그를 set하지 않고 읽기 용도로 버퍼에 map을 시도하면 실패할 것이다.
+</p>
+</blockquote>
+
+<p>
+<code>GL_MAP_WRITE_BIT</code>
+</p>
+<blockquote>
+<p>
+클라이언트가 <a href="https://www.opengl.org/wiki/Buffer_Object#Mapping">버퍼에 map</a> 을 해서 그 내용을 쓸 수 있도록 한다. 이
+플래그를 set하지 않고 쓰기 용도로 버퍼에 map을 시도하면 실패할 것이다.
+</p>
+</blockquote>
+
+<p>
+<code>GL_DYNAMIC_STORAGE_BIT</code>
+</p>
+<blockquote>
+<p>
+클라이언트가 <code>glBufferSubData</code> 를 통해 버퍼의 내용을 수정할 수 있도록
+한다. 이 플래그를 set하지 않고 해당 함수를 호출하면 실패한다.
+</p>
+</blockquote>
+
+<p>
+<code>GL_PERSISTENT_BIT</code>
+</p>
+<blockquote>
+<p>
+Buffer Object가 <a href="https://www.opengl.org/wiki/Buffer_Object#Persistent_mapping">map된 동안에도 사용</a> 될 수 있도록 한다. 이 플래그를
+set하지 않고 map되어 있는 버퍼에 오퍼레이션을 시도할 경우 실패한다. 이
+플래그 비트를 사용하려면 map 비트도 함께 설정해 주어야 한다.
+</p>
+</blockquote>
+
+<p>
+<code>GL_COHERENT_BIT</code>
+</p>
+<blockquote>
+<p>
+explicit barrier없이도 Persistent Buffer에 읽기/쓰기를 하여 OpenGL과
+coherent 하게 되도록 한다.<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> 이 플래그를 set하지 않으면 coherency를
+맞추기 위해서 explicit barrier가 필요하게 된다. 이 플래그 비트는
+Persistent 비트와 함께 사용한다.
+</p>
+</blockquote>
+
+<p>
+<code>GL_CLIENT_STORAGE_BIT</code>
+</p>
+<blockquote>
+<p>
+버퍼의 저장소 메모리가 "client"의 메모리라는 것을 알려주는 비트 필드.
+</p>
+</blockquote>
+
+<p>
+위의 비트들을 조합하여 Buffer Object를 사용하는 몇 가지 방식이 있을 수
+있다.
+</p>
+
+<p>
+<b>Pure in-OpenGL buffers</b>: 가끔은 OpenGL 프로세스가 Buffer Object를 거의
+완전히 다 소유하도록 하는게 유리할 때도 있다. 이 경우 <a href="https://www.opengl.org/wiki/Compute_Shader">Compute Shader</a>,
+<a href="https://www.opengl.org/wiki/Transform_Feedback">Transform Feedback</a> 이나 다른 다양한 매커니즘을 통해 버퍼의 내용이
+채워진다. 그리고 다른 OpenGL 프로세스에서 <a href="https://www.opengl.org/wiki/Vertex_Rendering#Indirect_rendering">Indirect Rendering</a>, <a href="https://www.opengl.org/wiki/Vertex_Specification">Vertex
+Specification</a> 등을 통해 버퍼의 내용을 읽어갈 수도 있다.
+</p>
+
+<p>
+이 경우 저장소를 고정된 사이즈로 할당하여야 한다. <i><b>flags</b></i> 를 0으로
+하면 된다.
+</p>
+
+<p>
+<b>Static data buffers</b>: 어떤 경우에서는 Buffer Object의 데이터가 한 번
+upload된 이후로 다시는 바뀌지 않을 수도 있다. 예를 들어 한 번 정의한
+다음에 여러번 쓰이는 Vertex 데이터는 static 일 수 있다.
+</p>
+
+<p>
+이런 경우 <i><b>flags</b></i> 를 0으로 하고 <i><b>data</b></i> 를 통해 초기화시에 upload해
+버린다. 이후부터는 버퍼안의 데이터를 쓰기만 하면 된다. 이 기법은
+static한 데이터들을 미리 모두 모아 놓아야 사용할 수 있다.
+</p>
+
+<p>
+<b>Image reading buffers</b>: Buffer Object는 <a href="https://www.opengl.org/wiki/Pixel_Buffer_Object">Pixel Buffer Object</a> 를 통한
+비동기 픽셀 전송 연산시에 중간 버퍼로서 사용할 수도 있다. 이 경우
+버퍼는 단순히 비동기적으로 읽기만 하면 된다.
+</p>
+
+<p>
+<code>glGetBufferSubData</code> 를 사용하여 읽기를 할 수 있겠지만 프로세서의
+성능이 엄청난 것이 아니라면<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> 읽기용으로 버퍼를 map하는 것도 동일한
+효과를 볼 수 있다. 따라서 <i><b>flags</b></i> 는 <code>GL_MAP_READ_BIT</code> 이 되어야
+한다.
+</p>
+
+<p>
+<b>Modifiable buffers</b>: 일반적으로는 버퍼를 map하고 거기에 write 하는것은
+<code>glBufferSubData</code> 와 같은 효율을 낸다. 그리고 대부분의 경우에서 훨씬
+빠르며, 특히 <a href="https://www.opengl.org/wiki/Buffer_Object#Invalidation">invalidation</a> 과 <a href="https://www.opengl.org/wiki/Buffer_Object_Streaming">Buffer Object Streaming</a> 기법을 사용할 경우
+더욱 그러하다.
+</p>
+
+<p>
+modifiable buffer를 사용하기 위해서는 <i><b>flags</b></i> 가 <code>GL_MAP_WRITE_BIT</code>
+이어야 한다. 이는 <code>glBufferSubData</code> 를 사용하지 않을 것이라고 알려주는
+것이다.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Mutable Storage</h3>
+<div class="outline-text-3" id="text-1-2">
+</div><div id="outline-container-sec-1-2-1" class="outline-4">
+<h4 id="sec-1-2-1"><span class="section-number-4">1.2.1</span> Buffer Object Usage</h4>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+mutable: 변할 수 있는, immutable: 불변의
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+But this only restrics how the user directly modifies the data store;
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+coherency는 일관성이라는 뜻으로, 클라이언트와 서버의 메모리가
+동시에 일치하도록 한다는 의미로 보인다. explicit barrier도 이런
+의미에서 보면 Fence Sync처럼 서버-클라이언트 모델간의 동기화를 맞추는
+방식으로 보인다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+if not superior performance
+</p></div>
+
+
+</div>
+</div></div>
+</body>
+</html>
