@@ -426,8 +426,83 @@ modifiable buffer를 사용하기 위해서는 <i><b>flags</b></i> 가 <code>GL_
 <div id="outline-container-sec-1-2" class="outline-3">
 <h3 id="sec-1-2"><span class="section-number-3">1.2</span> Mutable Storage</h3>
 <div class="outline-text-3" id="text-1-2">
-</div><div id="outline-container-sec-1-2-1" class="outline-4">
+<p>
+Buffer Object에 mutable한 저장소를 만들기 위해서는 아래 API를
+사용한다.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c">void glBufferData(enum target, sizeiptr size, const void *data, enum usage);
+</pre>
+</div>
+
+<p>
+<code>target</code> 파라미터는 <code>glBindBuffer</code> 에서 쓰인 것과 같이 수정할 버퍼가
+어디에 bind되었는지에 대한 것이다. <code>size</code> 는 해당 Buffer Object에
+할당할 메모리의 바이트수를 나타낸다.
+</p>
+
+<p>
+<code>data</code> 파라미터는 유저 메모리의 포인터로서 Buffer Object의 데이터
+저장소에 copy된다. 만일 이게 NULL이라면 copy는 발생하지 않고 Buffer
+Object의 데이터는 undefined 상태로 남을 것이다.
+</p>
+
+<p>
+<code>usage</code> 파라미터는 매우 복잡하다.
+</p>
+</div>
+
+<div id="outline-container-sec-1-2-1" class="outline-4">
 <h4 id="sec-1-2-1"><span class="section-number-4">1.2.1</span> Buffer Object Usage</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+Buffer Object는 OpenGL에서 할당한 general purpose한 메모리
+블록이다. Buffer Object는 아주 다양한 방식으로 사용될 수 있다. 특정
+Buffer Object의 데이터 저장소의 내용에 유연성과 보다 나은 성능 최적화를
+만족시키기 위해서 클라이언트는 usage hint 라는 것을 주어야 한다. 이는
+클라이언트가 Buffer Object를 정확히 어떻게 사용할지에 대한 general한
+description 이다.
+</p>
+
+<p>
+여기에는 두 가지의 사용 패턴이 있는데 하나는 클라이언트가 버퍼를 읽고
+쓰는 방식에 대한 것이고 다른 하나는 버퍼 데이터를 사용하는것에 비해
+얼마나 자주 수정하냐에 대한 것이다.
+</p>
+
+<p>
+Buffer Object의 데이터를 수정하는 방법에는 두 가지가 있다. 하나는
+클라이너트가 명시적으로 데이터를 upload 하는 것이다. 다른 방식은
+클라이언트가 버퍼를 채우도록 하는 GL 커맨드를 날리는 것이다. 예를 들면
+Transform Feedback을 통한 Vertex Shader 연산의 결과를 저장하는 버퍼
+저장소가 있다면 클라이언트는 버퍼의 정보를 직접 바꾸는 것이 아니게
+된다.<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup> 즉, 이건 후자의 경우이다.
+</p>
+
+<p>
+이와 비슷하게 클라이언트는 다양한 커맨드를 사용하여 버퍼의 데이터를
+읽을 수 있다. 혹은 버퍼의 내용을 읽어서 그걸로 무엇인가를 하도록 하는
+GL커맨드를 실행시킬 수도 있다. Vertex Data를 저장하는 버퍼는 GL이
+렌더링을 할 때 읽어간다.
+</p>
+
+<p>
+클라이언트가 데이터에 대해 명세하는 hint에는 세 가지가 있다. 이것들은
+클라이언트가 버퍼를 가지고 무엇을 할 것인지에 대한 것이다. 즉,
+클라이언트가 버퍼의 데이터를 직접 읽을 것인지 쓸 것인지에 대한 것이다.
+</p>
+
+<ul class="org-ul">
+<li>DRAW: 클라이언트는 버퍼에 데이터를 write만 하고 read는 안할 것임.
+</li>
+<li>READ: 클라이언트는 버퍼에 데이터를 read만 하고 write는 안할 것임.
+</li>
+<li>COPY: 클라이언트는 데이터를 read도 write도 안할 것임.
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -452,6 +527,13 @@ coherency는 일관성이라는 뜻으로, 클라이언트와 서버의 메모�
 
 <div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
 if not superior performance
+</p></div>
+
+<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+앞뒤가 안 맞는게 원문에 오류가 있는 것 같다. 의역하여
+수정함. 원문은 다음과 같다. if you want to have a buffe store the
+results of a vertex shader computation through the use of transform
+feedback, the user is not directly changing the buffer information.
 </p></div>
 
 
