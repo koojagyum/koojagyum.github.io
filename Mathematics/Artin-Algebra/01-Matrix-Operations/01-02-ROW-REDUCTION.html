@@ -205,21 +205,20 @@ y_{ij} = a_{i1}x_{1j} + \cdots + a_{in}x_{nj}
 \end{equation}
 
 <p>
-식 (2.2) 에서 엔트리 \(y_{ij}\) 는 변수로 쓰인 행렬 X의 j번째 column 과
-행렬 A의 i번째 row 인 \(x_{1j},\cdots,x_{nj}\) 에 의존적이게
-된다. 따라서 이 함수에서 행렬 A는 행렬 X의 각 column에 개별적으로
-작용하게 되는데, 이것을 A가 column vector 들에 대한 동작을
-지시한다고도 볼 수 있다.<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>
+식 (2.2) 에서 엔트리 \(y_{ij}\) 는 변수로 쓰인 행렬 X의 j번째 column 인
+\(x_{1j},\cdots,x_{nj}\) 과 행렬 A의 i번째 row 에 의존적이게
+된다. 따라서 이 함수에서 행렬 A는 행렬 X의 각 column 에 작용하게
+되는데, 이것을 A가 column vector 들에 대한 동작을 지시한다고도 볼 수
+있다.<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>
 </p>
 
-\begin{equation}
-\begin{bmatrix}
-A
-\end{bmatrix}
-\begin{bmatrix} x_{1} \\ \vdots \\ \vdots \\ x_{n} \end{bmatrix}
-=
-\begin{bmatrix} y_{1} \\ \vdots \\ y_{m} \end{bmatrix}
-\end{equation}
+<div class="center">
+
+<div class="figure">
+<p><img src="./images/a_on_colvec.png" alt="a_on_colvec.png" />
+</p>
+</div>
+</div>
 
 <p>
 column vector 들에 left multiplication by A 하는 것은 n-dimensional
@@ -255,9 +254,9 @@ c가 0일 경우 <i>homogeneous linear</i> 라고 부른다.)
 
 <p>
 다시 행렬 A에 \(n \times p\) 행렬 X를 연산하는 것으로 돌아가면, 행렬 A가
-행렬 X의 각 column에 대해 동일한 방식으로 연산된다고 해석할 수
-있다. \(Y_{i}\) 를 Y의 <i>i</i> 번째 열(row) 이라고 하자. 그러니까 <i>row
-vector</i> 처럼 보는 것이다. <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>
+행렬 X의 각 column 에 대해 똑같이 연산된다고 해석할 수 있다. \(Y_{i}\)
+를 Y의 <i>i</i> 번째 열(row) 이라고 하자. 그러니까 <i>row vector</i> 처럼 보는
+것이다. <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>
 </p>
 
 \begin{equation}
@@ -272,8 +271,8 @@ Y
 \end{equation}
 
 <p>
-\(Y_{i}\) 를 X의 j번째 row인 \(X_{j}\) 의 vector 표현식을 쓸 수
-있다. 아래와 같이&#x2026;
+아래와 같이 \(Y_{i}\) 를 X 에서 \(X_{j}\) row 의 vector 표현식으로 쓸 수
+있다.
 </p>
 
 <p>
@@ -468,21 +467,304 @@ elementary matrix(기본행렬) \(E\) 는 행렬 \(X\) 에 대해 아래와 같�
 </p>
 
 <p>
-(2.7) 아래의 과정을 거쳐서 행렬 \(EX\) 를 구한다.
+(2.7) 다음은 행렬 \(EX\) 를 구하기 위한 방법이다.
 </p>
 <blockquote>
 <p>
-Type (i):
+Type (i): <i>i</i> 번째 row인 \(X_{i}\) 를 \(X_{i} + aX_{j}\) 로 대체하거나
+(row i)에 \(a \cdot (row \; j)\) 를 더한다.
 </p>
 
 <p>
-Type (ii):
+Type (ii): (row i)와 (row j)를 서로 바꾼다.
 </p>
 
 <p>
-Type (iii):
+Type (iii): (row i)에 0이 아닌 스칼라 c를 곱한다.
 </p>
 </blockquote>
+
+<p>
+위의 연산들은 <i>elementary row operations</i> (기본행연산) 이라고
+부른다. 따라서 elementary matrix와(기본행렬과) 곱하는 것은 elementary
+row operation(기본행연산) 과 같다. 이게 사실인지 주의깊게 확인해보자.
+</p>
+
+<p>
+(2.8) <b>Lemma.</b> <sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup> elementary matrix(기본행렬) 가 invertible
+하다(역행렬을 갖는다)면 이들의 inverse(역행렬) 또한 elementray
+matrix(기본행렬) 이다.
+</p>
+
+<p>
+위의 lemma(부명제)는 계산을 통해 증명된다. elementary
+matrix(기본행렬)의 inverse는(역행렬은) row operation(기본행연산)의
+inverse(역) 인 matrix(행렬)이다. \(E = I + ae_{ij}\) 가 Type (i) 라면,
+\(E^{-1} = I - ae_{ij}\), 즉 "\((row \; i)\) 에서 \(a \cdot (row \; j)\) 를
+뺀 것" 이다. \(E\) 가 Type (ii) 라면 \(E^{-1} = E\) 이다. 그리고 \(E\) 가
+Type (iii) 라면 \(E^{-1}\) 은 \(c\) 의 자리에 \(c^{-1}\) 이 들어간 행렬이
+된다. 즉, "\((row \; i)\) 에 \(c^{-1}\) 을 곱한 것" 이 된다.
+</p>
+
+<p>
+이제 (2.7) 에서의 elementary row operation (기본행연산) 들을 행렬 A에
+하여 그 효과에 대해서 알아보도록 하자. 최종 연산 결과를 간단히 A' 라고
+표기한다.
+</p>
+
+<div class="center">
+
+<div class="figure">
+<p><img src="./images/seq_of_operations.png" alt="seq_of_operations.png" />
+</p>
+</div>
+</div>
+
+<p>
+각각의 elementary row operation(기본행연산)은 결과적으로 elementary
+matrix(기본행렬)로 곱한 것으로 구해진다. 따라서 위와 같은 일련의
+연산들을 elementary matrix(기본행렬)들인 \(E_{1},\cdots,E_{k}\) 의
+곱으로 표현할 수 있다.
+</p>
+
+<p>
+(2.9)
+</p>
+\begin{equation}
+A' = E_{k} \cdots E_{2}E_{1}A
+\end{equation}
+
+<p>
+이러한 절차를 <i>row reduction</i> 혹은 <i>Gaussian elimination</i> (가우스
+소거법) 이라고 부른다. 예를 들어 아래 matrix를(행렬을) 단순화
+시켜보자.
+</p>
+
+<p>
+(2.10)
+</p>
+\begin{equation}
+M
+=
+\begin{bmatrix}
+1 & 0 & 2 & 1 & 5 \\
+1 & 1 & 5 & 2 & 7 \\
+1 & 2 & 8 & 4 & 12
+\end{bmatrix}
+\end{equation}
+
+<p>
+첫 번째 타입의 elementary operation(기본행연산)을 가능한 많이 사용하여
+깔끔하게(단위행렬 처럼 보이게) 만들어보자.
+</p>
+
+<div class="center">
+
+<div class="figure">
+<p><img src="./images/row_reduction_2_10_ex.png" alt="row_reduction_2_10_ex.png" />
+</p>
+</div>
+</div>
+
+<p>
+row reduction은 systems of linear equation(연립일차방정식)을 푸는
+유용한 방법이다. m개의 방정식과 n개의 미지수를 가지고 있다고 하고
+(1.9) 에서와 같이 \(m \times n\) 행렬인 A와 미지의 column vector 행렬인
+X, 그리고 주어진 column vector인 B에 대하여 \(AX = B\) 이라고 하자. 이
+연립방정식을 풀기 위해서 \(m \times (n + 1)\) 의 block matrix를 만들어
+보자.
+</p>
+
+<p>
+(2.11)
+</p>
+<div class="center">
+
+<div class="figure">
+<p><img src="./images/row_reduction_2_11.png" alt="row_reduction_2_11.png" />
+</p>
+</div>
+</div>
+
+<p>
+그리고 row operation들을 하여 M을 단순화시켜 보자. \(EM = [EA \; | \;
+EB]\) 라는 것을 염두해두자. 그리고 M'를 아래와 같이 정의하여 일련의 row
+operation들의 결과라고 하자.
+</p>
+
+\begin{equation}
+M' = [A' \; | \; B']
+\end{equation}
+
+<p>
+그리고 아래 내용을 주의깊게 관찰한다.
+</p>
+
+<p>
+(2.12) *Proposition.*<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup> \(A'X = B'\) 의 해는 \(AX = B\) 와 같다.
+</p>
+
+<p>
+Proof. M' 는 아래와 같이 일련의 elementary row operation 들로 얻어질
+수기 때문임.
+</p>
+
+\begin{equation}
+M' = E_{r} \cdots E_{1}M
+\end{equation}
+
+<p>
+행렬 P를 \(P = E_{r} \cdots E_{1}\) 이라고 하자. Lemma (2.8) 과
+Proposition (1.18) 에 의해 P는 invertible 하다.
+그리고 \(M' = [A' | B'] = [PA | PB]\) 이다.
+X 가 원래의 식인 \(AX = B\) 의 해라고 하면 \(PAX = PB\) 가 되고,
+이것은 \(A'X = B'\) 라고 할 수 있다.<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup>
+따라서 X 는 새 방정식의 해가 된다.
+이걸 역으로 만일 \(A'X = B'\) 라면,
+\(AX = P^{-1}A'X = P^{-1}B' = B\) 가 되서
+X가 역시 \(AX = B\) 방정식을 풀 수 있다.
+</p>
+
+<p>
+아래 연립 방정식을 예로 들어보자.
+</p>
+
+<p>
+(2.13)
+</p>
+\begin{equation}
+\begin{array}
+1x_{1} +  + 2x_{3} + x_{4} = 5 \\
+x_{1} + x_{2} + 5x_{3} + 2x_{4} = 7 \\
+x_{1} + 2x_{2} + 8x_{3} + 4x_{4} = 12
+\end{array}
+\end{equation}
+
+<p>
+위 연립 방정식의 augmented matrix 를 (2.10) 에서와 같이 행렬 M 이라고
+하자. 이 행렬에 row reduction 을 하면 아래의 연립 방정식을 얻을 수
+있다.
+</p>
+
+\begin{equation}
+\begin{array}
+1x_{1} + &         & 2x_{3} &       & = & 2 \\
+         & x_{2} + & 3x_{3} &       & = & -1 \\
+         &         &        & x_{4} & = & 3
+\end{array}
+\end{equation}
+
+<p>
+위의 연립방정식의 해는 바로 알 수 있다.
+\(x_{3}\) 을 임의의 수로 두면
+\(x_{1}, x_{2}, x_{4}\) 를 풀 수 있다.
+따라서 (2.13) 의 general solution 은 아래와 같이 쓸 수 있다.
+</p>
+
+\begin{equation}
+x_{3} = c_{3}, x_{1} = 1 - 2c_{3}, x_{2} = -1 - 3c_{3}, x_{4} = 3
+\end{equation}
+
+<p>
+이고 \(c_{3}\) 은 임의의 수이다.
+</p>
+
+<p>
+이제 다시 임의의 행렬에 row reduction 을 하는 것으로 돌아가자. 별로
+어려워 보이지는 않을 것이다. 행렬 A에 일련의 row operation 을 하여
+대충 아래와 같은 형태로 소거하는 것이다.
+</p>
+
+<p>
+(2.14)
+</p>
+<div class="center">
+
+<div class="figure">
+<p><img src="./images/reduced_matrix.png" alt="reduced_matrix.png" />
+</p>
+</div>
+</div>
+
+<p>
+<code>*</code> 은 임의의 수를 나타내고 빈 공간은 0 들로 채워진 것을
+의미한다. 이러한 행렬을 <i>row echelon matrix</i> <sup><a id="fnr.6" name="fnr.6" class="footref" href="#fn.6">6</a></sup> 라고 한다. 예를
+들면 아래 행렬은 row echelon matrix 이다.
+</p>
+
+\begin{equation}
+\begin{bmatrix}
+1 & 6 & 0 & 1 \\
+0 & 0 & 1 & 2 \\
+0 & 0 & 0 & 0
+\end{bmatrix}
+\end{equation}
+
+<p>
+이것은 또한 (2.10) 에서의 최종 결과와 같은 형태이다. (2.15) 에서 row
+echelon matrix 의 정의를 내린다.
+</p>
+
+<p>
+(2.15)
+</p>
+<ol class="org-ol">
+<li>매 row 에서 첫 번째 0이 아닌 엔트리는 1 이다. 이 엔트리를 <i>pivot</i>
+    이라 부른다.
+</li>
+<li>i + 1 row의 첫 번째 0이 아닌 엔트리는 i row의 첫 번째 0이 아닌
+엔트리의 오른쪽에 위치해야 한다.
+</li>
+<li>pivot 위의 엔트리들은 모두 0이다.
+</li>
+</ol>
+
+<p>
+row reduction 을 하기 위해서는 우선 0이 아닌 엔트리를 가진 첫 번째
+column 을 찾아야 한다. (이런 column 이 없다면 A = 0 이고 row echelon
+matrix 는 0 이 된다.) Type (ii) 의 elementary operation 을 이용하여
+row 를 서로 교환해서 0이 아닌 엔트리를 제일 위의 row 로 옮긴다. 이
+엔트리를 Type (iii) 의 elementary operation 을 사용하여 1로
+정규화한다. 그리고 Type (i) 의 elementray operation 으로 해당 column
+의 다른 엔트리들을 정리한다. 그러면 아래와 같은 블록을 가진 행렬이
+완성될 것이다.
+</p>
+
+
+<div class="figure">
+<p><img src="./images/rowreduce_matrix_block.png" alt="rowreduce_matrix_block.png" />
+</p>
+</div>
+
+<p>
+이제 계속해서 더 작은 행렬인 D에 row operation 을 수행한다(다 될때까지
+계속한다). Formally, this is induction on the size of the
+matrix. <sup><a id="fnr.7" name="fnr.7" class="footref" href="#fn.7">7</a></sup> 완전한 귀납법[Appendix (2.6) 참고]에서는 A 보다 적은
+row 를 가진 모든 행렬이 row echelon form 으로 소거될 수 있다고
+가정한다. D가 A보다 적은 수의 row 를 가지므로 이것은 row echelon
+matrix(\(D''\) 라고 하자) 로 소거될 수 있다고 가정할 수 있다. \(D\) 를
+\(D''\) 로 소거하는 row reduction 은 \(A'\) 를 이루고 있는 다른 블록에
+수정을 가하지 않는다. 따라서 \(A'\) 는 아래와 같이 소거될 수 있다.
+</p>
+
+
+<div class="figure">
+<p><img src="./images/rowreduce_to_d_dd.png" alt="rowreduce_to_d_dd.png" />
+</p>
+</div>
+
+<p>
+이 행렬은 row echelon matrix 의 요구사항(2.15a 와 b)을
+만족한다. 그러므로 원본 행렬인 A는 이와 같은 형태로 소거될 수 있다. 이
+상태에서 \(D''\) 의 pivot 위의 B의 엔트리들은 제거될 수 있다. 여기까지
+하면 row echelon form 으로의 소거가 완료된다.
+</p>
+
+<p>
+행렬 A에서 row reduction 을 통해 얻은 row echelon matrix 는 유일하다는
+것을 알 수 있다. 즉, row operation 은 순서에 영향을 받지
+않는다. 이건 별로 중요한게 아니어서 증명은 생략한다.
+</p>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
@@ -496,6 +778,29 @@ on column vectors.
 그림에서 행렬 Y의 row vector를 \(Y_{p}\) 까지 그렸는데, 앞에서
 예로 든 내용을 보면 행렬 Y는 \(m \times p\) 행렬이다. \(Y_{m}\) 의
 오타이지 않을까 싶다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+부명제. 다른 진술이 참임을 검증하기 위해 참인 것으로 여겨지는
+진술.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+명제(命題). 논리학적으로 뜻이 분명한 문장. 즉, 어떤 말을 딱 본
+순간 '참' 혹은 '거짓'을 대번에 알 수 있는 말을 말한다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+\(PA = A'\), \(PB = B'\) 이기 때문.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.6" name="fn.6" class="footnum" href="#fnr.6">6</a></sup> <p class="footpara">
+echelon: 계급, (공군에서 항공기의) 사다리꼴 편대. 여기서는
+후자의 뜻인 듯.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.7" name="fn.7" class="footnum" href="#fnr.7">7</a></sup> <p class="footpara">
+해석 안됨.
 </p></div>
 
 
