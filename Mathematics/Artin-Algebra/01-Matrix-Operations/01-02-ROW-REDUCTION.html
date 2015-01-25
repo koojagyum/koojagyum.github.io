@@ -763,8 +763,158 @@ matrix(\(D''\) 라고 하자) 로 소거될 수 있다고 가정할 수 있다. 
 <p>
 행렬 A에서 row reduction 을 통해 얻은 row echelon matrix 는 유일하다는
 것을 알 수 있다. 즉, row operation 은 순서에 영향을 받지
-않는다. 이건 별로 중요한게 아니어서 증명은 생략한다.
+않는다. 이건 크게 중요한게 아니어서 증명은 생략한다.
 </p>
+
+<p>
+row reduction 이 유용한 까닭은 \(A'\) 가 row echelon form 이라면
+\(A'X = B'\) 의 연립방정식을 즉시 풀 수 있기 때문이다.
+아래 예를 살펴보자.
+</p>
+
+
+<div class="figure">
+<p><img src="./images/p15_ex_1.png" alt="p15_ex_1.png" />
+</p>
+</div>
+
+<p>
+위에서 \(A'X = B'\) 는 해가 없다. 왜냐하면 세 번째 방정식이 \(0 = 1\) 이기
+때문이다.
+</p>
+
+
+<div class="figure">
+<p><img src="./images//p15_ex_2.png" alt="p15_ex_2.png" />
+</p>
+</div>
+
+<p>
+반면에 위의 예제는 해가 존재한다. \(x_{2}\) 와 \(x_{4}\) 를 임의로 두면 첫
+번째 방정식은 \(x_{1}\) 을 구할 수 있고, 두 번째 방정식으로 \(x_{3}\) 을
+구할 수 있다. (2.13) 의 연립방정식을 풀 때의 방법과 동일하다.
+</p>
+
+<p>
+일반적인 룰은 아래와 같다.
+</p>
+
+<p>
+(2.16) <b>Proposition.</b> \(M' = [A' | B']\) 가 row echelon matrix 라고
+하자. 그러면 \(A'X = B'\) 에서 나타내는 연립방정식은 오직 \(B'\) 의 마지막
+colomn 에서 pivot 이 없을 경우에만 해를 갖는다.<sup><a id="fnr.8" name="fnr.8" class="footref" href="#fn.8">8</a></sup> 그리고 만일
+column <i>i</i> 상에 pivot 이 없다면 임의의 값이 미지수 \(x_{i}\) 에 할당될
+수 있다.
+</p>
+
+<p>
+물론 모든 <i>homogeneous</i> linear system \(AX = 0\) 에는 trivial
+solution(자명한 해)인 \(X = 0\) 가 존재한다. 그러나 row echelon form 을
+다시 살펴보면, 만일 방정식의 개수보다 미지수가 더 많은 경우
+homogeneous 방정식인 \(AX = 0\) 는 X에 대해 non-trivial 해를 갖게 된다.
+</p>
+
+<p>
+(2.17) <b>Corollary.</b> <sup><a id="fnr.9" name="fnr.9" class="footref" href="#fn.9">9</a></sup> m 개의 homogeneous equation 과 n 개의
+미지수를 가지고 있고, m &lt; n 인 \(AX = 0\) 의 모든 연립방정식은 몇 개의
+\(x_{i}\) 가 0이 아닌 해 X를 갖는다.
+</p>
+
+<p>
+\(A'X = 0\) 을 associated row echelon equation 이라고 하자. 그리고 r을
+\(A'\) 의 pivot 의 개수라고 하자. 그러면 \(r \leq m\) 이다. 명제에 따르면
+n - r 개의 임의의 변수를 \(x_{i}\) 에 할당할 수 있다.
+</p>
+
+<p>
+이제 row reduction 을 사용하여 square invertible matrix 들의 특징을
+알아보자.
+</p>
+
+<p>
+(2.18) <b>Proposition.</b> A를 정사각행렬이라고 하자. 아래 조건들은
+동등하다.
+</p>
+<ol class="org-ol">
+<li>A는 일련의 elementary row operation 들로 소거해서 단위행렬이 될 수
+있다.
+</li>
+<li>A는 elementary matrix 들의 곱(product)이다.
+</li>
+<li>A는 역행렬을 갖는다(invertible).
+</li>
+<li>\(AX = 0\) 이 나타내는 homogeneous 연립방정식은 오로지 \(X = 0\) 인
+해를 갖는다.
+</li>
+</ol>
+
+<p>
+<i>Proof.</i> 우리는 이 명제를 (1)=&gt;(2)=&gt;(3)=&gt;(4)=&gt;(1) 이런 식의
+함축(implication)<sup><a id="fnr.10" name="fnr.10" class="footref" href="#fn.10">10</a></sup>을 사용하여 증명하고자 한다. (1) 이면 (2) 라는
+것을 알아보기 위해 A가 row operation 들로 소거되어 단위행렬이 될 수
+있다고 해 보자. \(E_{k} \cdots E_{1}A = I\) 에서 양 변의 왼쪽에
+\(E_{1}^{-1} \cdots E_{k}^{-1}\) 를 곱하면 \(A = E_{1}^{-1} \cdots
+E_{k}^{-1}\) 를 얻게된다. elementary matrix 의 역행렬(inverse)은 역시
+elementary matrix 이므로, A는 elementary matrix 들의 곱으로 이루어져
+있다는 것을 알 수 있다. elementary matrix 들의 곱 역시 역행렬을
+가지므로(invertible) (2) 이면 (3) 이다. 만일 A가 역행렬을
+가진다면(invertible) \(AX = 0\) 의 양 변에 \(A^{-1}\) 을 곱해서 \(X = 0\) 을
+이끌어낼 수 있다. 따라서 \(AX = 0\) 이 trivial solution(자명한 해)을
+가지며 이것은 (3) 이면 (4) 라는 것을 이끌어낸다.
+</p>
+
+<p>
+마지막 implication 인 (4) 이면 (1) 을 중명하기 위해 square row echelon
+matrix 인 M을 사용한다. 그리고 아래의 이분법(dichotomy)를 살펴보자.
+</p>
+
+<p>
+(2.19)
+</p>
+<div class="center">
+<p>
+M을 square row echelon matrix 라고 하자. <br  />
+그러면 M은 단위행렬 이거나 가장 아래 row 가 0 이게 된다.
+</p>
+</div>
+
+<p>
+이것은 (2.15) 를 떠올려 보면 쉽게 이해할 수 있다.
+</p>
+
+<p>
+주어진 행렬 A가 (1)을 만족하지 않는다고 해 보자. 그러면 A는 row
+operation 들을 사용하여 최하단의 row 가 0인 행렬 A' 로 소거될 수
+있다. 이 경우 \(A'X = 0\) 에 대해서 최대 n-1 개의 nontrivial equation 이
+존재하게 된다. 그리고 따름정리(corollary) (2.17) 을 통해 이
+연립방정식은 nontrivial solution 을 갖는다는 것을 알 수 있다. \(AX = 0\)
+이 \(A'X = 0\) 과 동등하기 때문에 이 또한 nontrivial solution
+이다. 이것은 (1) 이 아니면 (4) 도 아니라는 것을 나타낸다. 따라서 (4)
+이면 (1) 이다. 이로써 (2.18) 의 명제가 증명된다.
+</p>
+
+<p>
+(2.20) <b>Corllary.</b> 정사각행렬 A에서 하나의 row 가 0이라면 A는 역행렬을
+갖지 않는다.
+</p>
+
+<p>
+row reduction 은 invertible matrix A 의 역행렬을 구하는 방법이 될 수
+있다. 아래와 같이 row operation 들을 사용하여 A를 단위행렬로
+만들어보자.
+</p>
+
+\begin{equation}
+E_{k} \cdots E_{1}A = I
+\end{equation}
+
+<p>
+위 식의 양 변에 \(A^{-1}\) 을 곱한다.
+</p>
+
+\begin{equation}
+E_{k} \cdots E_{1}I = A^{-1}
+\end{equation}
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
@@ -801,6 +951,23 @@ echelon: 계급, (공군에서 항공기의) 사다리꼴 편대. 여기서는
 
 <div class="footdef"><sup><a id="fn.7" name="fn.7" class="footnum" href="#fnr.7">7</a></sup> <p class="footpara">
 해석 안됨.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.8" name="fn.8" class="footnum" href="#fnr.8">8</a></sup> <p class="footpara">
+B' 행렬은 최우측에 위치한 column 벡터이다. 여기에 pivot 값이
+있다는 것은 \(0 = 1\) 이라는 뜻이므로 당연히 전체 연립방정식에서는 해가
+없게 된다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.9" name="fn.9" class="footnum" href="#fnr.9">9</a></sup> <p class="footpara">
+따름정리. 계(系) 라고도 한다. 1개의 정리에서 바로 유도되는
+사실로서 이용가치가 많은 것을 명제의 꼴로 나타낸 것을 원래의 정리의
+따름정리 또는 계라 한다.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.10" name="fn.10" class="footnum" href="#fnr.10">10</a></sup> <p class="footpara">
+임의의 명제 p,q 에 대하여 'p이면 q이다' 라고 하는 것. 기호로
+쓰면 \(p \supset q\) 로 나타낸다. 자세한 정보는 <a href="http://terms.naver.com/entry.nhn?docId=388917&cid=41978&categoryId=41985">여기</a> 참고.
 </p></div>
 
 
