@@ -844,7 +844,7 @@ n - r 개의 임의의 변수를 \(x_{i}\) 에 할당할 수 있다.
 <li>A는 역행렬을 갖는다(invertible).
 </li>
 <li>\(AX = 0\) 이 나타내는 homogeneous 연립방정식은 오로지 \(X = 0\) 인
-해를 갖는다.
+자명한 해를 갖는다.
 </li>
 </ol>
 
@@ -884,13 +884,13 @@ M을 square row echelon matrix 라고 하자. <br  />
 
 <p>
 주어진 행렬 A가 (1)을 만족하지 않는다고 해 보자. 그러면 A는 row
-operation 들을 사용하여 최하단의 row 가 0인 행렬 A' 로 소거될 수
-있다. 이 경우 \(A'X = 0\) 에 대해서 최대 n-1 개의 nontrivial equation 이
-존재하게 된다. 그리고 따름정리(corollary) (2.17) 을 통해 이
-연립방정식은 nontrivial solution 을 갖는다는 것을 알 수 있다. \(AX = 0\)
-이 \(A'X = 0\) 과 동등하기 때문에 이 또한 nontrivial solution
-이다. 이것은 (1) 이 아니면 (4) 도 아니라는 것을 나타낸다. 따라서 (4)
-이면 (1) 이다. 이로써 (2.18) 의 명제가 증명된다.
+operation 들을 사용하여 최하단의 row 가 0인 행렬 A' 로 소거된다. 이
+경우 \(A'X = 0\) 에 대해서 최대 n-1 개의 nontrivial equation 이 존재하게
+된다. 그리고 따름정리(corollary) (2.17) 을 통해 이 연립방정식은
+nontrivial solution 을 갖는다는 것을 알 수 있다. \(AX = 0\) 이 \(A'X = 0\)
+과 동등하기 때문에 이 또한 nontrivial solution 이다. 이것은 (1) 이
+아니면 (4) 도 아니라는 것을 나타낸다. 따라서 (4) 이면 (1) 이다. 이로써
+(2.18) 의 명제가 증명된다.
 </p>
 
 <p>
@@ -926,6 +926,145 @@ A에 적용하여 단위행렬로 만든다. 동일한 순서의 오퍼레이션
 <p>
 이 따름정리(corollary)는 위의 두 방정식에서 정리한 것이다.
 </p>
+
+<p>
+(2.22) <b>Example.</b> 아래 행렬의 역행렬을 구해보자.
+</p>
+
+\begin{equation}
+A
+=
+\begin{bmatrix}
+5 & 4 \\
+6 & 5
+\end{bmatrix}
+\end{equation}
+
+<p>
+이를 \(2 \times 4\) 블록 매트릭스로 만들어보자.
+</p>
+
+
+<div class="figure">
+<p><img src="./images/row_reduction_2_22_ex.png" alt="row_reduction_2_22_ex.png" />
+</p>
+</div>
+
+<p>
+행렬 A를 단위행렬로 만들기위해 row operation 들을 수행할
+것이다. 따름정리 (2.21)에 의해 우변이 \(A^{-1}\) 로 바뀌는 것을 잘
+살펴보자.
+</p>
+
+
+<div class="figure">
+<p><img src="./images/row_reduction_2_22_ex_calc.png" alt="row_reduction_2_22_ex_calc.png" />
+</p>
+</div>
+
+<p>
+따라서 \(A^{-1} = \begin{bmatrix} 5 & -4 \\ -6 & 5 \end{bmatrix}\) 이다.
+</p>
+
+<p>
+(2.23) <b>Proposition.</b> 정사각행렬 A가 \(BA = I\) 와 같이 left inverse 인
+B를 갖거나 또는 \(AB = I\) 와 같이 right inverse B를 갖는다고 해
+보자. 그러면 A는 역행렬을 갖고 B는 A의 역행렬이다.
+</p>
+
+<p>
+<i>Proof.</i> \(AB = I\) 라고 가정해보자. 그리고 A에 row reduction 을
+수행해보자. (2.19) 에 의하면 \(E_{1},\cdots,E_{k}\) 는 elementary
+matrix 들이다. 따라서 \(A' = E_{1},\cdots,E_{k}A\) 은 단위행렬이거나
+최하단에 zero row를 가진 행렬일 것이다. 그러면 \(A'B = E_{k} \cdots
+ E_{1}\) 이고 이것은 invertible matrix 이다. 따라서 \(A'B\) 의 최하단
+row는 0이 아니다. 이는 \(A'\) 또한 최하단 row가 0이 아님을
+나타낸다. (2.18)에 의해서 행렬 A는 역행렬을 갖는다. 그리고 \(I = E_{k}
+ \cdots E_{1}A\) 와 \(AB = I\) 는 \(A^{-1} = E_{k} \cdots E_{1} = B\) 임을
+나타낸다(1.17 참고). 다른 케이스는 \(BA = I\) 인데, 위에서 정리한
+내용의 A와 B를 바꾸어 대입하면 B가 역행렬을 갖고 A가 B의 역행렬이게
+된다. 따라서 A 또한 역행렬을 갖는다.
+</p>
+
+<p>
+지금까지 논의해온 내용을 row가 아니라 column에 적용할 수 있다. 우리는
+그동안 연립일차방정식에 적용하기위해 row에 대해서 다루고
+있었다. 그렇지 않았다면 column 에도 똑같이 적용할 수 있었다. row와
+column은 행렬 전치(matrix transpose)를 통해 서로 뒤바뀔 수 있다. \(m
+\times n\) 행렬 A의 전치행렬(transpose)은 대각선 방향으로 서로
+뒤바뀌어서 \(n \times m\) 행렬 \(A^{t}\) 가 된다. 즉, 아래와 같은 조건에서
+\(A^{t} = (B_{ij})\) 이다.
+</p>
+
+\begin{equation}
+b_{ij} = a_{ji}
+\end{equation}
+
+<p>
+아래 예를 참고하자.
+</p>
+
+\begin{equation}
+\begin{bmatrix}
+3 & 2 \\
+1 & 4
+\end{bmatrix}^{t}
+=
+\begin{bmatrix}
+3 & 1 \\
+2 & 4
+\end{bmatrix}
+\end{equation}
+<p>
+and
+</p>
+\begin{bmatrix}
+1 & 2 & 3
+\end{bmatrix}^{t}
+=
+\begin{bmatrix}
+1 \\ 2 \\ 3
+\end{bmatrix}
+
+<p>
+전치행렬의 연산 규칙은 아래 (2.24) 와 같다.
+</p>
+
+<p>
+(2.24)
+</p>
+<ol class="org-ol">
+<li>\((A + B)^{t} = A^{t} + B^{t}\)
+</li>
+<li>\((cA)^{t} = cA^{t}\)
+</li>
+<li>\((AB)^{t} = B^{t}A^{t}\)
+</li>
+<li>\((A^{t})^{t} = A\)
+</li>
+</ol>
+
+<p>
+2.24_3 과 2.24_4 의 공식을 사용하면 left multiplication 으로부터 right
+multiplication 을 만들어낼 수 있다.<sup><a id="fnr.11" name="fnr.11" class="footref" href="#fn.11">11</a></sup>
+</p>
+
+<p>
+(2.6) 의 elementary matrix 들은 아래 elementary column operation 들을
+통해 right multiplication 으로 연산될 수 있다.
+</p>
+
+<p>
+(2.25)
+</p>
+<ol class="org-ol">
+<li>\((column \; j)\) 에 \(a \cdot (column \; i)\) 를 더한다.
+</li>
+<li>\((column \; i)\) 와 \((column \; j)\) 를 서로 교환한다.
+</li>
+<li>\((column \; i)\) 에 0이 아닌 상수 c를 곱한다.
+</li>
+</ol>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
@@ -979,6 +1118,11 @@ B' 행렬은 최우측에 위치한 column 벡터이다. 여기에 pivot 값이
 <div class="footdef"><sup><a id="fn.10" name="fn.10" class="footnum" href="#fnr.10">10</a></sup> <p class="footpara">
 임의의 명제 p,q 에 대하여 'p이면 q이다' 라고 하는 것. 기호로
 쓰면 \(p \supset q\) 로 나타낸다. 자세한 정보는 <a href="http://terms.naver.com/entry.nhn?docId=388917&cid=41978&categoryId=41985">여기</a> 참고.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.11" name="fn.11" class="footnum" href="#fnr.11">11</a></sup> <p class="footpara">
+we can deduce facts about <i>right multiplication</i>, XP, from the
+corresponding facts about left multiplication.
 </p></div>
 
 
