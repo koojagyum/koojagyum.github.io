@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Command state and Explicit synchronization</title>
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Jagyum Koo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Command state and Explicit synchronization</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Command state</a></li>
+<li><a href="#sec-2">2. Explicit synchronization</a></li>
+</ul>
+</div>
+</div>
+<p>
+<a href="https://www.opengl.org/wiki/Synchronization">OpenGL wiki의 Synchronization</a> 에서 Command state 와 Explicit
+synchronization
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Command state</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+OpenGL <a href="https://www.opengl.org/wiki/Rendering_Command">Rendering Command</a> 는 세 가지 중 하나의 상태를 갖는다. unissued,
+issued but not complete 그리고 complete 상태이다.
+</p>
+
+<p>
+커맨드가 OpenGL 드라이버에 들어왔지만 아직 하드웨어에 전달하지 않아
+실행되지 않은 상태의 커맨드를 <i>unissued</i> 상태라고 한다. 하드웨어가
+issued 커맨드들을 수행하기 시작하면 unissued 상태의 커맨드 몇 개를
+가져와 issued로 만든다.
+</p>
+
+<p>
+<i>issued but not complete</i> 상태의 커맨드는 하드웨어에서 받았지만 아직
+결과를 낼 준비가 덜 된 상태를 말한다. 하드웨어는 이러한 커맨드들을
+쌓아둔 queue를 가지고 있다. 하드웨어상에 문제가 없다면 그 queue에 있는
+모든 커맨드들을 수행할 것이다.
+</p>
+
+<p>
+<i>complete</i> 상태의 커맨드는 <a href="https://www.opengl.org/wiki/Rendering_Pipeline_Overview">렌더링 파이프라인</a> 을 완전히 통과한
+커맨드이다. 렌더링 커맨드에 대해서 이 상태는 그 커맨드로 인해
+<a href="https://www.opengl.org/wiki/Framebuffer">Framebuffer</a>, <a href="https://www.opengl.org/wiki/Transform_Feedback">Transform Feedback</a> 버퍼, 또는 다른 아웃풋에 현재 상태(현재
+렌더링된 상태)가 쓰여진다는 의미이다. Buffer Object 에게 Pixel
+Transfer 를 하는 경우의 complete 상태는 픽셀 데이터가 Buffer Object 에
+해당 커맨드가 요청한대로 반영되었다는 뜻이다. Buffer Object 로부터
+Pixel Transfer 를 하는 경우는 픽셀 데이터가 텍스쳐 오브젝트에
+적용되었다는 뜻이다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Explicit synchronization</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+OpenGL 에서는 명시적 동기화(explicit synchronization)에 대한 두 가지
+매커니즘을 제공한다. <a href="https://www.opengl.org/wiki/GLAPI/glFinish"><code>glFinish</code></a> 와 <a href="https://www.opengl.org/wiki/GLAPI/glFlush"><code>glFlush</code></a> 이다.
+</p>
+
+<p>
+<code>glFinish</code> 는 모든 렌더링 커맨드가 완전히 다 수행될 때까지 CPU 스레드를
+멈추고 리턴하지 않는다.
+</p>
+
+<p>
+이에 비해 <code>glFlush</code> 의 동작은 좀 더 복잡하다.
+</p>
+
+<p>
+GPU는 "command queue" 라고 불리는 것을 가지고 있다. 이것은 유저가 내린
+명령에 대해 OpenGL 드라이버에서 작성하는 커맨드들의 리스트이다. 모든
+OpenGL 함수들은 한 개 이상의 커맨드로 바뀌어서 command queue 에
+추가된다. command queue 에 들어간 커맨드들은 GPU가 읽어서 실행하게
+된다.
+</p>
+
+<p>
+그런데 이 command queue 는 길이에 한계가 있다. 짧은 시간에 너무 많은
+명령을 내리면 드라이버에서는 GPU의 command queue 에 커맨드들을 모두 다
+넣지 못한다. 그래서 드라이버는 내부 메모리에 커맨드들을 기록해
+둔다. 이런 커맨드의 상태가 "unissued state" 이다. 시간이 좀 지나면
+unissued 상태의 커맨드들은 GPU의 queue에 들어가게 되는데 이게
+언제인지는 알 수 없다(드라이버 구현 사항이라는 뜻).
+</p>
+
+<p>
+GPU의 queue가 거진 비어있어서 커맨드를 더 넣을 수 있다는 것을 나타내는
+async 메세지 같은것을 날려주도록 할 수도 있을 것이다. 하지만 실제로
+이렇지는 않다. OpenGL 스팩상 드라이버는 실제로 OpenGL call 이 수행될
+때까지 queue가 비어있는지에 대한 확인을 하지 않아도 된다. 그리고
+내부적으로 체크를 하더라도 매번 호출시마다 체크하지는 않을 것이다.
+</p>
+
+<p>
+즉, 이론적으로는 다수의 unissued 상태의 커맨드가 드라이버의 버퍼에 쌓여
+있는데 GPU의 command queue 는 텅 비어 있을 수도 있는 것이다. 드라이버는
+일거리가 있다는 것을 알지만 만일 유저가 한동안 다른 OpenGL 커맨드를
+입력하지 않는다면, 드라이버가 command queue 에 대한 체크를 할 것이라고
+보장할 수는 없다.
+</p>
+
+<p>
+일반적인 경우에서는 문제가 아니겠지만 다음 상황을 가정해보자. 유저가
+짧은 시간에 많은양의 렌더링을 수행한다. 효율을 최대화하기위해 데이터를
+정렬했기 때문에 데이터를 보내는 것은 렌더링을 하는 것보다 시간이 덜
+걸린다.
+</p>
+
+<p>
+짧은 시간에 많은 커맨드를 보냈기 때문에 드라이버는 커맨드들에 대한
+버퍼링이 필요하다. 그런데 여기서 데이터를 보낸 후 OpenGL call 을
+<i>전혀</i> 하지 않는다면 드라이버는 버퍼링된 커맨드들을 command queue 에
+넣을 기회를 갖지 못하게 된다. 그리고 유저는 다음번 프래임에서 OpenGL
+커맨드를 입력할 것이지만 GPU가 렌더링을 시작하기까지 그리 긴 시간을
+기다리지는 않을 것이다.
+</p>
+
+<p>
+<code>glFlush</code> 은 OpenGL 이 모든 커맨드들을 GPU의 command queue 에 넣을
+때까지 현재 CPU 스래드를 잠시 멈추고 기다리게 하는 것이다. 이것은
+<code>glFinish</code> 보다는 시간이 덜 걸릴 것이지만 그래도 시간을 좀 잡아먹는다.
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -155,6 +155,29 @@ for the JavaScript code in this tag.
 </li>
 </ul>
 </li>
+<li><a href="#sec-2">2. Data Specification</a>
+<ul>
+<li><a href="#sec-2-1">2.1. Clearing</a></li>
+<li><a href="#sec-2-2">2.2. Copying</a></li>
+<li><a href="#sec-2-3">2.3. Mapping</a>
+<ul>
+<li><a href="#sec-2-3-1">2.3.1. Alignment</a></li>
+<li><a href="#sec-2-3-2">2.3.2. Buffer Corruption</a></li>
+<li><a href="#sec-2-3-3">2.3.3. Persistent mapping</a></li>
+<li><a href="#sec-2-3-4">2.3.4. Performance Concerns</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-4">2.4. Invalidatation</a></li>
+<li><a href="#sec-2-5">2.5. Streaming</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. General use</a>
+<ul>
+<li><a href="#sec-3-1">3.1. Binding indexed targets</a></li>
+<li><a href="#sec-3-2">3.2. Multibind and indexed targets</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. Reference</a></li>
 </ul>
 </div>
 </div>
@@ -180,31 +203,31 @@ OpenGL Object에서의 룰을 따른다. Buffer Object를 만드려면
 </p>
 
 <p>
-일반적인 OpenGL Object에서와 마찬가지로 <code>glGenBuffers</code> 역시 Object를
+일반적인 OpenGL Object 에서와 마찬가지로 <code>glGenBuffers</code> 역시 Object 를
 참조하는 이름만을 생성한다. 여기에 저장 공간을 할당하려면 Context에
 bind를 해야 한다. 이 때 사용하는 API는 다음과 같다.
 </p>
 
 <div class="org-src-container">
 
-<pre class="src src-c">void glBindBuffer(enum target, uint bufferName)
+<pre class="src src-c"><span style="color: #c17d11;">void</span> <span style="color: #729fcf;">glBindBuffer</span>(<span style="color: #fcaf3e;">enum</span> <span style="color: #c17d11;">target</span>, <span style="color: #c17d11;">uint</span> <span style="color: #fce94f;">bufferName</span>)
 </pre>
 </div>
 
 <p>
-<b><i>target</i></b> 은 bind한 해당 Buffer Object를 어떻게 사용할지를
+<b><i>target</i></b> 은 bind한 Buffer Object를 어떻게 사용하려 하는지를
 나타낸다. 그냥 Buffer Object를 생성하여 안에 데이터만 채울 용도라면
-target은 별 문제가 되지 않는다. target 값은 OpenGL이 어떠한 방법을 통해
-그 안의 데이터를 사용하도록 할 경우에만 문제가 된다.
+target은 어떤 값이 되든 문제가 되지 않는다. target 값은 OpenGL이 어떠한
+방법을 통해 그 안의 데이터를 사용하도록 할 경우에만 문제가 된다.
 </p>
 
 <p>
 Buffer Object는 직렬로 된(linear) 임의의 크기의 메모리 배열을 가지고
-있다. 메모리는 쓰거나(upload) 읽기(use)전에 미리 할당되어
-있어야(allocated) 한다. Buffer Object의 저장소를 할당은 두 가지, 즉
-mutable한 방법과 immutable<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>한 방법이 있다. Buffer Object에
-immutable한 저장소를 할당하는 것은 그 Buffer Object와 상호작용하는
-방법을 바꾸는 것이다.
+있다. 메모리는 GPU에 업로드(upload) 하거나 읽어와서 사용하기(use)전에
+미리 할당되어 있어야(allocated) 한다. Buffer Object의 저장소를 할당은
+두 가지, 즉 mutable한 방법과 immutable<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>한 방법이 있다. Buffer
+Object에 immutable한 저장소를 할당하는 것은 그 Buffer Object와
+상호작용하는 방법을 바꾸는 것이다.
 </p>
 </div>
 
@@ -225,7 +248,7 @@ Buffer Object에 immutable한 저장소를 할당하려면 아래 함수를 사�
 
 <div class="org-src-container">
 
-<pre class="src src-c">void glBufferStorage(GLenum target, GLsizeiptr size, const GLvoid * data, GLbitfield flags);
+<pre class="src src-c"><span style="color: #c17d11;">void</span> <span style="color: #729fcf;">glBufferStorage</span>(<span style="color: #c17d11;">GLenum</span> <span style="color: #fce94f;">target</span>, <span style="color: #c17d11;">GLsizeiptr</span> <span style="color: #fce94f;">size</span>, <span style="color: #fcaf3e;">const</span> <span style="color: #c17d11;">GLvoid</span> * <span style="color: #fce94f;">data</span>, <span style="color: #c17d11;">GLbitfield</span> <span style="color: #fce94f;">flags</span>);
 </pre>
 </div>
 
@@ -263,10 +286,10 @@ Buffer Object의 저장소의 내용에 접근하거나 수정하는 방법에 �
 </p>
 
 <p>
-<i><b>flags</b></i> 의 비트는 클라이언트가 직접적으로 버퍼를 읽거나 쓰는 방법에
-대한 내용도 담고 있다. 하지만 클라이언트가 데이터를 직접 수정하는
-방식에 대해서만 제한되어 있다.<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> 즉, 버퍼 내용에 대해
-"server-side"의 오퍼레이션만 가능한 것이다.
+<i><b>flags</b></i> 비트는 클라이언트가 직접적으로 버퍼를 읽거나 쓰는 방법에 대한
+내용을 담고 있다. 그런데 이 필드는 클라이언트가 데이터를 직접 수정하는
+방식에 대해서만 제한하는 것이다.<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup> 따라서 서버 사이드에서의 버퍼
+내용에 대한 연산은 이 필드값과 관계 없이 사용 가능하다.
 </p>
 
 <p>
@@ -384,14 +407,14 @@ Specification</a> 등을 통해 버퍼의 내용을 읽어갈 수도 있다.
 
 <p>
 <b>Static data buffers</b>: 어떤 경우에서는 Buffer Object의 데이터가 한 번
-upload된 이후로 다시는 바뀌지 않을 수도 있다. 예를 들어 한 번 정의한
+업로드된 이후로 다시는 바뀌지 않을 수도 있다. 예를 들어 한 번 정의한
 다음에 여러번 쓰이는 Vertex 데이터는 static 일 수 있다.
 </p>
 
 <p>
 이런 경우 <i><b>flags</b></i> 를 0으로 하고 <i><b>data</b></i> 를 통해 초기화시에 upload해
 버린다. 이후부터는 버퍼안의 데이터를 쓰기만 하면 된다. 이 기법은
-static한 데이터들을 미리 모두 모아 놓아야 사용할 수 있다.
+static한 데이터들을 미리 모두 준비해 두어야 사용할 수 있다.
 </p>
 
 <p>
@@ -433,7 +456,7 @@ Buffer Object에 mutable한 저장소를 만들기 위해서는 아래 API를
 
 <div class="org-src-container">
 
-<pre class="src src-c">void glBufferData(enum target, sizeiptr size, const void *data, enum usage);
+<pre class="src src-c"><span style="color: #c17d11;">void</span> <span style="color: #729fcf;">glBufferData</span>(<span style="color: #fcaf3e;">enum</span> <span style="color: #c17d11;">target</span>, <span style="color: #c17d11;">sizeiptr</span> <span style="color: #fce94f;">size</span>, <span style="color: #fcaf3e;">const</span> <span style="color: #c17d11;">void</span> *<span style="color: #fce94f;">data</span>, <span style="color: #fcaf3e;">enum</span> <span style="color: #c17d11;">usage</span>);
 </pre>
 </div>
 
@@ -474,11 +497,11 @@ description 이다.
 
 <p>
 Buffer Object의 데이터를 수정하는 방법에는 두 가지가 있다. 하나는
-클라이너트가 명시적으로 데이터를 upload 하는 것이다. 다른 방식은
+클라이너트가 명시적으로 데이터를 업로드하는 것이다. 다른 방식은
 클라이언트가 버퍼를 채우도록 하는 GL 커맨드를 날리는 것이다. 예를 들면
 Transform Feedback을 통한 Vertex Shader 연산의 결과를 저장하는 버퍼
 저장소가 있다면 클라이언트는 버퍼의 정보를 직접 바꾸는 것이 아니게
-된다.<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup> 즉, 이건 후자의 경우이다.
+된다. 즉, 이건 후자의 경우이다.
 </p>
 
 <p>
@@ -502,9 +525,126 @@ GL커맨드를 실행시킬 수도 있다. Vertex Data를 저장하는 버퍼는
 <li>COPY: 클라이언트는 데이터를 read도 write도 안할 것임.
 </li>
 </ul>
+
+<p>
+<code>DRAW</code> 는 이름에서 의미하는 것과 같이 그림을 그릴 때 유용하다. 유저가
+업로드한 데이터는 GL 만 읽을 수 있다. 예외가 있긴 하지만 vertex
+데이터를 저장하고 있는 Buffer Object 는 usage hint를 보통 <code>DRAW</code> 로
+한다.
+</p>
+
+<p>
+<code>READ</code> 는 Buffer Object가 OpenGL 커맨드의 최종목적지로 사용될 때
+쓰인다. <a href="https://www.opengl.org/wiki/Buffer_Texture">Buffer Texture</a> 에 그리거나 <a href="https://www.opengl.org/wiki/Image_Load_Store">Buffer Texture 에 임의로 쓰거나</a>
+<a href="https://www.opengl.org/wiki/Pixel_Buffer_Object">Buffer Object에 Pixel Transfer</a> 를 하거나 <a href="https://www.opengl.org/wiki/Transform_Feedback">Transform Feedback</a> 을 받거나
+또는 다른 OpenGL 오퍼레이션을 수행하여 Buffer Object에 write를 하는
+것이 될 수 있다.
+</p>
+
+<p>
+<code>COPY</code> 는 Buffer Object 가 OpenGL 상의 어떤 곳에서 다른 곳으로 데이터를
+옮기기 위해 사용될 때 쓰인다. 예를 들어 이미지 데이터를 버퍼에 쓰고 그
+데이터를 draw call 에서 vertex 데이터로 사용할 수 있다. 코드에서는
+버퍼에 데이터를 직접적으로 보내거나 읽어오지 않는다. 좀 더 직접적인
+방법으로 <a href="https://www.opengl.org/wiki/Transform_Feedback">Transform Feedback</a> 을 사용할 수도 있다. Buffer Object 로
+나가는 피드백 데이터를 가지고 있으면 그 Buffer Object 를 vertex
+데이터로 사용할 수 있다. 그리고 사용자가 렌더링 커맨드를 통해 버퍼를
+업데이트 하고자 하는 것은 결코 버퍼 스토리지에 대해 <i>직접적인</i> 읽고
+쓰기를 하는 것이 아니게 된다.
+</p>
+
+<p>
+아래는 사용자가 버퍼의 데이터를 얼마나 자주 바꾸는지에 대한 세 가지
+usage hint 이다.
+</p>
+
+<ul class="org-ul">
+<li>STATIC: 사용자는 버퍼에 데이터를 딱 한 번 쓴다.
+</li>
+<li>DYNAMIC: 사용자는 데이터를 가끔씩 변경한다.
+</li>
+<li>STREAM: 사용자는 매 번 또는 거의 매 번 데이터를 변경한다.
+</li>
+</ul>
+
+<p>
+STREAM 은 아주 쉽게 이해할 수 있다. Buffer Object 의 스토리지가 거의 매
+번 사용할 때마다 업데이트 될 것이라는 의미이다. STATIC 또한
+쉽다. Buffer Object 의 컨텐츠는 한 번 업데이트된 다음에 다시는 변하지
+않는다.
+</p>
+
+<p>
+DYNAMIC 이 STREAM 이나 STATIC 으로 바뀌는 시점은 불분명하다. 결국
+이것은 hint 일 뿐이라서 STATIC 버퍼를 수정하거나 STREAM 버퍼를 절대 안
+바꾸는 것도 OpenGL 코드에서 합법적인 것이다.
+</p>
+
+<p>
+STATIC 을 쓰고 업데이트를 최대한 적게 하는 것이 이득일까? DYNAMIC 을
+쓰고 STREAM 보다 덜 자주 업데이트를 하는게 나을까? DYNAMIC 을 쓰고 부분
+업데이트를 하도록 하는게 나을까? 이런 것들은 세심한 프로파일링을 통해서
+답을 얻을 수 있는 문제들이다. 그렇게 답을 구하더라도 그 답은 특정
+벤더의 특정 드라이버 버전에서만 정확한 결과일 것이다.
+</p>
+
+<p>
+어떤 경우에서든지 STREAM, STATIC, DYNAMIC 은 READ, DRAW, COPY 와 조합할
+수 있다. STREAM_COPY 는 거의 매번 사용할 때마다 버퍼에 transform
+feedback write(또는 다른 GL 기반의 write)를 한다는 의미이다. 그리고
+<code>glBufferSubData</code> 나 이와 비슷한 함수로는 업데이트되지 않을
+것이다. STATIC_READ 는 GL을 사용해서 버퍼를 딱 한 번 채운다는
+의미이다.
+</p>
 </div>
 </div>
 </div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Data Specification</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Clearing</h3>
+</div>
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Copying</h3>
+</div>
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Mapping</h3>
+<div class="outline-text-3" id="text-2-3">
+</div><div id="outline-container-sec-2-3-1" class="outline-4">
+<h4 id="sec-2-3-1"><span class="section-number-4">2.3.1</span> Alignment</h4>
+</div>
+<div id="outline-container-sec-2-3-2" class="outline-4">
+<h4 id="sec-2-3-2"><span class="section-number-4">2.3.2</span> Buffer Corruption</h4>
+</div>
+<div id="outline-container-sec-2-3-3" class="outline-4">
+<h4 id="sec-2-3-3"><span class="section-number-4">2.3.3</span> Persistent mapping</h4>
+</div>
+<div id="outline-container-sec-2-3-4" class="outline-4">
+<h4 id="sec-2-3-4"><span class="section-number-4">2.3.4</span> Performance Concerns</h4>
+</div>
+</div>
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Invalidatation</h3>
+</div>
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> Streaming</h3>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> General use</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Binding indexed targets</h3>
+</div>
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Multibind and indexed targets</h3>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Reference</h2>
 </div>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
@@ -527,13 +667,6 @@ coherency는 일관성이라는 뜻으로, 클라이언트와 서버의 메모�
 
 <div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
 if not superior performance
-</p></div>
-
-<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
-앞뒤가 안 맞는게 원문에 오류가 있는 것 같다. 의역하여
-수정함. 원문은 다음과 같다. if you want to have a buffe store the
-results of a vertex shader computation through the use of transform
-feedback, the user is not directly changing the buffer information.
 </p></div>
 
 

@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>udev</title>
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Jagyum Koo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">udev</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Installation</a></li>
+<li><a href="#sec-2">2. About udev rules</a>
+<ul>
+<li><a href="#sec-2-1">2.1. Writing udev rules</a></li>
+<li><a href="#sec-2-2">2.2. List attributes of a device</a></li>
+<li><a href="#sec-2-3">2.3. Testing rules before loading</a></li>
+<li><a href="#sec-2-4">2.4. Loading new rules</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. Udisks</a></li>
+<li><a href="#sec-4">4. Tips and tricks</a>
+<ul>
+<li><a href="#sec-4-1">4.1. Accessing firmware programmers and USB virtual comm devices</a></li>
+<li><a href="#sec-4-2">4.2. Execute on USB insert</a></li>
+<li><a href="#sec-4-3">4.3. Execute on VGA cable plug in</a></li>
+<li><a href="#sec-4-4">4.4. Detect new eSATA drives</a></li>
+<li><a href="#sec-4-5">4.5. Mark internal SATA ports as eSATA</a></li>
+<li><a href="#sec-4-6">4.6. Setting static device names</a>
+<ul>
+<li><a href="#sec-4-6-1">4.6.1. Video devices</a></li>
+<li><a href="#sec-4-6-2">4.6.2. Printers</a></li>
+<li><a href="#sec-4-6-3">4.6.3. USB flash device</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-7">4.7. Waking from suspend with USB device</a></li>
+<li><a href="#sec-4-8">4.8. Triggering events</a></li>
+</ul>
+</li>
+<li><a href="#sec-5">5. Troubleshooting</a>
+<ul>
+<li><a href="#sec-5-1">5.1. Blacklisting modules</a></li>
+<li><a href="#sec-5-2">5.2. udevd hangs at boot</a></li>
+<li><a href="#sec-5-3">5.3. BusLogic devices can be broken and will cause a freeze during startup</a></li>
+<li><a href="#sec-5-4">5.4. Some devices, that should be treated as removable, are not</a></li>
+<li><a href="#sec-5-5">5.5. Sound problems with some modules not loaded automatically</a></li>
+<li><a href="#sec-5-6">5.6. IDE CD/DVD-drive support</a></li>
+<li><a href="#sec-5-7">5.7. Optical drives have group ID set to "disk"</a></li>
+</ul>
+</li>
+<li><a href="#sec-6">6. See also</a></li>
+</ul>
+</div>
+</div>
+<p>
+<a href="https://wiki.archlinux.org/index.php/udev">https://wiki.archlinux.org/index.php/udev</a> 의 내용 번역.
+</p>
+
+<p>
+<code>udev</code> 는 <code>hotplug</code> 와 <code>hwdetect</code> 의 기능을 대체한다.
+</p>
+
+<p>
+<a href="http://en.wikipedia.org/wiki/Udev">위키피디아 기사글</a> 에는 다음과 같이 서술하고 있다.
+</p>
+
+<blockquote>
+<p>
+"Udev is the device manager for the Linux Kernel. Primarily, it
+manages device nodes in <code>/dev</code>. It is the successor of devfs and
+hotplug, which means that it handles the <code>/dev</code> directory and all user
+space actions when adding/removing devices, including firmware load."
+</p>
+</blockquote>
+
+<p>
+udev는 병렬성을 활용하여 커널 모듈들을 로드하는데 이 방식은 모듈들을
+연이어서 로드하는 방식에 비해 잠재적인 성능상의 이득을 얻을 수도
+있다. 따라서 모듈들은 비동기적으로 로드되게 된다. 이런 udev 방식의
+단점은 부팅시마다 항상 똑같은 순서로 모듈들이 로드되는 것이 아니라는
+점이다. 만일 컴퓨터가 여러개의 블록 디바이스를 가지고 있다면 디바이스
+노드들이 매 번 다른 이름<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>으로 보여질 수도 있다. 예를 들어 컴퓨터에
+두 개의 하드 드라이브가 있다면, <code>/dev/sda</code> 가 <code>/dev/sdb</code> 로 되는 현상이
+랜덤하게 생길 것이다. 아래에서 더 자세하게 기술한다.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Installation</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+udev는 현재 <a href="https://www.archlinux.org/packages/?name=systemd">systemd</a> 의 일부분이며 Arch Linux 시스템에서 기본으로
+설치된다. <code>man systemd-udevd.service</code> 를 참고하시라<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> About udev rules</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+udev rules는 관리자 권한으로 <code>/etc/udev/rules.d/</code> 에 작성한다. 이
+디렉토리 안의 파일들은 반드시 <i>.rules</i> 로 끝나야 한다. 다양한 패키지에
+함께 포함된 udev rules 는 <code>/usr/lib/udev/rules.d/</code> 에서 찾아볼 수
+있다<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>. 만일 <code>/usr/lib/</code> 디렉토리와 <code>/etc</code> 에 같은 이름의 파일이
+있다면 <code>/etc</code> 에 있는 것이 우선권을 갖는다.
+</p>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Writing udev rules</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+<b>주의</b>: 제거 가능한 드라이브를 마운트하기 위해 udev rules 에서 <code>mount</code>
+를 사용하지 마시라. FUSE 파일시스템의 경우 <code>Transport endpoint not
+connected</code> 에러를 띄울 것이다. 대신 <a href="https://wiki.archlinux.org/index.php/Udisks">udisks</a> 를 사용하라. 오토마운트를
+정확하게 잘 수행할 것이다.
+</p>
+
+<ul class="org-ul">
+<li>udev rules 를 작성하는 방법이 궁금하다면 <a href="http://www.reactivated.net/writing_udev_rules.html">Writeing udev rules</a> 페이지
+참고.
+</li>
+<li>udev rule의 예제를 보고 싶다면 상위 가이드 페이지에서 <a href="http://www.reactivated.net/writing_udev_rules.html#example-printer">Examples</a>
+   섹션을 참고하라.
+</li>
+</ul>
+
+<p>
+아래는 웹캠 카메라가 연결되었을 때 <code>/dev/video-cam1</code> 에 대한
+심볼릭링크를 만드는 rule의 예제이다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> List attributes of a device</h3>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Testing rules before loading</h3>
+</div>
+
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Loading new rules</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Udisks</h2>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Tips and tricks</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> Accessing firmware programmers and USB virtual comm devices</h3>
+</div>
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> Execute on USB insert</h3>
+</div>
+
+<div id="outline-container-sec-4-3" class="outline-3">
+<h3 id="sec-4-3"><span class="section-number-3">4.3</span> Execute on VGA cable plug in</h3>
+</div>
+
+<div id="outline-container-sec-4-4" class="outline-3">
+<h3 id="sec-4-4"><span class="section-number-3">4.4</span> Detect new eSATA drives</h3>
+</div>
+
+<div id="outline-container-sec-4-5" class="outline-3">
+<h3 id="sec-4-5"><span class="section-number-3">4.5</span> Mark internal SATA ports as eSATA</h3>
+</div>
+
+<div id="outline-container-sec-4-6" class="outline-3">
+<h3 id="sec-4-6"><span class="section-number-3">4.6</span> Setting static device names</h3>
+<div class="outline-text-3" id="text-4-6">
+</div><div id="outline-container-sec-4-6-1" class="outline-4">
+<h4 id="sec-4-6-1"><span class="section-number-4">4.6.1</span> Video devices</h4>
+</div>
+
+<div id="outline-container-sec-4-6-2" class="outline-4">
+<h4 id="sec-4-6-2"><span class="section-number-4">4.6.2</span> Printers</h4>
+</div>
+
+<div id="outline-container-sec-4-6-3" class="outline-4">
+<h4 id="sec-4-6-3"><span class="section-number-4">4.6.3</span> USB flash device</h4>
+</div>
+</div>
+
+<div id="outline-container-sec-4-7" class="outline-3">
+<h3 id="sec-4-7"><span class="section-number-3">4.7</span> Waking from suspend with USB device</h3>
+</div>
+
+<div id="outline-container-sec-4-8" class="outline-3">
+<h3 id="sec-4-8"><span class="section-number-3">4.8</span> Triggering events</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Troubleshooting</h2>
+<div class="outline-text-2" id="text-5">
+</div><div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> Blacklisting modules</h3>
+</div>
+
+<div id="outline-container-sec-5-2" class="outline-3">
+<h3 id="sec-5-2"><span class="section-number-3">5.2</span> udevd hangs at boot</h3>
+</div>
+
+<div id="outline-container-sec-5-3" class="outline-3">
+<h3 id="sec-5-3"><span class="section-number-3">5.3</span> BusLogic devices can be broken and will cause a freeze during startup</h3>
+</div>
+
+<div id="outline-container-sec-5-4" class="outline-3">
+<h3 id="sec-5-4"><span class="section-number-3">5.4</span> Some devices, that should be treated as removable, are not</h3>
+</div>
+
+<div id="outline-container-sec-5-5" class="outline-3">
+<h3 id="sec-5-5"><span class="section-number-3">5.5</span> Sound problems with some modules not loaded automatically</h3>
+</div>
+
+<div id="outline-container-sec-5-6" class="outline-3">
+<h3 id="sec-5-6"><span class="section-number-3">5.6</span> IDE CD/DVD-drive support</h3>
+</div>
+
+<div id="outline-container-sec-5-7" class="outline-3">
+<h3 id="sec-5-7"><span class="section-number-3">5.7</span> Optical drives have group ID set to "disk"</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> See also</h2>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+원문은 designation.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+현재 Ubuntu 12.04 에서는 이 명령어가 먹지를 않음.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+현재 Ubuntu 12.04 에서는 /usr/lib/udev 디렉토리까지 밖에 없음.
+</p></div>
+
+
+</div>
+</div></div>
+</body>
+</html>
