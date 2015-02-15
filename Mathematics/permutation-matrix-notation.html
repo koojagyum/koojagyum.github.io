@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>치환행렬의 수식에 대하여</title>
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Jagyum Koo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">치환행렬의 수식에 대하여</h1>
+<p>
+<a href="http://www.amazon.com/Michael-Artin-Algebra-Second-Paperback/dp/B00RWU5G1O/ref=sr_1_5?s=books&ie=UTF8&qid=1423989544&sr=1-5&keywords=artin+algebra">Artin Algebra</a> 책에서 치환행렬(P)에 대해서 설명할 때 아래와 같은 좀
+이해하기 힘든 수식을 사용한다.
+</p>
+
+\begin{equation}
+P =
+e_{p(1)1} + \cdots + e_{p(n)n} =
+\sum\limits_{j} e_{p(j)j}
+\end{equation}
+
+<p>
+생각해보니 그냥 처음부터 이 식으로 접근했었더라면 더 이해하기 편했을
+수도 있다. 이 수식이 나오기 전에 치환행렬 P를 컬럼벡터 의 모음으로
+정의할 수 있다는 설명이 나온다.
+</p>
+
+<blockquote>
+<p>
+The permutation matrix P can be written conveniently in terms of the
+matrix units (2.5) or in terms of certain column vectors called the
+<i>standard basis</i> and denotd by \(e_{i}\). The vector \(e_{i}\) has a 1 in
+the <i>i</i> th position as its single nonzero entry, so these vectors are
+the matrix units for an \(n \times 1\) matrix.
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+치환행렬 P는 (2.5) 절에서 나왔던 matrix unit 혹은 <i>standard basis</i>
+라고 불리고 \(e_{i}\) 로 표기되는 특정 컬럼벡터 들로 쉽게 표기할 수
+있다. 벡터 \(e_{i}\) 는 <i>i</i> 번째 위치에 유일한 0이 아닌 엔트리인 1을
+갖는다. 따라서 이들 벡터는 \(n \times 1\) 행렬의 matrix unit 인 것이다.
+</p>
+</blockquote>
+
+<p>
+책에서는 위와같이 이탤릭체로 강조된 <i>standard basis</i> 라는 컬럼벡터로
+떡밥을 하나 던지고, 아래 명제를 통해서 다시 한 번 혼란을 준다.
+</p>
+
+<blockquote>
+<p>
+(4.6) <b>Proposition.</b> &nbsp;&nbsp;&nbsp; Let <i>P</i> be the permutation matrix
+associated to a permutation <i>p</i>.
+</p>
+
+<p>
+(a) The <i>j</i> the column of <i>P</i> is the column vector \(e_{p(j)}\). <br  />
+ (b) <i>P</i> is a sum n matrix units: \(P = e_{p(1)1} + \cdots + e_{p(n)n}
+ = \sum\limits_{j} e_{p(j)j}\).
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+(4.6) <b>명제.</b> &nbsp;&nbsp;&nbsp; <i>P</i> 를 치환 <i>p</i> 에 대한 치환행렬 이라고
+하자.
+</p>
+
+<p>
+(a) 행렬 <i>P</i> 의 <i>j</i> 번째 열은 컬럼벡터 \(e_{p(j)}\) 이다. <br  />
+ (b) 행렬 <i>P</i> 는 n개의 matrix unit들의 합이다: \(P = e_{p(1)1} +
+ \cdots + e_{p(n)n} = \sum\limits_{j} e_{p(j)j}\).
+</p>
+</blockquote>
+
+<p>
+헷갈렸던 부분은 \(e_{i}\), 즉 <i>standard basis</i> 로 시작된다. \(e_{i}\) 는
+<i>i</i> 번째에 1을 갖고 나머지는 0인 컬럼벡터이다. 그렇다면 \(e_{p(n)n}\)
+이건 뭐란 말인가? 책에서는 <i>standard basis</i> 에다가 밑을 더 붙이면
+어떻게 된다는 <a href="https://mirror.enha.kr/wiki/%EB%8D%94%2520%EC%9D%B4%EC%83%81%EC%9D%98%2520%EC%9E%90%EC%84%B8%ED%95%9C%2520%EC%84%A4%EB%AA%85%EC%9D%80%2520%EC%83%9D%EB%9E%B5%ED%95%9C%EB%8B%A4">(더 이상의 자세한)</a> 설명은 하지 않는다.
+</p>
+
+<p>
+두 번째는 완성된 표현식인 \(P = e_{p(1)1} + \cdots + e_{p(n)n} =
+\sum\limits_{j} e_{p(j)j}\) 이다. \(e_{j}\) 가 행렬 <i>P</i> 의 <i>j</i> 번째
+열이라고 했으니, \(e_{p(j)j}\) 이거는 행렬 <i>P</i> 의 j열, j행에 위치한
+엔트리인가? 갑자기 '행,열' 식의 표현에서 '열,행' 식의 표현으로 바꾸는
+것도 이해가 안 될 뿐더러 만일 그렇다면 전체 식은 단위행렬이 되는거
+아닌가? 단위행렬이 치환행렬이라는 말인가?
+</p>
+
+<p>
+아래 내용은 상당히 오랬동안 생각한 끝에 내린 결론이다.
+</p>
+
+<p>
+우선 수식의 내용은 그 동안 알고있던 내용 그대로 해석하면 된다. 즉,
+\(e_{ij}\) 는 i행, j열에 위치한 엔트리라는 것이다. 그리고 \(p(j)\) 는 j를
+치환해서 얻은 결과로 보면 된다. \(e_{p(j)j}\) 는 j열, j행의 1짜리
+엔트리가 아니라 <b>p(j)행, j열의 1짜리 엔트리</b> 인 것이다.
+</p>
+
+<p>
+아래의 치환행렬을 예로 들어 생각해보자.
+</p>
+
+\begin{equation}
+P =
+\begin{bmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{bmatrix}
+\end{equation}
+
+<p>
+이것은 아래의 치환함수 <i>p</i> 에 대한 치환행렬이다.
+</p>
+
+<div class="center">
+<p>
+\(p(1) = 3\) <br  />
+\(p(2) = 1\) <br  />
+\(p(3) = 2\)
+</p>
+</div>
+
+<p>
+위의 함수를 기반으로 \(P = \sum\limits_{j} e_{p(j)j}\) 를 해석해 보자.
+</p>
+
+\begin{equation}
+P = \sum\limits_{j} e_{p(j)j} =
+e_{p(1)1} + e_{p(2)2} + e_{p(3)3} =
+e_{31} + e_{12} + e_{23} =
+\begin{bmatrix}
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+1 & 0 & 0
+\end{bmatrix}
+\end{equation}
+
+<p>
+짠 하고 P 행렬이 나왔다!
+</p>
+
+<p>
+그럼 \(e_{i}\) 가 <i>i</i> 번째에 1을 갖고 나머지는 0인 컬럼벡터라는
+<i>standard basis</i> 에 대하여 생각해보자. \(e_{31}\) 을 <span class="underline">컬럼벡터</span> 로
+해석하면, <b>세 번째 위치에 1을 갖는 컬럼벡터이다.</b> 마찬가지로 \(e_{12}\)
+는 <b>첫 번째 위치에 1을 갖는 컬럼벡터이다.</b> 마지막 \(e_{23}\) 역시 <b>두
+번재 위치에 1을 갖는 컬럼벡터이다.</b>
+</p>
+
+<p>
+그리고 (4.6)(a) 의 \(e_{p(j)}\) 가 j열의 컬럼벡터라는 것은 어떨까?
+이것도 마찬가지로 위의 예를 사용해 보면 다 맞아떨어진다. \(e_{p(1)1} =
+e_{31}\) 이고, 이것은 행렬 <i>P</i> 에서 1번째 열의 컬럼벡터이다. \(e_{p(2)2}
+= e_{12}\) 와 \(e_{p(3)3} = e_{23}\) 도 역시 행렬 <i>P</i> 에서 각각 2번째,
+3번째 열의 컬럼벡터이다.
+</p>
+
+<p>
+책에서 나름 복잡하게 연계된 논리를 아무렇지도 않은 듯 덤덤하게
+쓰다보니 이런 혼란이 온 것 같다.
+</p>
+</div>
+</body>
+</html>
