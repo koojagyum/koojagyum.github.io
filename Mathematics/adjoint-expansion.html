@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>수반행렬 전개에 대하여</title>
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Jagyum Koo" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">수반행렬 전개에 대하여</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. 수반행렬(adjoint)</a></li>
+<li><a href="#sec-2">2. 수반행렬과 행렬식의 관계</a></li>
+<li><a href="#sec-3">3. 수반행렬과 행렬식 관계 증명</a>
+<ul>
+<li><a href="#sec-3-1">3.1. i와 j가 같을 경우: 대각 성분</a></li>
+<li><a href="#sec-3-2">3.2. i와 j가 다를 경우: 비대각 성분</a></li>
+<li><a href="#sec-3-3">3.3. 의문점: 행렬이 바뀌었는데 식은 그대로다?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+<a href="http://www.amazon.com/Michael-Artin-Algebra-Second-Paperback/dp/B00RWU5G1O/ref=sr_1_5?s=books&ie=UTF8&qid=1423989544&sr=1-5&keywords=artin+algebra">Artin Algebra</a> 책에서 Cramer's Rule을 설명하는 과정에서
+수반행렬(adjoint matrix)과 행렬식의 관계에 대한 내용이 나오는데,
+증명과정에서 이해하기 힘든 부분이 있다.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> 수반행렬(adjoint)</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+일단 수반행렬의 정의는 아래와 같다.
+</p>
+
+<blockquote>
+<p>
+(5.4) <b>Definition.</b> &nbsp;&nbsp;&nbsp; Let A be an \(n \times n\) matrix. The <i>adjoint</i> of
+A is the \(n \times n\) matrix whose (i, j) entry \((adj)_{ij}\) is
+\((-1)^{i+j}det\;A_{ji} = \alpha_{ji}\), where \(A_{ij}\) is the matrix
+obtained by crossing out the <i>i</i> th row and the <i>j</i> th column, as in
+(3.3):
+</p>
+\begin{equation}
+(adj\; A) = (\alpha_{ij})^{t},
+\end{equation}
+<p>
+where \(\alpha_{ij} = (-1)^{i+j} det \; A_{ij}\).
+</p>
+</blockquote>
+
+<blockquote>
+<p>
+(5.4) <b>정의.</b> &nbsp;&nbsp;&nbsp; A를 \(n \times n\) 정사각행렬이라고
+하자. A의 <i>수반행렬(adjoint)</i> 은 \(n \times n\) 정사각행렬이고 (i, j) 의
+성분 \((adj)_{ij}\) 은 \((-1)^{i+j}det\;A_{ji} = \alpha_{ji}\)
+이다. 여기서 \(A_{ij}\) 는 (3.3) 에서와같이 <i>i</i> 번째 행과 <i>j</i> 번째 열을
+제거하여 얻어지는 행렬이다. 즉,
+</p>
+\begin{equation}
+(adj\; A) = (\alpha_{ij})^{t},
+\end{equation}
+<p>
+이고 여기서 \(\alpha_{ij} = (-1)^{i+j} det \; A_{ij}\) 이다.
+</p>
+</blockquote>
+
+<p>
+수반행렬의 정의를 보면 행렬식을 구할 때 소행렬식 전개(expansion by
+minors)와 비슷해 보인다. 아래 \(2 \times 2\) 행렬의 예를 보면 역행렬을
+구하는 것이 떠오르기도 한다.
+</p>
+
+\begin{equation}
+adj \begin{bmatrix} a & b \\ c & d \end{bmatrix} = \begin{bmatrix} d
+& -b \\ -c & a \end{bmatrix}
+\end{equation}
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 수반행렬과 행렬식의 관계</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+다음으로 수반행렬과 행렬식의 관계에 대해서 소개하고 이를 통해 역행렬을
+구할 수 있음에 대해 설명한다.
+</p>
+
+<blockquote>
+<p>
+(5.7) <b>Theorem.</b> &nbsp;&nbsp;&nbsp; Let \(\delta = det \; A\). Then
+</p>
+\begin{equation}
+(adj \; A) \cdot A = \delta I, \;\;\; and \;\;\; A \cdot (adj \; A) = \delta I.
+\end{equation}
+</blockquote>
+
+<blockquote>
+<p>
+(5.8) <b>Corollary.</b> &nbsp;&nbsp;&nbsp; Suppose that the determinant
+\(\delta\) of A is not zero. Then
+</p>
+\begin{equation}
+A^{-1} = \frac{1}{\delta}(adj \; A).
+\end{equation}
+</blockquote>
+
+<p>
+위의 따름정리에 대하여 \(2 \times 2\) 행렬의 예를 들어보면 역행렬 공식을
+도출해내게 된다.
+</p>
+
+\begin{equation}
+\frac{1}{ad - bc} \begin{bmatrix} d & -b \\ -c & a \end{bmatrix}
+\end{equation}
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> 수반행렬과 행렬식 관계 증명</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+머리가 아파지는 부분은 행렬 A와 그 수반행렬의 곱이 행렬식과 단위행렬의
+곱이 된다는 정리를 증명하는 부분이다.
+</p>
+
+<p>
+일단 \((adj \; A) \cdot A\) 의 (i, j) 성분은 아래와 같이 계산된다.
+</p>
+
+\begin{equation}
+(adj)_{i1} a_{1j} + \cdots + (adj)_{in} a_{nj}
+=
+\alpha_{1i} a_{1j} + \cdots + \alpha_{ni} a_{nj}.
+\end{equation}
+
+<p>
+수반행렬은 알파(\(\alpha\))로 표현되는 성분들의 전치행렬이므로
+성분표현식에 쓰이는 i와 j가 뒤바뀌고 위의 식에서 우변과 같이 표현될 수
+있다.
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> i와 j가 같을 경우: 대각 성분</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+\(i = j\) 인 경우, \(\alpha_{ij} = (-1)^{i+j} det \; A_{ij}\) 이므로 위
+식을 j에 대해서 정리하면 아래와 같다.
+</p>
+
+\begin{equation}
+(adj)_{j1} a_{1j} + \cdots + (adj)_{jn} a_{nj}
+=
+\alpha_{1j} a_{1j} + \cdots + \alpha_{nj} a_{nj}
+\end{equation}
+\begin{equation}
+=
+a_{1j} \cdot (-1)^{1+j} det \; A_{1j}
++
+\cdots
++
+a_{nj} \cdot (-1)^{n+j} det \; A_{nj}
+=
+det \; A
+\end{equation}
+
+<p>
+위와 같이 j열에 대한 소행렬식 전개(expansion by minors)가 되므로 A의
+행렬식이 되게 된다. 즉, \((adj \; A) \cdot A\) 의 대각선 성분은 \(det \;
+A\) 가 되므로 <span class="underline">최소한 대각선 성분들은 OK</span> 다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> i와 j가 다를 경우: 비대각 성분</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+이제 \(i \neq j\) 인 경우, \((adj)_{j1} a_{1j} + \cdots + (adj)_{jn}
+a_{nj} = 0\) 이어야 전체 식을 만족한다. 이 부분은 책에서 굉장히
+단순하게 넘어가는데, 다른 사이트나 강의를 찾아봐도 어물쩡 넘어가거나
+그냥 그런줄 알라며(!) 아예 다루지 않는 경우도 있었다.
+</p>
+
+<p>
+책에서 접근한 방식은 i열을 j열의 것으로 대체한 행렬 B를 만드는
+방법이다. 이 경우 아래 식은 (i열이 j열과 같으므로) i열에 대한 소행렬식
+전개(expansion by minors)가 된다.
+</p>
+
+\begin{equation}
+(adj)_{i1} a_{1j} + \cdots + (adj)_{in} a_{nj}
+=
+\alpha_{1i} a_{1j} + \cdots + \alpha_{ni} a_{nj}
+\end{equation}
+\begin{equation}
+=
+\alpha_{1i} a_{1i} + \cdots + \alpha_{ni} a_{ni}
+\end{equation}
+
+<p>
+그리고, 행렬 B는 동일한 열이 두 개 존재하기 때문에 행렬식은 0
+이다. 따라서 위의 식도 0이 되고 <span class="underline">전체 식의 비대각 성분은 0</span> 이 된다는
+것이다.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> 의문점: 행렬이 바뀌었는데 식은 그대로다?</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+여기서 드는 의문점은 행렬 A에 대한 식에 행렬 B를 적용했는데도
+괜찮은지에 대한 것이다. 즉, 행렬 A가 행렬 B로 바뀌었으니 아래 식에서
+알파(\(\alpha\))로 표현되는 수반행렬의 성분에 대한 내용도 바뀌어야 되지
+않느냐는 것이다.
+</p>
+
+\begin{equation}
+(adj)_{i1} a_{1j} + \cdots + (adj)_{in} a_{nj}
+=
+\alpha_{1i} a_{1j} + \cdots + \alpha_{ni} a_{nj}
+\end{equation}
+
+<p>
+그러니까 위 식에 행렬 B를 적용하면 아래와 같이 바뀌어야 한다(j열은
+어차피 같으니 그냥 \(a\) 를 그대로 썼다).
+</p>
+
+\begin{equation}
+\beta_{1i} a_{1j} + \cdots + \beta_{ni} a_{nj}
+\end{equation}
+
+<p>
+이제 문제는 \(1 \le k \le n\) 에 대하여 \(\alpha_{kj} = \beta_{kj}\) 가
+성립하는지에 대한 것이다. 이에 대한 의문을 풀기 위해 알파와 베타의
+정의를 풀어서 식에 대입해보자.
+</p>
+
+\begin{equation}
+a_{1j} (-1)^{1+i} det \; A_{1i}
++
+\cdots
++
+a_{nj} (-1)^{n+i} det \; A_{ni}
+\end{equation}
+
+\begin{equation}
+a_{1j} (-1)^{1+i} det \; B_{1i}
++
+\cdots
++
+a_{nj} (-1)^{n+i} det \; B_{ni}
+\end{equation}
+
+<p>
+위의 두 식은 각각 행렬 A와 B의 i열을 제거한 소행렬의 행렬식을 취하고
+있다. <span class="underline">행렬 A와 B의 차이점은 i열 뿐인데 i열을 제거한 부분을 취하고 있기
+때문에 결국 두 식은 같게 된다!</span> 
+</p>
+
+<p>
+그리고 \(1 \le k \le n\) 에 대하여 \(a_{kj} = b_{kj}\) 이고, 행렬 B는
+i열과 j열이 같으므로 위의 두 번째 식은 아래와 같이 정리된다.
+</p>
+
+\begin{equation}
+\alpha_{1i} a_{1j} + \cdots + \alpha_{ni} a_{nj}
+\end{equation}
+\begin{equation}
+=
+a_{1j} (-1)^{1+i} det \; B_{1i}
++
+\cdots
++
+a_{nj} (-1)^{n+i} det \; B_{ni}
+\end{equation}
+\begin{equation}
+=
+b_{1j} (-1)^{1+i} det \; B_{1i}
++
+\cdots
++
+b_{nj} (-1)^{n+i} det \; B_{ni}
+\end{equation}
+\begin{equation}
+=
+b_{1i} (-1)^{1+i} det \; B_{1i}
++
+\cdots
++
+b_{ni} (-1)^{n+i} det \; B_{ni}
+\end{equation}
+\begin{equation}
+= det \; B = 0
+\end{equation}
+
+<p>
+따라서 \((adj \; A) \cdot A\) 의 비대각 성분은 0이 된다.
+</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
